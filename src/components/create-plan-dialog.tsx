@@ -73,8 +73,10 @@ export function CreatePlanDialog({ onPlanCreated }: CreatePlanDialogProps) {
             Fill out the details below to create a new training plan.
           </DialogDescription>
         </DialogHeader>
+        {/* Define the form */}
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
+            {/* Define the title input */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="title" className="text-right">
                 Title
@@ -89,6 +91,7 @@ export function CreatePlanDialog({ onPlanCreated }: CreatePlanDialogProps) {
                 required
               />
             </div>
+            {/* Define the description input */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="description" className="text-right">
                 Description
@@ -102,6 +105,7 @@ export function CreatePlanDialog({ onPlanCreated }: CreatePlanDialogProps) {
                 placeholder="Brief description of this training plan"
               />
             </div>
+            {/* Define the start date input */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="startDate" className="text-right">
                 Start Date
@@ -115,6 +119,7 @@ export function CreatePlanDialog({ onPlanCreated }: CreatePlanDialogProps) {
                 className="col-span-3"
               />
             </div>
+            {/* Define the duration input */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="duration" className="text-right">
                 Duration (weeks)
@@ -132,6 +137,7 @@ export function CreatePlanDialog({ onPlanCreated }: CreatePlanDialogProps) {
               />
             </div>
           </div>
+          {/* Define the footer */}
           <DialogFooter>
             <Button
               type="submit"

@@ -1,70 +1,66 @@
-import { useState } from "react";
-import { Workout } from "@/types/progression";
+import { useState, useEffect } from "react";
+import { Workout } from "@/types/workout";
+
+// Define the STORAGE_KEY constant
+const STORAGE_KEY = "workouts";
 
 // Define the useWorkouts hook
-export function useWorkouts(initialWorkouts: Workout[] = []) {
-  const [workouts, setWorkouts] = useState<Workout[]>(initialWorkouts);
+export function useWorkouts() {
+  // Define the state for the workouts
+  const [workouts, setWorkouts] = useState<Workout[]>(() => {
+    if (typeof window === "undefined") return [];
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored ? JSON.parse(stored) : [];
+  });
+
+  // Define the useEffect hook to save the workouts to localStorage
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(workouts));
+  }, [workouts]);
 
   // Define the addWorkout function
-  const addWorkout = () => {
-    const newWorkout: Workout = {
-      id: workouts.length + 1,
-      name: "",
-      type: "interval",
-      format: "time",
-      value: "",
-      unit: "",
-      description: "",
+  const addWorkout = (workout: Omit<Workout, "id">) => {
+    const newWorkout = {
+      ...workout,
+      id: crypto.randomUUID(),
     };
     setWorkouts([...workouts, newWorkout]);
-  };
-
-  // Define the removeWorkout function
-  const removeWorkout = (id: number) => {
-    setWorkouts(workouts.filter((workout) => workout.id !== id));
+    return newWorkout;
   };
 
   // Define the updateWorkout function
-  const updateWorkout = (id: number, field: string, value: string) => {
-    setWorkouts(
-      workouts.map((workout) =>
-        workout.id === id ? { ...workout, [field]: value } : workout
-      )
-    );
+  const updateWorkout = (id: string, workout: Partial<Workout>) => {
+    setWorkouts(workouts.map((w) => (w.id === id ? { ...w, ...workout } : w)));
   };
 
-  // Define the moveWorkout function
-  const moveWorkout = (id: number, direction: "up" | "down") => {
-    const index = workouts.findIndex((workout) => workout.id === id);
-    if (
-      (direction === "up" && index === 0) ||
-      (direction === "down" && index === workouts.length - 1)
-    ) {
-      return;
-    }
+  // Define the deleteWorkout function
+  const deleteWorkout = (id: string) => {
+    setWorkouts(workouts.filter((w) => w.id !== id));
+  };
 
-    // Define the new workouts array
-    const newWorkouts = [...workouts];
+  // Define the getWorkout function
+  const getWorkout = (id: string) => {
+    return workouts.find((w) => w.id === id);
+  };
 
-    // Define the new index
-    const newIndex = direction === "up" ? index - 1 : index + 1;
+  // Define the getWorkoutsByType function
+  const getWorkoutsByType = (type: string) => {
+    return workouts.filter((w) => w.type === type);
+  };
 
-    // Swap the workouts
-    [newWorkouts[index], newWorkouts[newIndex]] = [
-      newWorkouts[newIndex],
-      newWorkouts[index],
-    ];
-
-    // Update the workouts
-    setWorkouts(newWorkouts);
+  // Define the getWorkoutsByDuration function
+  const getWorkoutsByDuration = (duration: number) => {
+    return workouts.filter((w) => w.duration === duration);
   };
 
   // Define the main return function
   return {
     workouts,
     addWorkout,
-    removeWorkout,
     updateWorkout,
-    moveWorkout,
+    deleteWorkout,
+    getWorkout,
+    getWorkoutsByType,
+    getWorkoutsByDuration,
   };
 }
