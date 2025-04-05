@@ -1,0 +1,3 @@
+```typescriptreact file="app/about-standalone/page.tsx" isDeleted="true"
+...deleted...
+
