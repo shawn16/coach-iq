@@ -18,6 +18,9 @@ import {
   Legend,
 } from "chart.js";
 
+// Importing custom hook
+import { useProgressionChart } from "@/hooks/useProgressionChart";
+
 // Register the components with Chart.js
 ChartJS.register(
   CategoryScale,
@@ -37,42 +40,11 @@ interface ProgressionChartProps {
 
 // Define the ProgressionChart component
 export function ProgressionChart({ steps, metric }: ProgressionChartProps) {
-  // Define the data for the chart
-  const data = {
-    labels: steps.map((step) => `Week ${step.week}`),
-    datasets: [
-      {
-        label: metric,
-        data: steps.map((step) => parseFloat(step.value)),
-        borderColor: "rgb(75, 192, 192)",
-        tension: 0.1,
-      },
-    ],
-  };
+  const { chartData, chartOptions } = useProgressionChart(steps, metric);
 
-  // Define the options for the chart
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top" as const,
-      },
-      title: {
-        display: true,
-        text: "Progression Over Time",
-      },
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-      },
-    },
-  };
-
-  // Define the main return function
   return (
     <div className="p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-      <Line data={data} options={options} />
+      <Line data={chartData} options={chartOptions} />
     </div>
   );
 }

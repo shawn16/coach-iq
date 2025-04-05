@@ -7,6 +7,7 @@ export interface ProgressionTemplate {
   duration: number;
   description: string;
   pattern: number[];
+  workouts: Workout[];
   workoutType?: string;
   progress?: number;
   status?: string;
@@ -24,10 +25,11 @@ export interface Step {
 // Define the Workout interface - Represents a workout
 export interface Workout {
   id: number;
-  reps: string;
-  distance: string;
-  pace: string;
-  recovery: string;
+  name: string;
+  type: WorkoutType;
+  format: WorkoutFormat;
+  value: string;
+  unit: string;
   description: string;
 }
 
