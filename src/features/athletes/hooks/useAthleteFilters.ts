@@ -1,6 +1,16 @@
-import { useState, useMemo } from "react";
-import { Athlete, SortConfig, AthleteFilters } from "../types";
+import { useState, useCallback, useMemo } from "react";
+import { Athlete } from "../types";
 import { timeToSeconds } from "../utils/timeCalculations";
+
+interface AthleteFilters {
+  searchQuery: string;
+  gradeFilter: string;
+}
+
+interface SortConfig {
+  column: string;
+  direction: "asc" | "desc";
+}
 
 // Custom hook for filtering and sorting athletes
 export function useAthleteFilters(athletes: Athlete[]) {
@@ -16,21 +26,22 @@ export function useAthleteFilters(athletes: Athlete[]) {
   });
 
   // Function to handle sorting
-  const handleSort = (column: SortConfig["column"]) => {
+  const handleSort = useCallback((column: string) => {
     setSortConfig((prev) => ({
       column,
-      direction: prev.column === column && prev.direction === "asc" ? "desc" : "asc",
+      direction:
+        prev.column === column && prev.direction === "asc" ? "desc" : "asc",
     }));
-  };
+  }, []);
 
   // Function to set the search query
-  const setSearchQuery = (searchQuery: string) => {
-    setFilters((prev) => ({ ...prev, searchQuery }));
-  };
+  const setSearchQuery = useCallback((query: string) => {
+    setFilters((prev) => ({ ...prev, searchQuery: query }));
+  }, []);
 
-  const setGradeFilter = (gradeFilter: string) => {
-    setFilters((prev) => ({ ...prev, gradeFilter }));
-  };
+  const setGradeFilter = useCallback((filter: string) => {
+    setFilters((prev) => ({ ...prev, gradeFilter: filter }));
+  }, []);
 
   // Function to filter and sort athletes
   const filteredAthletes = useMemo(() => {
@@ -40,7 +51,8 @@ export function useAthleteFilters(athletes: Athlete[]) {
     if (filters.searchQuery) {
       const query = filters.searchQuery.toLowerCase();
       filtered = filtered.filter((athlete) => {
-        const fullName = `${athlete.firstName} ${athlete.lastName}`.toLowerCase();
+        const fullName =
+          `${athlete.firstName} ${athlete.lastName}`.toLowerCase();
         return fullName.includes(query);
       });
     }
@@ -71,9 +83,7 @@ export function useAthleteFilters(athletes: Athlete[]) {
       if (sortConfig.column === "time1600m") {
         const timeA = timeToSeconds(a.time1600m);
         const timeB = timeToSeconds(b.time1600m);
-        return sortConfig.direction === "asc"
-          ? timeA - timeB
-          : timeB - timeA;
+        return sortConfig.direction === "asc" ? timeA - timeB : timeB - timeA;
       }
 
       // Return 0 if no sorting is needed
@@ -91,4 +101,4 @@ export function useAthleteFilters(athletes: Athlete[]) {
     setGradeFilter,
     handleSort,
   };
-} 
+}

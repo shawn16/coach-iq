@@ -1,66 +1,109 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { ChevronDown, ChevronUp, Edit, Trash2 } from "lucide-react"
-import { AddWorkoutDialog } from "@/components/add-workout-dialog"
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ChevronDown, ChevronUp, Edit, Trash2 } from "lucide-react";
+import { AddWorkoutDialog } from "@/components/add-workout-dialog";
 
-export function TrainingPlanTable({ planData, workoutTypes, updateWorkout, removeWeek, moveWeek }) {
-  const [editingCell, setEditingCell] = useState<{ weekId: number; workoutType: string } | null>(null)
-  const [editValue, setEditValue] = useState("")
-  const [showAddWorkoutDialog, setShowAddWorkoutDialog] = useState(false)
-  const [selectedCell, setSelectedCell] = useState<{ weekId: number; workoutType: string } | null>(null)
+interface WorkoutType {
+  id: string;
+  name: string;
+  color: string;
+}
+
+interface WeekData {
+  id: number;
+  weekNumber: number;
+  dateRange: string;
+  seasonPhase: string;
+  workouts: Record<string, string>;
+}
+
+interface TrainingPlanTableProps {
+  planData: WeekData[];
+  workoutTypes: WorkoutType[];
+  updateWorkout: (weekId: number, workoutType: string, value: string) => void;
+  removeWeek: (weekId: number) => void;
+  moveWeek: (weekId: number, direction: "up" | "down") => void;
+}
+
+export function TrainingPlanTable({
+  planData,
+  workoutTypes,
+  updateWorkout,
+  removeWeek,
+  moveWeek,
+}: TrainingPlanTableProps) {
+  const [editingCell, setEditingCell] = useState<{
+    weekId: number;
+    workoutType: string;
+  } | null>(null);
+  const [editValue, setEditValue] = useState("");
+  const [showAddWorkoutDialog, setShowAddWorkoutDialog] = useState(false);
+  const [selectedCell, setSelectedCell] = useState<{
+    weekId: number;
+    workoutType: string;
+  } | null>(null);
 
   useEffect(() => {
     // Apply smooth scrolling to all scrollable containers
-    const scrollContainers = document.querySelectorAll(".table-scroll-container")
+    const scrollContainers = document.querySelectorAll(
+      ".table-scroll-container"
+    );
     scrollContainers.forEach((container) => {
-      container.style.scrollBehavior = "smooth"
-    })
-  }, [])
+      (container as HTMLElement).style.scrollBehavior = "smooth";
+    });
+  }, []);
 
-  const handleCellClick = (weekId, workoutType, currentValue) => {
-    setEditingCell({ weekId, workoutType })
-    setEditValue(currentValue || "")
-  }
+  const handleCellClick = (
+    weekId: number,
+    workoutType: string,
+    currentValue: string
+  ) => {
+    setEditingCell({ weekId, workoutType });
+    setEditValue(currentValue || "");
+  };
 
   const handleCellBlur = () => {
     if (editingCell) {
-      updateWorkout(editingCell.weekId, editingCell.workoutType, editValue)
-      setEditingCell(null)
+      updateWorkout(editingCell.weekId, editingCell.workoutType, editValue);
+      setEditingCell(null);
     }
-  }
+  };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      handleCellBlur()
+      handleCellBlur();
     } else if (e.key === "Escape") {
-      setEditingCell(null)
+      setEditingCell(null);
     }
-  }
+  };
 
-  const openAddWorkoutDialog = (weekId, workoutType) => {
-    setSelectedCell({ weekId, workoutType })
-    setShowAddWorkoutDialog(true)
-  }
+  const openAddWorkoutDialog = (weekId: number, workoutType: string) => {
+    setSelectedCell({ weekId, workoutType });
+    setShowAddWorkoutDialog(true);
+  };
 
-  const handleAddWorkout = (workout) => {
+  const handleAddWorkout = (workout: string) => {
     if (selectedCell) {
-      updateWorkout(selectedCell.weekId, selectedCell.workoutType, workout)
+      updateWorkout(selectedCell.weekId, selectedCell.workoutType, workout);
     }
-    setShowAddWorkoutDialog(false)
-  }
+    setShowAddWorkoutDialog(false);
+  };
 
   // Get color class for season phase
-  const getSeasonPhaseColor = (phase) => {
-    if (phase.includes("Transition")) return "bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300"
-    if (phase.includes("Summer")) return "bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-300"
-    if (phase.includes("OFF")) return "bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300"
+  const getSeasonPhaseColor = (phase: string) => {
+    if (phase.includes("Transition"))
+      return "bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300";
+    if (phase.includes("Summer"))
+      return "bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-300";
+    if (phase.includes("OFF"))
+      return "bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300";
     if (phase.includes("Relays") || phase.includes("Inv"))
-      return "bg-purple-50 dark:bg-purple-900/20 text-purple-800 dark:text-purple-300"
-    return "bg-gray-50 dark:bg-gray-800/40 text-gray-800 dark:text-gray-300"
-  }
+      return "bg-purple-50 dark:bg-purple-900/20 text-purple-800 dark:text-purple-300";
+    return "bg-gray-50 dark:bg-gray-800/40 text-gray-800 dark:text-gray-300";
+  };
 
   return (
     <div className="relative shadow-md sm:rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
@@ -88,10 +131,18 @@ export function TrainingPlanTable({ planData, workoutTypes, updateWorkout, remov
               key={`fixed-${week.id}`}
               className="grid grid-cols-[80px_120px_150px] bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700"
             >
-              <div className="px-4 py-3 flex items-center font-medium h-14">{week.weekNumber}</div>
-              <div className="px-4 py-3 flex items-center h-14">{week.dateRange}</div>
+              <div className="px-4 py-3 flex items-center font-medium h-14">
+                {week.weekNumber}
+              </div>
+              <div className="px-4 py-3 flex items-center h-14">
+                {week.dateRange}
+              </div>
               <div className="px-4 py-3 flex items-center h-14 border-r-2 border-r-gray-300 dark:border-r-gray-700">
-                <span className={`px-2 py-1 rounded text-xs font-medium ${getSeasonPhaseColor(week.seasonPhase)}`}>
+                <span
+                  className={`px-2 py-1 rounded text-xs font-medium ${getSeasonPhaseColor(
+                    week.seasonPhase
+                  )}`}
+                >
                   {week.seasonPhase}
                 </span>
               </div>
@@ -129,9 +180,16 @@ export function TrainingPlanTable({ planData, workoutTypes, updateWorkout, remov
                   <div
                     key={`${week.id}-${type.id}`}
                     className="px-4 py-3 flex items-center w-[150px] h-14 cursor-pointer"
-                    onClick={() => handleCellClick(week.id, type.id, week.workouts[type.id] || "")}
+                    onClick={() =>
+                      handleCellClick(
+                        week.id,
+                        type.id,
+                        week.workouts[type.id] || ""
+                      )
+                    }
                   >
-                    {editingCell?.weekId === week.id && editingCell?.workoutType === type.id ? (
+                    {editingCell?.weekId === week.id &&
+                    editingCell?.workoutType === type.id ? (
                       <div className="flex w-full">
                         <Input
                           value={editValue}
@@ -151,9 +209,15 @@ export function TrainingPlanTable({ planData, workoutTypes, updateWorkout, remov
                         </Button>
                       </div>
                     ) : (
-                      <div className={`px-2 py-1 rounded text-xs w-full ${week.workouts[type.id] ? type.color : ""}`}>
+                      <div
+                        className={`px-2 py-1 rounded text-xs w-full ${
+                          week.workouts[type.id] ? type.color : ""
+                        }`}
+                      >
                         {week.workouts[type.id] || (
-                          <span className="text-gray-400 dark:text-gray-600">Click to add workout</span>
+                          <span className="text-gray-400 dark:text-gray-600">
+                            Click to add workout
+                          </span>
                         )}
                       </div>
                     )}
@@ -203,6 +267,5 @@ export function TrainingPlanTable({ planData, workoutTypes, updateWorkout, remov
         />
       )}
     </div>
-  )
+  );
 }
-

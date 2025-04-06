@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
 import { Workout } from "@/types/workout";
 
 // Define the STORAGE_KEY constant
@@ -28,34 +30,42 @@ export function useTrainingPlan() {
   }, [plans]);
 
   // Define the addPlan function
-  const addPlan = (plan: Omit<TrainingPlan, "id">) => {
+  const addPlan = useCallback((plan: Omit<TrainingPlan, "id">) => {
     const newPlan = {
       ...plan,
       id: crypto.randomUUID(),
     };
-    setPlans([...plans, newPlan]);
+    setPlans((prevPlans) => [...prevPlans, newPlan]);
     return newPlan;
-  };
+  }, []);
 
   // Define the updatePlan function
-  const updatePlan = (id: string, plan: Partial<TrainingPlan>) => {
-    setPlans(plans.map((p) => (p.id === id ? { ...p, ...plan } : p)));
-  };
+  const updatePlan = useCallback((id: string, plan: Partial<TrainingPlan>) => {
+    setPlans((prevPlans) =>
+      prevPlans.map((p) => (p.id === id ? { ...p, ...plan } : p))
+    );
+  }, []);
 
   // Define the deletePlan function
-  const deletePlan = (id: string) => {
-    setPlans(plans.filter((p) => p.id !== id));
-  };
+  const deletePlan = useCallback((id: string) => {
+    setPlans((prevPlans) => prevPlans.filter((p) => p.id !== id));
+  }, []);
 
   // Define the getPlan function
-  const getPlan = (id: string) => {
-    return plans.find((p) => p.id === id);
-  };
+  const getPlan = useCallback(
+    (id: string) => {
+      return plans.find((p) => p.id === id);
+    },
+    [plans]
+  );
 
   // Define the getPlansByDuration function
-  const getPlansByDuration = (duration: number) => {
-    return plans.filter((p) => p.duration === duration);
-  };
+  const getPlansByDuration = useCallback(
+    (duration: number) => {
+      return plans.filter((p) => p.duration === duration);
+    },
+    [plans]
+  );
 
   // Define the main return function
   return {

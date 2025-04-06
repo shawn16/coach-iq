@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
 
 /**
  * Workout Results Hook
@@ -19,6 +18,7 @@ interface Athlete {
   name: string;
   group: string;
   results: Record<string, string>;
+  notes?: string;
 }
 
 interface WorkoutStructure {

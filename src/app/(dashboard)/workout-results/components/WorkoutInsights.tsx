@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
 import { useWorkoutResults } from "@/hooks/useWorkoutResults";
+import { Brain } from "lucide-react";
 
 /**
  * Workout Insights Component
@@ -29,7 +30,7 @@ import { useWorkoutResults } from "@/hooks/useWorkoutResults";
  * 5. Workout Analysis - Breaking down performance by workout type
  */
 export function WorkoutInsights() {
-  const { aiInsights, isAnalyzing, generateAIAnalysis } = useWorkoutResults();
+  const { isAnalyzing, generateAIAnalysis } = useWorkoutResults();
 
   return (
     <div className="space-y-6">
@@ -42,21 +43,12 @@ export function WorkoutInsights() {
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <div className="flex items-center gap-2">
             <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
-              <svg
-                className="h-5 w-5 text-blue-600"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
-                  fill="currentColor"
-                />
-              </svg>
+              <Brain className="h-4 w-4 text-blue-600" />
             </div>
             <div>
               <CardTitle>AI Workout Analysis</CardTitle>
               <CardDescription>
-                Get AI-powered insights about your team's performance
+                Get AI-powered insights about your team&apos;s performance
               </CardDescription>
             </div>
           </div>
