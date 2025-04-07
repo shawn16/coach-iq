@@ -1,3 +1,20 @@
+/**
+ * Training Plan Builder Page
+ *
+ * Main page for creating and managing training plans.
+ * Provides a comprehensive interface for:
+ * - Plan configuration (name, description, dates, type)
+ * - Week management (adding, removing, reordering)
+ * - Workout scheduling and updates
+ * - Plan import/export functionality
+ *
+ * Features:
+ * - Tabbed interface for different aspects of plan management
+ * - Real-time workout updates
+ * - Error handling with toast notifications
+ * - Data persistence and state management
+ */
+
 "use client";
 
 import { useState, useCallback } from "react";
@@ -15,7 +32,15 @@ import type {
   WorkoutType as WorkoutUpdateType,
 } from "./components/WorkoutUpdates";
 
-// Define types for our data structures
+/**
+ * Workout Type Configuration
+ *
+ * Defines the visual and functional properties of workout types
+ * @property id - Unique identifier for the workout type
+ * @property name - Display name of the workout type
+ * @property color - Background color for the workout type
+ * @property textColor - Text color for the workout type
+ */
 interface WorkoutType {
   id: string;
   name: string;
@@ -23,6 +48,16 @@ interface WorkoutType {
   textColor: string;
 }
 
+/**
+ * Plan Data Structure
+ *
+ * Represents a week in the training plan
+ * @property id - Unique identifier for the week
+ * @property weekNumber - Display number of the week
+ * @property dateRange - Date range for the week
+ * @property seasonPhase - Current phase of the training season
+ * @property workouts - Map of workout types to their values
+ */
 interface PlanData {
   id: number;
   weekNumber: number;
@@ -32,10 +67,11 @@ interface PlanData {
 }
 
 export default function TrainingPlanBuilderPage() {
+  // Navigation and notification hooks
   const router = useRouter();
   const { toast } = useToast();
 
-  // State management
+  // State management for plan configuration
   const [planName, setPlanName] = useState("");
   const [planDescription, setPlanDescription] = useState("");
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
@@ -47,7 +83,12 @@ export default function TrainingPlanBuilderPage() {
   const [planData, setPlanData] = useState<PlanData[]>([]);
   const [activeTab, setActiveTab] = useState("plan-configuration");
 
-  // Memoize workout types to prevent recreation on every render
+  /**
+   * Workout Type Definitions
+   *
+   * Predefined workout types with their visual properties
+   * Memoized to prevent recreation on every render
+   */
   const workoutTypes: WorkoutType[] = [
     {
       id: "green_vol",
@@ -58,7 +99,16 @@ export default function TrainingPlanBuilderPage() {
     // ... rest of workout types ...
   ];
 
-  // Handle workout updates with proper error handling
+  /**
+   * Workout Update Handler
+   *
+   * Updates a specific workout in the plan data
+   * Includes error handling with toast notifications
+   *
+   * @param weekId - ID of the week to update
+   * @param workoutType - Type of workout to update
+   * @param value - New value for the workout
+   */
   const updateWorkout = useCallback(
     (weekId: number, workoutType: string, value: string) => {
       try {
@@ -82,7 +132,17 @@ export default function TrainingPlanBuilderPage() {
     },
     [toast]
   );
-  // Handle week management
+
+  /**
+   * Week Management Handlers
+   *
+   * Functions for managing weeks in the training plan:
+   * - Adding new weeks
+   * - Removing weeks
+   * - Reordering weeks
+   *
+   * Each function includes error handling with toast notifications
+   */
   const handleAddWeek = useCallback(() => {
     try {
       setPlanData((prevData) => [
@@ -143,7 +203,14 @@ export default function TrainingPlanBuilderPage() {
     [toast]
   );
 
-  // Convert PlanData to Workout type for WorkoutUpdates component
+  /**
+   * Data Conversion Utility
+   *
+   * Converts PlanData format to Workout format for the WorkoutUpdates component
+   *
+   * @param data - PlanData array to convert
+   * @returns Array of Workout objects
+   */
   const convertPlanDataToWorkouts = (data: PlanData[]): Workout[] => {
     return data.map((week) => ({
       id: week.id.toString(),
@@ -155,7 +222,17 @@ export default function TrainingPlanBuilderPage() {
     }));
   };
 
-  // Handle plan operations
+  /**
+   * Plan Operation Handlers
+   *
+   * Functions for managing the training plan:
+   * - Importing plans
+   * - Exporting plans
+   * - Saving plans
+   * - Previewing plans
+   *
+   * Each function includes error handling with toast notifications
+   */
   const handleImport = useCallback(async () => {
     try {
       // Implementation
@@ -202,7 +279,7 @@ export default function TrainingPlanBuilderPage() {
         variant: "destructive",
       });
     }
-  }, [router, planName, toast]);
+  }, [planName, router, toast]);
 
   const handleCopy = useCallback(async () => {
     try {

@@ -12,8 +12,8 @@ const nextConfig: NextConfig = {
     domains: [],
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: '**',
+        protocol: "https",
+        hostname: "**",
       },
     ],
   },
@@ -22,7 +22,6 @@ const nextConfig: NextConfig = {
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
-  swcMinify: true,
   reactStrictMode: true,
   poweredByHeader: false,
 };

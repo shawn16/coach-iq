@@ -1,3 +1,23 @@
+/**
+ * TrainingPlanTable Component
+ *
+ * A complex table component for managing and displaying training plans.
+ * Features a split layout with fixed and scrollable sections for optimal UX.
+ *
+ * Key Features:
+ * - Fixed left columns (Week, Dates, Phase)
+ * - Horizontally scrollable workout columns
+ * - Inline cell editing
+ * - Week reordering
+ * - Workout type management
+ * - Season phase color coding
+ *
+ * Data Structure:
+ * - WeekData: Represents a week in the training plan
+ * - WorkoutType: Defines different types of workouts
+ * - TrainingPlanTableProps: Component interface
+ */
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -6,12 +26,26 @@ import { Input } from "@/components/ui/input";
 import { ChevronDown, ChevronUp, Edit, Trash2 } from "lucide-react";
 import { AddWorkoutDialog } from "@/components/add-workout-dialog";
 
+/**
+ * Defines the structure of a workout type
+ * @property id - Unique identifier
+ * @property name - Display name
+ * @property color - Color code for visual representation
+ */
 interface WorkoutType {
   id: string;
   name: string;
   color: string;
 }
 
+/**
+ * Represents a week in the training plan
+ * @property id - Unique identifier
+ * @property weekNumber - Week number in the plan
+ * @property dateRange - Date range for the week
+ * @property seasonPhase - Current training phase
+ * @property workouts - Map of workout types to their descriptions
+ */
 interface WeekData {
   id: number;
   weekNumber: number;
@@ -20,6 +54,14 @@ interface WeekData {
   workouts: Record<string, string>;
 }
 
+/**
+ * Props interface for the TrainingPlanTable component
+ * @property planData - Array of week data
+ * @property workoutTypes - Available workout types
+ * @property updateWorkout - Callback for updating workout details
+ * @property removeWeek - Callback for removing a week
+ * @property moveWeek - Callback for reordering weeks
+ */
 interface TrainingPlanTableProps {
   planData: WeekData[];
   workoutTypes: WorkoutType[];
@@ -35,6 +77,7 @@ export function TrainingPlanTable({
   removeWeek,
   moveWeek,
 }: TrainingPlanTableProps) {
+  // State for managing cell editing
   const [editingCell, setEditingCell] = useState<{
     weekId: number;
     workoutType: string;
@@ -46,8 +89,11 @@ export function TrainingPlanTable({
     workoutType: string;
   } | null>(null);
 
+  /**
+   * Applies smooth scrolling behavior to all scrollable containers
+   * Runs once on component mount
+   */
   useEffect(() => {
-    // Apply smooth scrolling to all scrollable containers
     const scrollContainers = document.querySelectorAll(
       ".table-scroll-container"
     );
@@ -56,6 +102,12 @@ export function TrainingPlanTable({
     });
   }, []);
 
+  /**
+   * Handles cell click for editing
+   * @param weekId - ID of the week
+   * @param workoutType - Type of workout
+   * @param currentValue - Current cell value
+   */
   const handleCellClick = (
     weekId: number,
     workoutType: string,
@@ -65,6 +117,10 @@ export function TrainingPlanTable({
     setEditValue(currentValue || "");
   };
 
+  /**
+   * Handles cell blur event
+   * Saves changes and exits edit mode
+   */
   const handleCellBlur = () => {
     if (editingCell) {
       updateWorkout(editingCell.weekId, editingCell.workoutType, editValue);
@@ -72,6 +128,10 @@ export function TrainingPlanTable({
     }
   };
 
+  /**
+   * Handles keyboard events during cell editing
+   * @param e - Keyboard event
+   */
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleCellBlur();
@@ -80,11 +140,20 @@ export function TrainingPlanTable({
     }
   };
 
+  /**
+   * Opens the add workout dialog
+   * @param weekId - ID of the week
+   * @param workoutType - Type of workout
+   */
   const openAddWorkoutDialog = (weekId: number, workoutType: string) => {
     setSelectedCell({ weekId, workoutType });
     setShowAddWorkoutDialog(true);
   };
 
+  /**
+   * Handles adding a new workout
+   * @param workout - Workout description
+   */
   const handleAddWorkout = (workout: string) => {
     if (selectedCell) {
       updateWorkout(selectedCell.weekId, selectedCell.workoutType, workout);
@@ -92,7 +161,11 @@ export function TrainingPlanTable({
     setShowAddWorkoutDialog(false);
   };
 
-  // Get color class for season phase
+  /**
+   * Returns appropriate color classes based on season phase
+   * @param phase - Season phase name
+   * @returns Tailwind CSS classes for styling
+   */
   const getSeasonPhaseColor = (phase: string) => {
     if (phase.includes("Transition"))
       return "bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300";
@@ -108,7 +181,7 @@ export function TrainingPlanTable({
   return (
     <div className="relative shadow-md sm:rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
       <div className="flex">
-        {/* Fixed columns section */}
+        {/* Fixed columns section - Week, Dates, Phase */}
         <div className="flex-none w-[350px]">
           {/* Fixed headers */}
           <div className="sticky top-0 z-30 bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
@@ -150,7 +223,7 @@ export function TrainingPlanTable({
           ))}
         </div>
 
-        {/* Scrollable columns section - single scroll container for all rows */}
+        {/* Scrollable columns section - Workouts and Actions */}
         <div className="overflow-x-auto flex-grow table-scroll-container">
           <div className="min-w-max">
             {/* Scrollable headers */}
@@ -199,59 +272,52 @@ export function TrainingPlanTable({
                           autoFocus
                           className="h-8 text-sm border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
                         />
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-between w-full">
+                        <span className="text-sm">
+                          {week.workouts[type.id] || ""}
+                        </span>
                         <Button
-                          size="sm"
                           variant="ghost"
-                          className="h-8 w-8 p-0 ml-1 flex-shrink-0"
-                          onClick={() => openAddWorkoutDialog(week.id, type.id)}
+                          size="sm"
+                          className="h-8 w-8 p-0"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openAddWorkoutDialog(week.id, type.id);
+                          }}
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
                       </div>
-                    ) : (
-                      <div
-                        className={`px-2 py-1 rounded text-xs w-full ${
-                          week.workouts[type.id] ? type.color : ""
-                        }`}
-                      >
-                        {week.workouts[type.id] || (
-                          <span className="text-gray-400 dark:text-gray-600">
-                            Click to add workout
-                          </span>
-                        )}
-                      </div>
                     )}
                   </div>
                 ))}
-                <div className="px-4 py-3 flex items-center justify-start w-[120px] h-14">
-                  <div className="flex items-center space-x-1">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => moveWeek(week.id, "up")}
-                      disabled={week.weekNumber === 1}
-                      className="h-8 w-8 text-gray-500"
-                    >
-                      <ChevronUp className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => moveWeek(week.id, "down")}
-                      disabled={week.weekNumber === planData.length}
-                      className="h-8 w-8 text-gray-500"
-                    >
-                      <ChevronDown className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => removeWeek(week.id)}
-                      className="h-8 w-8 text-red-500"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
+                <div className="px-4 py-3 flex items-center gap-2 w-[120px] h-14">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0"
+                    onClick={() => moveWeek(week.id, "up")}
+                  >
+                    <ChevronUp className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0"
+                    onClick={() => moveWeek(week.id, "down")}
+                  >
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0"
+                    onClick={() => removeWeek(week.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </div>
               </div>
             ))}
@@ -259,13 +325,12 @@ export function TrainingPlanTable({
         </div>
       </div>
 
-      {showAddWorkoutDialog && (
-        <AddWorkoutDialog
-          isOpen={showAddWorkoutDialog}
-          onClose={() => setShowAddWorkoutDialog(false)}
-          onAdd={handleAddWorkout}
-        />
-      )}
+      {/* Add Workout Dialog */}
+      <AddWorkoutDialog
+        open={showAddWorkoutDialog}
+        onOpenChange={setShowAddWorkoutDialog}
+        onAddWorkout={handleAddWorkout}
+      />
     </div>
   );
 }

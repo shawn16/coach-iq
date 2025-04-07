@@ -24,7 +24,17 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 
-// Define proper types for the workout data
+/**
+ * Workout data structure
+ *
+ * Represents a single workout in the training plan
+ * @property id - Unique identifier for the workout
+ * @property type - Type of workout (e.g., "interval", "tempo")
+ * @property name - Display name of the workout
+ * @property value - Workout details or parameters
+ * @property description - Optional detailed description
+ * @property weekId - Week number this workout belongs to
+ */
 export interface Workout {
   id: string;
   type: string;
@@ -34,6 +44,15 @@ export interface Workout {
   weekId: number;
 }
 
+/**
+ * Workout type configuration
+ *
+ * Defines the visual and functional properties of workout types
+ * @property id - Unique identifier for the workout type
+ * @property name - Display name of the workout type
+ * @property color - Background color for the workout type
+ * @property textColor - Text color for the workout type
+ */
 export interface WorkoutType {
   id: string;
   name: string;
@@ -41,6 +60,21 @@ export interface WorkoutType {
   textColor: string;
 }
 
+/**
+ * Component props interface
+ *
+ * @property planData - Array of workouts in the training plan
+ * @property workoutTypes - Available workout type configurations
+ * @property updateWorkout - Callback for updating workout details
+ * @property removeWeek - Callback for removing a week
+ * @property moveWeek - Callback for reordering weeks
+ * @property onAddWeek - Optional callback for adding a new week
+ * @property onImport - Optional callback for importing a plan
+ * @property onExport - Optional callback for exporting a plan
+ * @property onSave - Optional callback for saving the plan
+ * @property onPreview - Optional callback for previewing the plan
+ * @property onCopy - Optional callback for copying the plan
+ */
 interface WorkoutUpdatesProps {
   planData: Workout[];
   workoutTypes: WorkoutType[];
@@ -55,7 +89,19 @@ interface WorkoutUpdatesProps {
   onCopy?: () => void;
 }
 
-// Memoized action buttons component
+/**
+ * Action Buttons Component
+ *
+ * Memoized toolbar component for plan management actions
+ * Includes buttons for:
+ * - Importing plans
+ * - Exporting plans
+ * - Saving plans
+ * - Previewing plans
+ * - Copying plans
+ *
+ * Each button has a tooltip for better UX
+ */
 const ActionButtons = memo(
   ({
     onImport,
@@ -130,7 +176,15 @@ const ActionButtons = memo(
 );
 ActionButtons.displayName = "ActionButtons";
 
-// Error fallback component
+/**
+ * Error Fallback Component
+ *
+ * Displays an error message and retry button when something goes wrong
+ * Used as a fallback for the ErrorBoundary component
+ *
+ * @param error - The error object containing the error message
+ * @param resetErrorBoundary - Function to reset the error state
+ */
 const ErrorFallback = ({
   error,
   resetErrorBoundary,
@@ -148,13 +202,18 @@ const ErrorFallback = ({
 );
 
 /**
- * Workout Updates Component
+ * Main Workout Updates Component
  *
- * This component handles the workout management in a training plan:
- * 1. Display workout table with proper type safety
- * 2. Import/Export functionality with error handling
- * 3. Save/Preview/Copy actions
- * 4. Workout assignments and updates
+ * Manages the workout schedule and provides editing capabilities
+ *
+ * State:
+ * - selectedWorkout: Currently selected workout for editing
+ *
+ * Features:
+ * - Workout type selection and updates
+ * - Workout value editing
+ * - Workout description management
+ * - Error handling with fallback UI
  */
 export function WorkoutUpdates({
   planData,
@@ -174,7 +233,10 @@ export function WorkoutUpdates({
 
   /**
    * Handles changes to the workout type selection
-   * @param {string} value - The selected workout type ID
+   *
+   * Updates the workout type while preserving other properties
+   *
+   * @param value - The selected workout type ID
    */
   const handleTypeChange = (value: string) => {
     if (!selectedWorkout) return;
@@ -190,7 +252,10 @@ export function WorkoutUpdates({
 
   /**
    * Handles changes to the workout value input
-   * @param {React.ChangeEvent<HTMLInputElement>} e - The change event from the input
+   *
+   * Updates the workout value while preserving other properties
+   *
+   * @param e - The change event from the input
    */
   const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!selectedWorkout) return;
@@ -199,7 +264,10 @@ export function WorkoutUpdates({
 
   /**
    * Handles changes to the workout description
-   * @param {React.ChangeEvent<HTMLTextAreaElement>} e - The change event from the textarea
+   *
+   * Updates the workout description while preserving other properties
+   *
+   * @param e - The change event from the textarea
    */
   const handleDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>
@@ -210,6 +278,7 @@ export function WorkoutUpdates({
 
   return (
     <div className="space-y-6">
+      {/* Workout Schedule Card */}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -235,6 +304,7 @@ export function WorkoutUpdates({
           </div>
         </CardHeader>
         <CardContent>
+          {/* Error boundary for handling table errors */}
           <ErrorBoundary
             FallbackComponent={ErrorFallback}
             onReset={() => {
@@ -242,6 +312,7 @@ export function WorkoutUpdates({
               window.location.reload();
             }}
           >
+            {/* Training plan table component */}
             <TrainingPlanTable
               planData={planData.reduce<
                 Array<{
@@ -277,6 +348,7 @@ export function WorkoutUpdates({
         </CardContent>
       </Card>
 
+      {/* Workout Updates Card */}
       <Card>
         <CardHeader>
           <CardTitle>Workout Updates</CardTitle>

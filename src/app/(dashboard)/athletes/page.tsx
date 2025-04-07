@@ -1,3 +1,20 @@
+/**
+ * Athletes Page Component
+ *
+ * Main page for managing and viewing athlete information.
+ * Features:
+ * - Display athlete list in a sortable table
+ * - Search and filter athletes by name and grade
+ * - Add new athletes
+ * - View and delete athlete details
+ *
+ * State Management:
+ * - athletes: List of all athletes
+ * - searchQuery: Current search filter
+ * - gradeFilter: Selected grade filter
+ * - sortConfig: Current sorting configuration
+ */
+
 "use client";
 
 import { useState } from "react";
@@ -6,6 +23,16 @@ import { AthleteFilters } from "@/features/athletes/components/AthleteFilters";
 import { AthleteTable } from "@/features/athletes/components/AthleteTable";
 import { Button } from "@/components/ui/button";
 
+/**
+ * Sample athlete data for development and testing
+ *
+ * Each athlete has:
+ * - Unique ID
+ * - First and last name
+ * - Birthday
+ * - Grade level
+ * - 1600m time
+ */
 const sampleAthletes: Athlete[] = [
   {
     id: 1,
@@ -74,6 +101,7 @@ const sampleAthletes: Athlete[] = [
 ];
 
 export default function AthletesPage() {
+  // State management for athletes list and filters
   const [athletes] = useState<Athlete[]>(sampleAthletes);
   const [searchQuery, setSearchQuery] = useState("");
   const [gradeFilter, setGradeFilter] = useState("all");
@@ -82,7 +110,13 @@ export default function AthletesPage() {
     direction: "asc",
   });
 
-  // Filter athletes based on search query and grade filter
+  /**
+   * Filters athletes based on search query and grade filter
+   *
+   * @returns Filtered list of athletes matching:
+   * - Name search (first or last name)
+   * - Selected grade level
+   */
   const filteredAthletes = athletes.filter((athlete) => {
     const matchesSearch =
       athlete.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -94,7 +128,16 @@ export default function AthletesPage() {
     return matchesSearch && matchesGrade;
   });
 
-  // Sort athletes based on sort config
+  /**
+   * Sorts athletes based on current sort configuration
+   *
+   * Supports sorting by:
+   * - Last name (alphabetical)
+   * - Grade (numerical)
+   * - 1600m time (converted to seconds)
+   *
+   * @returns Sorted list of athletes
+   */
   const sortedAthletes = [...filteredAthletes].sort((a, b) => {
     if (sortConfig.column === "lastName") {
       return sortConfig.direction === "asc"
@@ -118,6 +161,14 @@ export default function AthletesPage() {
     return 0;
   });
 
+  /**
+   * Handles column sorting
+   *
+   * Toggles sort direction if clicking the same column,
+   * otherwise sets new sort column and direction to ascending
+   *
+   * @param column - Column to sort by
+   */
   const handleSort = (column: SortConfig["column"]) => {
     setSortConfig((prev) => ({
       column,
@@ -126,6 +177,12 @@ export default function AthletesPage() {
     }));
   };
 
+  /**
+   * Handles athlete deletion
+   *
+   * @param athlete - Athlete to delete
+   * @param e - Click event
+   */
   const handleDeleteClick = (athlete: Athlete, e: React.MouseEvent) => {
     e.stopPropagation();
     // TODO: Implement delete functionality when dialog is ready
@@ -135,6 +192,7 @@ export default function AthletesPage() {
   return (
     <div className="container mx-auto py-6">
       <div className="flex flex-col gap-6">
+        {/* Page header with title and add button */}
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Athletes</h1>
           <Button onClick={() => console.log("Add athlete clicked")}>
@@ -142,6 +200,7 @@ export default function AthletesPage() {
           </Button>
         </div>
 
+        {/* Search and filter controls */}
         <AthleteFilters
           searchQuery={searchQuery}
           gradeFilter={gradeFilter}
@@ -150,6 +209,7 @@ export default function AthletesPage() {
           onAddAthleteClick={() => console.log("Add athlete clicked")}
         />
 
+        {/* Athlete data table */}
         <AthleteTable
           athletes={sortedAthletes}
           sortConfig={sortConfig}
