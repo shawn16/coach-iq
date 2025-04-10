@@ -34,7 +34,7 @@ export default function Home() {
         "Maintain detailed athlete records, set goals, and analyze performance metrics.",
       icon: Users,
       iconBg: "bg-amber-100 dark:bg-amber-900/50",
-      href: "/team-pace-chart",
+      href: "/athletes",
       buttonText: "View Athletes",
     },
     {

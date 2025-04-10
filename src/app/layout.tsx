@@ -12,10 +12,9 @@
  * - SEO metadata configuration
  */
 
-import "./globals.css"; // Global styles including Tailwind CSS utilities
+import type { Metadata } from "next";
 import { Inter } from "next/font/google"; // Google's Inter font for consistent typography
-import Navbar from "@/components/Navbar"; // Global navigation component
-import Providers from "@/components/Providers"; // Wraps authentication and theme providers
+import "./globals.css"; // Global styles including Tailwind CSS utilities
 
 // Configure the Inter font with Latin character subset
 // This enables font optimization and ensures consistent typography across the app
@@ -27,9 +26,9 @@ const inter = Inter({ subsets: ["latin"] });
  * Defines SEO-related metadata for the application
  * These values are used by Next.js for generating appropriate meta tags
  */
-export const metadata = {
-  title: "Coach IQ",
-  description: "AI-enhanced coaching platform for distance coaches",
+export const metadata: Metadata = {
+  title: "CoachIQ",
+  description: "Athlete management platform for coaches",
 };
 
 /**
@@ -51,20 +50,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${inter.className} min-h-screen bg-background`}
-        suppressHydrationWarning
-      >
-        {/* Providers wrapper for authentication and theme context */}
-        <Providers>
-          {/* Global navigation bar */}
-          <Navbar />
-
-          {/* Main content area with responsive container */}
-          <main className="container mx-auto px-4 py-8">{children}</main>
-        </Providers>
-      </body>
+    <html lang="en">
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }

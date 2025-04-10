@@ -1,11 +1,20 @@
-import { PrismaClient } from '@prisma/client';
+/**
+ * Database Utility
+ *
+ * Provides a singleton instance of the database client.
+ * Uses Kysely for type-safe SQL queries.
+ */
 
-const globalForPrisma = global as unknown as { prisma: PrismaClient };
+import { Kysely, PostgresDialect } from "kysely";
+import { Pool } from "pg";
+import { DB } from "@/types/db";
 
-export const prisma =
-  globalForPrisma.prisma ||
-  new PrismaClient({
-    log: ['query'],
-  });
+const dialect = new PostgresDialect({
+  pool: new Pool({
+    connectionString: process.env.DATABASE_URL,
+  }),
+});
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+export const db = new Kysely<DB>({
+  dialect,
+});

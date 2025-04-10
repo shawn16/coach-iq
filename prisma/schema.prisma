@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,363 +7,340 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Users
 model User {
   id                  Int                  @id @default(autoincrement())
   email               String               @unique
   password_hash       String
   first_name          String
   last_name           String
-  role                String               // "coach", "assistant_coach", etc.
+  role                String
   created_at          DateTime             @default(now())
   updated_at          DateTime?            @updatedAt
-  teams               Team[]
+  appSettings         AppSettings?
+  assistantSettings   AssistantSettings?
   athletes            Athlete[]
+  coachNotes          CoachNote[]
+  coachingInsights    CoachingInsight[]
+  leaderboardSettings LeaderboardSettings?
+  Progressions        Progression[]
+  racePlans           RacePlan[]
+  teams               Team[]
   trainingPlans       TrainingPlan[]
   workouts            Workout[]
   workoutExecutions   WorkoutExecution[]
-  racePlans           RacePlan[]
-  assistantSettings   AssistantSettings?
-  coachingInsights    CoachingInsight[]
-  leaderboardSettings LeaderboardSettings?
-  coachNotes          CoachNote[]
-  appSettings         AppSettings?
-  Progressions        Progression[]       
 }
 
-// Teams or Groups
 model Team {
-  id                   Int                   @id @default(autoincrement())
-  name                 String
-  description          String?
-  team_type            String                // "Varsity Boys", "JV Girls", "Freshmen", etc.
-  coach_id             Int
-  coach                User                  @relation(fields: [coach_id], references: [id])
-  created_at           DateTime              @default(now())
-  updated_at           DateTime?             @updatedAt
-  athleteTeams         AthleteTeam[]
-  teamPlanAssignments  TeamPlanAssignment[]
+  id                  Int                  @id @default(autoincrement())
+  name                String
+  description         String?
+  team_type           String
+  coach_id            Int
+  created_at          DateTime             @default(now())
+  updated_at          DateTime?            @updatedAt
+  athleteTeams        AthleteTeam[]
+  coach               User                 @relation(fields: [coach_id], references: [id])
+  teamPlanAssignments TeamPlanAssignment[]
 }
 
-// Athletes
 model Athlete {
-  id                   Int                   @id @default(autoincrement())
-  first_name           String
-  last_name            String
-  birthday             DateTime
-  grade                Int?                  // 9th, 10th, 11th, 12th grade
-  gender               String?
-  active               Boolean               @default(true)
-  coach_id             Int
-  coach                User                  @relation(fields: [coach_id], references: [id])
-  created_at           DateTime              @default(now())
-  updated_at           DateTime?             @updatedAt
-  athleteTeams         AthleteTeam[]
-  planAssignments      PlanAssignment[]
-  workoutResults       AthleteWorkoutResult[]
-  metrics              AthleteMetric[]
-  projectedRaceTimes   ProjectedRaceTime[]
-  racePlans            RacePlan[]
-  coachNotes           CoachNote[]
+  id                 Int                    @id @default(autoincrement())
+  first_name         String
+  last_name          String
+  birthday           DateTime
+  grade              Int?
+  gender             String?
+  active             Boolean                @default(true)
+  coach_id           Int
+  time1600m          String?
+  created_at         DateTime               @default(now())
+  updated_at         DateTime?              @updatedAt
+  coach              User                   @relation(fields: [coach_id], references: [id])
+  metrics            AthleteMetric[]
+  athleteTeams       AthleteTeam[]
+  workoutResults     AthleteWorkoutResult[]
+  coachNotes         CoachNote[]
+  planAssignments    PlanAssignment[]
+  projectedRaceTimes ProjectedRaceTime[]
+  racePlans          RacePlan[]
 }
 
-// Athlete Teams (many-to-many relationship)
 model AthleteTeam {
-  id          Int       @id @default(autoincrement())
-  athlete_id  Int
-  athlete     Athlete   @relation(fields: [athlete_id], references: [id])
-  team_id     Int
-  team        Team      @relation(fields: [team_id], references: [id])
-  created_at  DateTime  @default(now())
-  updated_at  DateTime? @updatedAt
+  id         Int       @id @default(autoincrement())
+  athlete_id Int
+  team_id    Int
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+  athlete    Athlete   @relation(fields: [athlete_id], references: [id])
+  team       Team      @relation(fields: [team_id], references: [id])
 }
 
-// Training Plans
 model TrainingPlan {
-  id                   Int                   @id @default(autoincrement())
-  name                 String
-  description          String?
-  plan_type            String?               // "Cross Country", "Track", etc.
-  status               String                // "active", "upcoming", "completed", "draft"
-  start_date           DateTime
-  end_date             DateTime
-  duration_weeks       Int
-  progress_percentage  Decimal               @default(0)
-  coach_id             Int
-  coach                User                  @relation(fields: [coach_id], references: [id])
-  created_at           DateTime              @default(now())
-  updated_at           DateTime?             @updatedAt
-  planAssignments      PlanAssignment[]
-  teamPlanAssignments  TeamPlanAssignment[]
-  trainingPhases       TrainingPhase[]
-  trainingSchedules    TrainingSchedule[]
+  id                  Int                  @id @default(autoincrement())
+  name                String
+  description         String?
+  plan_type           String?
+  status              String
+  start_date          DateTime
+  end_date            DateTime
+  duration_weeks      Int
+  progress_percentage Decimal              @default(0)
+  coach_id            Int
+  created_at          DateTime             @default(now())
+  updated_at          DateTime?            @updatedAt
+  planAssignments     PlanAssignment[]
+  teamPlanAssignments TeamPlanAssignment[]
+  trainingPhases      TrainingPhase[]
+  coach               User                 @relation(fields: [coach_id], references: [id])
+  trainingSchedules   TrainingSchedule[]
 }
 
-// Plan Assignments (athletes assigned to training plans)
 model PlanAssignment {
-  id                Int          @id @default(autoincrement())
-  training_plan_id  Int
-  trainingPlan      TrainingPlan @relation(fields: [training_plan_id], references: [id])
-  athlete_id        Int
-  athlete           Athlete      @relation(fields: [athlete_id], references: [id])
-  created_at        DateTime     @default(now())
-  updated_at        DateTime?    @updatedAt
+  id               Int          @id @default(autoincrement())
+  training_plan_id Int
+  athlete_id       Int
+  created_at       DateTime     @default(now())
+  updated_at       DateTime?    @updatedAt
+  athlete          Athlete      @relation(fields: [athlete_id], references: [id])
+  trainingPlan     TrainingPlan @relation(fields: [training_plan_id], references: [id])
 }
 
-// Team Plan Assignments (teams assigned to training plans)
 model TeamPlanAssignment {
-  id                Int          @id @default(autoincrement())
-  training_plan_id  Int
-  trainingPlan      TrainingPlan @relation(fields: [training_plan_id], references: [id])
-  team_id           Int
-  team              Team         @relation(fields: [team_id], references: [id])
-  created_at        DateTime     @default(now())
-  updated_at        DateTime?    @updatedAt
+  id               Int          @id @default(autoincrement())
+  training_plan_id Int
+  team_id          Int
+  created_at       DateTime     @default(now())
+  updated_at       DateTime?    @updatedAt
+  team             Team         @relation(fields: [team_id], references: [id])
+  trainingPlan     TrainingPlan @relation(fields: [training_plan_id], references: [id])
 }
 
-// Training Phases
 model TrainingPhase {
-  id                Int              @id @default(autoincrement())
+  id                Int                @id @default(autoincrement())
   training_plan_id  Int
-  trainingPlan      TrainingPlan     @relation(fields: [training_plan_id], references: [id])
-  name              String           // "Transition Week", "Summer Week", "Competition Phase"
+  name              String
   description       String?
   start_date        DateTime
   end_date          DateTime
   week_number       Int
-  created_at        DateTime         @default(now())
-  updated_at        DateTime?        @updatedAt
+  created_at        DateTime           @default(now())
+  updated_at        DateTime?          @updatedAt
+  trainingPlan      TrainingPlan       @relation(fields: [training_plan_id], references: [id])
   trainingSchedules TrainingSchedule[]
 }
 
-// Workouts
 model Workout {
-  id                     Int                      @id @default(autoincrement())
-  name                   String
-  description            String?
-  workout_type           String                   // "Interval", "Tempo", "Long Run", "Recovery", etc.
-  duration_minutes       Int?
-  components_count       Int?
-  intensity_profile      String?                  // Stores JSON or serialized data about intensity
-  category               String?                  // "Endurance", "Speed", "Strength", "Mixed", "Recovery"
-  coach_id               Int
-  coach                  User                     @relation(fields: [coach_id], references: [id])
-  created_at             DateTime                 @default(now())
-  updated_at             DateTime?                @updatedAt
-  workoutComponents      WorkoutComponent[]
-  scheduleWorkouts       ScheduleWorkout[]
-  workoutExecutions      WorkoutExecution[]
-}
-
-// Workout Components (parts of a workout)
-model WorkoutComponent {
-  id                     Int                      @id @default(autoincrement())
-  workout_id             Int
-  workout                Workout                  @relation(fields: [workout_id], references: [id])
-  name                   String
-  description            String?
-  distance               Decimal?
-  distance_unit          String?                  // "m", "km", "mi"
-  repetitions            Int?
-  intensity_percentage   Decimal?                 // e.g., 75% of max
-  rest_duration          String?                  // "90sec", "2min", etc.
-  sequence_order         Int                      // Order within the workout
-  created_at             DateTime                 @default(now())
-  updated_at             DateTime?                @updatedAt
-  athleteWorkoutResults  AthleteWorkoutResult[]
-}
-
-// Progressions (templates for progression over time)
-model Progression {
   id                Int                @id @default(autoincrement())
   name              String
   description       String?
-  progression_type  String             // "Linear", "Wave", etc.
-  focus             String             // "Intensity", "Volume", "Distance"
-  duration_weeks    Int
-  status            String             // "active", "completed", "draft"
+  workout_type      String
+  duration_minutes  Int?
+  components_count  Int?
+  intensity_profile String?
+  category          String?
   coach_id          Int
-  coach             User               @relation(fields: [coach_id], references: [id])
-  created_at        DateTime           @default(now())
-  updated_at        DateTime?          @updatedAt
-  progressionSteps  ProgressionStep[]
-}
-
-// Progression Steps (weekly steps in a progression)
-model ProgressionStep {
-  id                Int          @id @default(autoincrement())
-  progression_id    Int
-  progression       Progression  @relation(fields: [progression_id], references: [id])
-  week_number       Int
-  description       String?
-  workouts_count    Int?
-  intensity_target  Decimal?
-  volume_target     Decimal?
-  created_at        DateTime     @default(now())
-  updated_at        DateTime?    @updatedAt
-}
-
-// Training Schedule (the actual weekly schedule in a training plan)
-model TrainingSchedule {
-  id                Int                @id @default(autoincrement())
-  training_plan_id  Int
-  trainingPlan      TrainingPlan       @relation(fields: [training_plan_id], references: [id])
-  week_number       Int
-  start_date        DateTime
-  end_date          DateTime
-  phase_id          Int
-  trainingPhase     TrainingPhase      @relation(fields: [phase_id], references: [id])
-  notes             String?
   created_at        DateTime           @default(now())
   updated_at        DateTime?          @updatedAt
   scheduleWorkouts  ScheduleWorkout[]
+  coach             User               @relation(fields: [coach_id], references: [id])
+  workoutComponents WorkoutComponent[]
+  workoutExecutions WorkoutExecution[]
 }
 
-// Schedule Workouts (workouts assigned to specific days in schedule)
+model WorkoutComponent {
+  id                    Int                    @id @default(autoincrement())
+  workout_id            Int
+  name                  String
+  description           String?
+  distance              Decimal?
+  distance_unit         String?
+  repetitions           Int?
+  intensity_percentage  Decimal?
+  rest_duration         String?
+  sequence_order        Int
+  created_at            DateTime               @default(now())
+  updated_at            DateTime?              @updatedAt
+  athleteWorkoutResults AthleteWorkoutResult[]
+  workout               Workout                @relation(fields: [workout_id], references: [id])
+}
+
+model Progression {
+  id               Int               @id @default(autoincrement())
+  name             String
+  description      String?
+  progression_type String
+  focus            String
+  duration_weeks   Int
+  status           String
+  coach_id         Int
+  created_at       DateTime          @default(now())
+  updated_at       DateTime?         @updatedAt
+  coach            User              @relation(fields: [coach_id], references: [id])
+  progressionSteps ProgressionStep[]
+}
+
+model ProgressionStep {
+  id               Int         @id @default(autoincrement())
+  progression_id   Int
+  week_number      Int
+  description      String?
+  workouts_count   Int?
+  intensity_target Decimal?
+  volume_target    Decimal?
+  created_at       DateTime    @default(now())
+  updated_at       DateTime?   @updatedAt
+  progression      Progression @relation(fields: [progression_id], references: [id])
+}
+
+model TrainingSchedule {
+  id               Int               @id @default(autoincrement())
+  training_plan_id Int
+  week_number      Int
+  start_date       DateTime
+  end_date         DateTime
+  phase_id         Int
+  notes            String?
+  created_at       DateTime          @default(now())
+  updated_at       DateTime?         @updatedAt
+  scheduleWorkouts ScheduleWorkout[]
+  trainingPhase    TrainingPhase     @relation(fields: [phase_id], references: [id])
+  trainingPlan     TrainingPlan      @relation(fields: [training_plan_id], references: [id])
+}
+
 model ScheduleWorkout {
-  id              Int               @id @default(autoincrement())
-  schedule_id     Int
+  id               Int              @id @default(autoincrement())
+  schedule_id      Int
+  workout_id       Int
+  scheduled_date   DateTime
+  group_column     String?
+  notes            String?
+  created_at       DateTime         @default(now())
+  updated_at       DateTime?        @updatedAt
   trainingSchedule TrainingSchedule @relation(fields: [schedule_id], references: [id])
-  workout_id      Int
-  workout         Workout           @relation(fields: [workout_id], references: [id])
-  scheduled_date  DateTime
-  group_column    String?           // "GREEN VOL", "WHITE LR", etc. (custom column name)
-  notes           String?
-  created_at      DateTime          @default(now())
-  updated_at      DateTime?         @updatedAt
+  workout          Workout          @relation(fields: [workout_id], references: [id])
 }
 
-// Workout Executions (actual instances of workouts that were executed)
 model WorkoutExecution {
-  id                     Int                      @id @default(autoincrement())
-  workout_id             Int
-  workout                Workout                  @relation(fields: [workout_id], references: [id])
-  execution_date         DateTime
-  status                 String                   // "planned", "completed", "cancelled"
-  notes                  String?
-  coach_id               Int
-  coach                  User                     @relation(fields: [coach_id], references: [id])
-  created_at             DateTime                 @default(now())
-  updated_at             DateTime?                @updatedAt
-  athleteWorkoutResults  AthleteWorkoutResult[]
+  id                    Int                    @id @default(autoincrement())
+  workout_id            Int
+  execution_date        DateTime
+  status                String
+  notes                 String?
+  coach_id              Int
+  created_at            DateTime               @default(now())
+  updated_at            DateTime?              @updatedAt
+  athleteWorkoutResults AthleteWorkoutResult[]
+  coach                 User                   @relation(fields: [coach_id], references: [id])
+  workout               Workout                @relation(fields: [workout_id], references: [id])
 }
 
-// Athlete Workout Results (individual performance in workouts)
 model AthleteWorkoutResult {
-  id                Int               @id @default(autoincrement())
+  id                Int              @id @default(autoincrement())
   athlete_id        Int
-  athlete           Athlete           @relation(fields: [athlete_id], references: [id])
   execution_id      Int
-  workoutExecution  WorkoutExecution  @relation(fields: [execution_id], references: [id])
   component_id      Int
-  workoutComponent  WorkoutComponent  @relation(fields: [component_id], references: [id])
-  completion_status Boolean           @default(true)
-  time_result       String?           // "1:05.30"
+  completion_status Boolean          @default(true)
+  time_result       String?
   distance_result   Decimal?
   notes             String?
-  created_at        DateTime          @default(now())
-  updated_at        DateTime?         @updatedAt
+  created_at        DateTime         @default(now())
+  updated_at        DateTime?        @updatedAt
+  athlete           Athlete          @relation(fields: [athlete_id], references: [id])
+  workoutComponent  WorkoutComponent @relation(fields: [component_id], references: [id])
+  workoutExecution  WorkoutExecution @relation(fields: [execution_id], references: [id])
 }
 
-// Athlete Performance Metrics
 model AthleteMetric {
-  id             Int       @id @default(autoincrement())
-  athlete_id     Int
-  athlete        Athlete   @relation(fields: [athlete_id], references: [id])
-  metric_type    String    // "1600m_time", "5k_time", "volume", "pace_accuracy", etc.
-  value          Decimal
-  recorded_date  DateTime
-  created_at     DateTime  @default(now())
-  updated_at     DateTime? @updatedAt
+  id            Int       @id @default(autoincrement())
+  athlete_id    Int
+  metric_type   String
+  value         Decimal
+  recorded_date DateTime
+  created_at    DateTime  @default(now())
+  updated_at    DateTime? @updatedAt
+  athlete       Athlete   @relation(fields: [athlete_id], references: [id])
 }
 
-// Projected Race Times
 model ProjectedRaceTime {
   id               Int       @id @default(autoincrement())
   athlete_id       Int
-  athlete          Athlete   @relation(fields: [athlete_id], references: [id])
-  race_distance    String    // "800m", "1600m", "3200m", "5K"
-  projected_time   String    // "2:13.51", "17:48.30"
+  race_distance    String
+  projected_time   String
   calculation_date DateTime
   created_at       DateTime  @default(now())
   updated_at       DateTime? @updatedAt
+  athlete          Athlete   @relation(fields: [athlete_id], references: [id])
 }
 
-// Race Plans
 model RacePlan {
-  id                 Int       @id @default(autoincrement())
-  athlete_id         Int
-  athlete            Athlete   @relation(fields: [athlete_id], references: [id])
-  race_distance      String
-  race_date          DateTime?
-  goal_time          String?
-  opening_strategy   String?
-  mid_race_strategy  String?
-  finish_strategy    String?
-  mental_focus       String?
-  watchouts          String?
-  ai_generated       Boolean   @default(false)
-  coach_id           Int
-  coach              User      @relation(fields: [coach_id], references: [id])
-  created_at         DateTime  @default(now())
-  updated_at         DateTime? @updatedAt
-}
-
-// AI Assistant Settings
-model AssistantSettings {
-  id                   Int       @id @default(autoincrement())
-  user_id              Int       @unique
-  user                 User      @relation(fields: [user_id], references: [id])
-  show_insights_panel  Boolean   @default(true)
-  created_at           DateTime  @default(now())
-  updated_at           DateTime? @updatedAt
-}
-
-// AI Coaching Insights
-model CoachingInsight {
-  id              Int       @id @default(autoincrement())
-  user_id         Int
-  user            User      @relation(fields: [user_id], references: [id])
-  insight_type    String    // "training", "philosophy", "team_culture", "transitions"
-  title           String
-  content         String
-  generated_date  DateTime
-  created_at      DateTime  @default(now())
-  updated_at      DateTime? @updatedAt
-}
-
-// Team Leaderboard Settings
-model LeaderboardSettings {
   id                Int       @id @default(autoincrement())
-  user_id           Int       @unique
-  user              User      @relation(fields: [user_id], references: [id])
-  default_metric    String    // "volume", "pace_accuracy", etc.
-  default_date_range String    // "this_week", "last_30_days", etc.
-  default_group     Int
+  athlete_id        Int
+  race_distance     String
+  race_date         DateTime?
+  goal_time         String?
+  opening_strategy  String?
+  mid_race_strategy String?
+  finish_strategy   String?
+  mental_focus      String?
+  watchouts         String?
+  ai_generated      Boolean   @default(false)
+  coach_id          Int
   created_at        DateTime  @default(now())
   updated_at        DateTime? @updatedAt
+  athlete           Athlete   @relation(fields: [athlete_id], references: [id])
+  coach             User      @relation(fields: [coach_id], references: [id])
 }
 
-// Coach Notes
+model AssistantSettings {
+  id                  Int       @id @default(autoincrement())
+  user_id             Int       @unique
+  show_insights_panel Boolean   @default(true)
+  created_at          DateTime  @default(now())
+  updated_at          DateTime? @updatedAt
+  user                User      @relation(fields: [user_id], references: [id])
+}
+
+model CoachingInsight {
+  id             Int       @id @default(autoincrement())
+  user_id        Int
+  insight_type   String
+  title          String
+  content        String
+  generated_date DateTime
+  created_at     DateTime  @default(now())
+  updated_at     DateTime? @updatedAt
+  user           User      @relation(fields: [user_id], references: [id])
+}
+
+model LeaderboardSettings {
+  id                 Int       @id @default(autoincrement())
+  user_id            Int       @unique
+  default_metric     String
+  default_date_range String
+  default_group      Int
+  created_at         DateTime  @default(now())
+  updated_at         DateTime? @updatedAt
+  user               User      @relation(fields: [user_id], references: [id])
+}
+
 model CoachNote {
-  id          Int       @id @default(autoincrement())
-  athlete_id  Int
-  athlete     Athlete   @relation(fields: [athlete_id], references: [id])
-  note_text   String
-  note_date   DateTime
-  coach_id    Int
-  coach       User      @relation(fields: [coach_id], references: [id])
-  created_at  DateTime  @default(now())
-  updated_at  DateTime? @updatedAt
+  id         Int       @id @default(autoincrement())
+  athlete_id Int
+  note_text  String
+  note_date  DateTime
+  coach_id   Int
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+  athlete    Athlete   @relation(fields: [athlete_id], references: [id])
+  coach      User      @relation(fields: [coach_id], references: [id])
 }
 
-// App Settings
 model AppSettings {
   id                       Int       @id @default(autoincrement())
   user_id                  Int       @unique
-  user                     User      @relation(fields: [user_id], references: [id])
   theme                    String    @default("light")
-  notification_preferences String?   // JSON or serialized data
+  notification_preferences String?
   created_at               DateTime  @default(now())
   updated_at               DateTime? @updatedAt
+  user                     User      @relation(fields: [user_id], references: [id])
 }

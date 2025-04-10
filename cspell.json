@@ -1,0 +1,22 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "cmdk",
+    "embla",
+    "kysely",
+    "chartjs",
+    "sonner",
+    "vaul",
+    "Ssvq"
+  ],
+  "ignorePaths": [
+    "node_modules/**",
+    "dist/**",
+    "build/**",
+    ".git/**",
+    "*.min.*",
+    "package-lock.json",
+    "public/**"
+  ]
+}

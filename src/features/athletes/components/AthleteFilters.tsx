@@ -1,35 +1,49 @@
-import { Search, Download, UserPlus } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+/**
+ * AthleteFilters Component
+ *
+ * Filter controls for the athletes list:
+ * - Search by name
+ * - Filter by grade level
+ * - Filter by active status
+ */
+
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 // Define the props for the AthleteFilters component
 interface AthleteFiltersProps {
-  searchQuery: string
-  gradeFilter: string
-  onSearchChange: (query: string) => void
-  onGradeFilterChange: (grade: string) => void
-  onAddAthleteClick: () => void
+  searchQuery: string;
+  gradeFilter: string;
+  activeFilter: string;
+  onSearchChange: (value: string) => void;
+  onGradeFilterChange: (value: string) => void;
+  onActiveFilterChange: (value: string) => void;
 }
 
 // Define the AthleteFilters component
 export function AthleteFilters({
   searchQuery,
   gradeFilter,
+  activeFilter,
   onSearchChange,
   onGradeFilterChange,
-  onAddAthleteClick,
+  onActiveFilterChange,
 }: AthleteFiltersProps) {
   return (
     // Container for the filters
-    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div className="flex flex-col gap-4 sm:flex-row">
       <div className="flex items-center gap-2">
         <div className="relative flex-1 md:w-80">
           {/* Search input */}
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
           <Input
             type="search"
-            placeholder="Search athletes..."
+            placeholder="Search by name..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             className="pl-9 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
@@ -38,7 +52,7 @@ export function AthleteFilters({
         <div className="flex-shrink-0">
           {/* Grade filter select */}
           <Select value={gradeFilter} onValueChange={onGradeFilterChange}>
-            <SelectTrigger className="w-[130px] border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+            <SelectTrigger className="w-[180px] border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
               <SelectValue placeholder="Filter by grade" />
             </SelectTrigger>
             <SelectContent>
@@ -51,24 +65,19 @@ export function AthleteFilters({
           </Select>
         </div>
       </div>
-      <div className="flex gap-2">
-        {/* Export button */}
-        <Button
-          variant="outline"
-          className="border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300"
-        >
-          <Download className="h-4 w-4 mr-1" />
-          Export
-        </Button>
-        {/* Add athlete button */}
-        <Button
-          className="bg-indigo-600 hover:bg-indigo-700 text-white h-10 py-2"
-          onClick={onAddAthleteClick}
-        >
-          <UserPlus className="h-4 w-4 mr-1" />
-          Add Athlete
-        </Button>
+      <div className="flex-shrink-0">
+        {/* Active filter select */}
+        <Select value={activeFilter} onValueChange={onActiveFilterChange}>
+          <SelectTrigger className="w-[180px] border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+            <SelectValue placeholder="Filter by status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Status</SelectItem>
+            <SelectItem value="true">Active</SelectItem>
+            <SelectItem value="false">Inactive</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
     </div>
-  )
-} 
+  );
+}
