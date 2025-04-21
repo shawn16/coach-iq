@@ -10,7 +10,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -27,18 +27,17 @@ model User {
 
 // Athlete model
 model Athlete {
-  id             String          @id @default(cuid())
+  id             Int             @id @default(autoincrement())
   firstName      String
   lastName       String
-  dateOfBirth    DateTime?
-  gradeLevel     Int?
-  coachId        String // Foreign key to User (Coach)
-  coach          User            @relation(fields: [coachId], references: [id])
+  birthday       DateTime        @db.Date
+  grade          Int
+  time1600m      Int
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
-  // Add fields for PRs, projected times etc. later
+  coachId        String // Foreign key to User (Coach)
+  coach          User            @relation(fields: [coachId], references: [id])
   workoutResults WorkoutResult[] // Relation to workout results
-  // trainingPlans TrainingPlan[] // Relation to assigned training plans (if needed directly)
 }
 
 // Training Plan model (Simplified for now)
@@ -48,7 +47,6 @@ model TrainingPlan {
   description String?
   startDate   DateTime?
   endDate     DateTime?
-  // Add fields for phases, workouts, assignments later
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
@@ -56,7 +54,7 @@ model TrainingPlan {
 // Workout Result model (Simplified for now)
 model WorkoutResult {
   id        String   @id @default(cuid())
-  athleteId String // Foreign key to Athlete
+  athleteId Int // Foreign key to Athlete (Changed to Int)
   athlete   Athlete  @relation(fields: [athleteId], references: [id])
   date      DateTime
   type      String // e.g., "Interval", "Tempo", "Long Run"
