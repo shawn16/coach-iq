@@ -20,7 +20,7 @@ export function toAthleteDisplay(athlete: Athlete): AthleteDisplay {
 
 // Get all athletes from the database
 export async function getAthletes(): Promise<AthleteDisplay[]> {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
   const { data, error } = await supabase
@@ -40,7 +40,7 @@ export async function getAthletes(): Promise<AthleteDisplay[]> {
 export async function getAthleteById(
   id: number
 ): Promise<AthleteDisplay | null> {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
   const { data, error } = await supabase
@@ -61,7 +61,7 @@ export async function getAthleteById(
 export async function addAthlete(
   athlete: AthleteInput
 ): Promise<AthleteDisplay | null> {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
   const { data, error } = await supabase
@@ -76,14 +76,14 @@ export async function addAthlete(
   }
 
   // Revalidate the athletes page to refresh the data
-  revalidatePath("/planning/athletes");
+  revalidatePath("/athletes");
 
   return toAthleteDisplay(data as Athlete);
 }
 
 // Delete an athlete from the database
 export async function deleteAthlete(id: number): Promise<boolean> {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
   const { error } = await supabase.from("athletes").delete().eq("id", id);
@@ -94,7 +94,7 @@ export async function deleteAthlete(id: number): Promise<boolean> {
   }
 
   // Revalidate the athletes page to refresh the data
-  revalidatePath("/planning/athletes");
+  revalidatePath("/athletes");
 
   return true;
 }
@@ -114,4 +114,30 @@ export function prepareAthleteForDb(athleteInput: {
     grade: athleteInput.grade,
     time_1600m: timeStringToMs(athleteInput.time1600m),
   };
+}
+
+// Update an existing athlete in the database
+export async function updateAthlete(
+  id: number,
+  athlete: AthleteInput
+): Promise<AthleteDisplay | null> {
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+
+  const { data, error } = await supabase
+    .from("athletes")
+    .update(athlete)
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error || !data) {
+    console.error("Error updating athlete:", error);
+    return null;
+  }
+
+  // Revalidate the athletes page to refresh the data
+  revalidatePath("/athletes");
+
+  return toAthleteDisplay(data as Athlete);
 }

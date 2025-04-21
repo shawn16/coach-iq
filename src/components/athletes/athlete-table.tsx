@@ -3,14 +3,14 @@
 import type React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, Trash2 } from "lucide-react";
+import { ArrowUpDown, Trash2, Pencil } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { Athlete } from "@/types/athlete"; // Import Athlete type
+import { AthleteDisplay } from "@/types/athlete"; // Import AthleteDisplay type
 
 interface AthleteTableProps {
-  athletes: Athlete[];
-  sortColumn: keyof Athlete | null;
+  athletes: AthleteDisplay[];
+  sortColumn: keyof AthleteDisplay | null;
   sortDirection: "asc" | "desc";
   calculateAge: (birthday: string | Date) => number | null; // Pass down calculation function
   calculateProjectedTimes: (time1600m: string) => {
@@ -18,9 +18,10 @@ interface AthleteTableProps {
     time3200m: string;
     time800m: string;
   }; // Pass down calculation
-  onSort: (column: keyof Athlete) => void;
-  onOpenProfile: (athlete: Athlete) => void;
-  onDeleteClick: (athlete: Athlete, e: React.MouseEvent) => void;
+  onSort: (column: keyof AthleteDisplay) => void;
+  onOpenProfile: (athlete: AthleteDisplay) => void;
+  onDeleteClick: (athlete: AthleteDisplay, e: React.MouseEvent) => void;
+  onEditClick: (athlete: AthleteDisplay, e: React.MouseEvent) => void;
 }
 
 export function AthleteTable({
@@ -32,10 +33,14 @@ export function AthleteTable({
   onSort,
   onOpenProfile,
   onDeleteClick,
+  onEditClick,
 }: AthleteTableProps) {
   // Helper to render sortable table headers
-  const renderSortableHeader = (columnKey: keyof Athlete, label: string) => {
-    const isSortable = ["lastName", "grade", "time1600m"].includes(
+  const renderSortableHeader = (
+    columnKey: keyof AthleteDisplay,
+    label: string
+  ) => {
+    const isSortable = ["last_name", "grade", "time1600m"].includes(
       columnKey as string
     );
     const isSorted = sortColumn === columnKey;
@@ -69,7 +74,7 @@ export function AthleteTable({
       <table className="w-full text-sm text-left">
         <thead className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
           <tr>
-            {renderSortableHeader("lastName", "Last Name")}
+            {renderSortableHeader("last_name", "Last Name")}
             <th scope="col" className="px-4 py-3 whitespace-nowrap">
               First Name
             </th>
@@ -116,10 +121,10 @@ export function AthleteTable({
                 onClick={() => onOpenProfile(athlete)} // Use prop
               >
                 <td className="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
-                  {athlete.lastName}
+                  {athlete.last_name}
                 </td>
                 <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
-                  {athlete.firstName}
+                  {athlete.first_name}
                 </td>
                 <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
                   {formattedBirthday}
@@ -145,15 +150,26 @@ export function AthleteTable({
                   {projectedTimes.time800m}
                 </td>
                 <td className="px-4 py-3 text-center">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={(e) => onDeleteClick(athlete, e)} // Use prop
-                    className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
-                    aria-label={`Delete ${athlete.firstName} ${athlete.lastName}`}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  <div className="flex justify-center space-x-1">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={(e) => onEditClick(athlete, e)} // Use new prop
+                      className="h-8 w-8 text-blue-500 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                      aria-label={`Edit ${athlete.first_name} ${athlete.last_name}`}
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={(e) => onDeleteClick(athlete, e)} // Use prop
+                      className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+                      aria-label={`Delete ${athlete.first_name} ${athlete.last_name}`}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </td>
               </tr>
             );

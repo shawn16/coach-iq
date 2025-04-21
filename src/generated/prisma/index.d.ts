@@ -2085,6 +2085,7 @@ export namespace Prisma {
      * The data used to create many Users.
      */
     data: UserCreateManyInput | UserCreateManyInput[]
+    skipDuplicates?: boolean
   }
 
   /**
@@ -2103,6 +2104,7 @@ export namespace Prisma {
      * The data used to create many Users.
      */
     data: UserCreateManyInput | UserCreateManyInput[]
+    skipDuplicates?: boolean
   }
 
   /**
@@ -2297,87 +2299,101 @@ export namespace Prisma {
   }
 
   export type AthleteAvgAggregateOutputType = {
-    gradeLevel: number | null
+    id: number | null
+    grade: number | null
+    time1600m: number | null
   }
 
   export type AthleteSumAggregateOutputType = {
-    gradeLevel: number | null
+    id: number | null
+    grade: number | null
+    time1600m: number | null
   }
 
   export type AthleteMinAggregateOutputType = {
-    id: string | null
+    id: number | null
     firstName: string | null
     lastName: string | null
-    dateOfBirth: Date | null
-    gradeLevel: number | null
-    coachId: string | null
+    birthday: Date | null
+    grade: number | null
+    time1600m: number | null
     createdAt: Date | null
     updatedAt: Date | null
+    coachId: string | null
   }
 
   export type AthleteMaxAggregateOutputType = {
-    id: string | null
+    id: number | null
     firstName: string | null
     lastName: string | null
-    dateOfBirth: Date | null
-    gradeLevel: number | null
-    coachId: string | null
+    birthday: Date | null
+    grade: number | null
+    time1600m: number | null
     createdAt: Date | null
     updatedAt: Date | null
+    coachId: string | null
   }
 
   export type AthleteCountAggregateOutputType = {
     id: number
     firstName: number
     lastName: number
-    dateOfBirth: number
-    gradeLevel: number
-    coachId: number
+    birthday: number
+    grade: number
+    time1600m: number
     createdAt: number
     updatedAt: number
+    coachId: number
     _all: number
   }
 
 
   export type AthleteAvgAggregateInputType = {
-    gradeLevel?: true
+    id?: true
+    grade?: true
+    time1600m?: true
   }
 
   export type AthleteSumAggregateInputType = {
-    gradeLevel?: true
+    id?: true
+    grade?: true
+    time1600m?: true
   }
 
   export type AthleteMinAggregateInputType = {
     id?: true
     firstName?: true
     lastName?: true
-    dateOfBirth?: true
-    gradeLevel?: true
-    coachId?: true
+    birthday?: true
+    grade?: true
+    time1600m?: true
     createdAt?: true
     updatedAt?: true
+    coachId?: true
   }
 
   export type AthleteMaxAggregateInputType = {
     id?: true
     firstName?: true
     lastName?: true
-    dateOfBirth?: true
-    gradeLevel?: true
-    coachId?: true
+    birthday?: true
+    grade?: true
+    time1600m?: true
     createdAt?: true
     updatedAt?: true
+    coachId?: true
   }
 
   export type AthleteCountAggregateInputType = {
     id?: true
     firstName?: true
     lastName?: true
-    dateOfBirth?: true
-    gradeLevel?: true
-    coachId?: true
+    birthday?: true
+    grade?: true
+    time1600m?: true
     createdAt?: true
     updatedAt?: true
+    coachId?: true
     _all?: true
   }
 
@@ -2468,14 +2484,15 @@ export namespace Prisma {
   }
 
   export type AthleteGroupByOutputType = {
-    id: string
+    id: number
     firstName: string
     lastName: string
-    dateOfBirth: Date | null
-    gradeLevel: number | null
-    coachId: string
+    birthday: Date
+    grade: number
+    time1600m: number
     createdAt: Date
     updatedAt: Date
+    coachId: string
     _count: AthleteCountAggregateOutputType | null
     _avg: AthleteAvgAggregateOutputType | null
     _sum: AthleteSumAggregateOutputType | null
@@ -2501,11 +2518,12 @@ export namespace Prisma {
     id?: boolean
     firstName?: boolean
     lastName?: boolean
-    dateOfBirth?: boolean
-    gradeLevel?: boolean
-    coachId?: boolean
+    birthday?: boolean
+    grade?: boolean
+    time1600m?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    coachId?: boolean
     coach?: boolean | UserDefaultArgs<ExtArgs>
     workoutResults?: boolean | Athlete$workoutResultsArgs<ExtArgs>
     _count?: boolean | AthleteCountOutputTypeDefaultArgs<ExtArgs>
@@ -2515,11 +2533,12 @@ export namespace Prisma {
     id?: boolean
     firstName?: boolean
     lastName?: boolean
-    dateOfBirth?: boolean
-    gradeLevel?: boolean
-    coachId?: boolean
+    birthday?: boolean
+    grade?: boolean
+    time1600m?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    coachId?: boolean
     coach?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["athlete"]>
 
@@ -2527,11 +2546,12 @@ export namespace Prisma {
     id?: boolean
     firstName?: boolean
     lastName?: boolean
-    dateOfBirth?: boolean
-    gradeLevel?: boolean
-    coachId?: boolean
+    birthday?: boolean
+    grade?: boolean
+    time1600m?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    coachId?: boolean
     coach?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["athlete"]>
 
@@ -2539,14 +2559,15 @@ export namespace Prisma {
     id?: boolean
     firstName?: boolean
     lastName?: boolean
-    dateOfBirth?: boolean
-    gradeLevel?: boolean
-    coachId?: boolean
+    birthday?: boolean
+    grade?: boolean
+    time1600m?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    coachId?: boolean
   }
 
-  export type AthleteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "lastName" | "dateOfBirth" | "gradeLevel" | "coachId" | "createdAt" | "updatedAt", ExtArgs["result"]["athlete"]>
+  export type AthleteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "lastName" | "birthday" | "grade" | "time1600m" | "createdAt" | "updatedAt" | "coachId", ExtArgs["result"]["athlete"]>
   export type AthleteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     coach?: boolean | UserDefaultArgs<ExtArgs>
     workoutResults?: boolean | Athlete$workoutResultsArgs<ExtArgs>
@@ -2566,14 +2587,15 @@ export namespace Prisma {
       workoutResults: Prisma.$WorkoutResultPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: string
+      id: number
       firstName: string
       lastName: string
-      dateOfBirth: Date | null
-      gradeLevel: number | null
-      coachId: string
+      birthday: Date
+      grade: number
+      time1600m: number
       createdAt: Date
       updatedAt: Date
+      coachId: string
     }, ExtArgs["result"]["athlete"]>
     composites: {}
   }
@@ -2999,14 +3021,15 @@ export namespace Prisma {
    * Fields of the Athlete model
    */
   interface AthleteFieldRefs {
-    readonly id: FieldRef<"Athlete", 'String'>
+    readonly id: FieldRef<"Athlete", 'Int'>
     readonly firstName: FieldRef<"Athlete", 'String'>
     readonly lastName: FieldRef<"Athlete", 'String'>
-    readonly dateOfBirth: FieldRef<"Athlete", 'DateTime'>
-    readonly gradeLevel: FieldRef<"Athlete", 'Int'>
-    readonly coachId: FieldRef<"Athlete", 'String'>
+    readonly birthday: FieldRef<"Athlete", 'DateTime'>
+    readonly grade: FieldRef<"Athlete", 'Int'>
+    readonly time1600m: FieldRef<"Athlete", 'Int'>
     readonly createdAt: FieldRef<"Athlete", 'DateTime'>
     readonly updatedAt: FieldRef<"Athlete", 'DateTime'>
+    readonly coachId: FieldRef<"Athlete", 'String'>
   }
     
 
@@ -3236,6 +3259,7 @@ export namespace Prisma {
      * The data used to create many Athletes.
      */
     data: AthleteCreateManyInput | AthleteCreateManyInput[]
+    skipDuplicates?: boolean
   }
 
   /**
@@ -3254,6 +3278,7 @@ export namespace Prisma {
      * The data used to create many Athletes.
      */
     data: AthleteCreateManyInput | AthleteCreateManyInput[]
+    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -4303,6 +4328,7 @@ export namespace Prisma {
      * The data used to create many TrainingPlans.
      */
     data: TrainingPlanCreateManyInput | TrainingPlanCreateManyInput[]
+    skipDuplicates?: boolean
   }
 
   /**
@@ -4321,6 +4347,7 @@ export namespace Prisma {
      * The data used to create many TrainingPlans.
      */
     data: TrainingPlanCreateManyInput | TrainingPlanCreateManyInput[]
+    skipDuplicates?: boolean
   }
 
   /**
@@ -4468,13 +4495,23 @@ export namespace Prisma {
 
   export type AggregateWorkoutResult = {
     _count: WorkoutResultCountAggregateOutputType | null
+    _avg: WorkoutResultAvgAggregateOutputType | null
+    _sum: WorkoutResultSumAggregateOutputType | null
     _min: WorkoutResultMinAggregateOutputType | null
     _max: WorkoutResultMaxAggregateOutputType | null
   }
 
+  export type WorkoutResultAvgAggregateOutputType = {
+    athleteId: number | null
+  }
+
+  export type WorkoutResultSumAggregateOutputType = {
+    athleteId: number | null
+  }
+
   export type WorkoutResultMinAggregateOutputType = {
     id: string | null
-    athleteId: string | null
+    athleteId: number | null
     date: Date | null
     type: string | null
     notes: string | null
@@ -4484,7 +4521,7 @@ export namespace Prisma {
 
   export type WorkoutResultMaxAggregateOutputType = {
     id: string | null
-    athleteId: string | null
+    athleteId: number | null
     date: Date | null
     type: string | null
     notes: string | null
@@ -4504,6 +4541,14 @@ export namespace Prisma {
     _all: number
   }
 
+
+  export type WorkoutResultAvgAggregateInputType = {
+    athleteId?: true
+  }
+
+  export type WorkoutResultSumAggregateInputType = {
+    athleteId?: true
+  }
 
   export type WorkoutResultMinAggregateInputType = {
     id?: true
@@ -4575,6 +4620,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: WorkoutResultAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WorkoutResultSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: WorkoutResultMinAggregateInputType
@@ -4605,13 +4662,15 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: WorkoutResultCountAggregateInputType | true
+    _avg?: WorkoutResultAvgAggregateInputType
+    _sum?: WorkoutResultSumAggregateInputType
     _min?: WorkoutResultMinAggregateInputType
     _max?: WorkoutResultMaxAggregateInputType
   }
 
   export type WorkoutResultGroupByOutputType = {
     id: string
-    athleteId: string
+    athleteId: number
     date: Date
     type: string
     details: JsonValue
@@ -4619,6 +4678,8 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     _count: WorkoutResultCountAggregateOutputType | null
+    _avg: WorkoutResultAvgAggregateOutputType | null
+    _sum: WorkoutResultSumAggregateOutputType | null
     _min: WorkoutResultMinAggregateOutputType | null
     _max: WorkoutResultMaxAggregateOutputType | null
   }
@@ -4702,7 +4763,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      athleteId: string
+      athleteId: number
       date: Date
       type: string
       details: Prisma.JsonValue
@@ -5134,7 +5195,7 @@ export namespace Prisma {
    */
   interface WorkoutResultFieldRefs {
     readonly id: FieldRef<"WorkoutResult", 'String'>
-    readonly athleteId: FieldRef<"WorkoutResult", 'String'>
+    readonly athleteId: FieldRef<"WorkoutResult", 'Int'>
     readonly date: FieldRef<"WorkoutResult", 'DateTime'>
     readonly type: FieldRef<"WorkoutResult", 'String'>
     readonly details: FieldRef<"WorkoutResult", 'Json'>
@@ -5370,6 +5431,7 @@ export namespace Prisma {
      * The data used to create many WorkoutResults.
      */
     data: WorkoutResultCreateManyInput | WorkoutResultCreateManyInput[]
+    skipDuplicates?: boolean
   }
 
   /**
@@ -5388,6 +5450,7 @@ export namespace Prisma {
      * The data used to create many WorkoutResults.
      */
     data: WorkoutResultCreateManyInput | WorkoutResultCreateManyInput[]
+    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -5558,6 +5621,9 @@ export namespace Prisma {
    */
 
   export const TransactionIsolationLevel: {
+    ReadUncommitted: 'ReadUncommitted',
+    ReadCommitted: 'ReadCommitted',
+    RepeatableRead: 'RepeatableRead',
     Serializable: 'Serializable'
   };
 
@@ -5580,11 +5646,12 @@ export namespace Prisma {
     id: 'id',
     firstName: 'firstName',
     lastName: 'lastName',
-    dateOfBirth: 'dateOfBirth',
-    gradeLevel: 'gradeLevel',
-    coachId: 'coachId',
+    birthday: 'birthday',
+    grade: 'grade',
+    time1600m: 'time1600m',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    coachId: 'coachId'
   };
 
   export type AthleteScalarFieldEnum = (typeof AthleteScalarFieldEnum)[keyof typeof AthleteScalarFieldEnum]
@@ -5632,6 +5699,14 @@ export namespace Prisma {
   export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
+  export const QueryMode: {
+    default: 'default',
+    insensitive: 'insensitive'
+  };
+
+  export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
   export const NullsOrder: {
     first: 'first',
     last: 'last'
@@ -5649,14 +5724,6 @@ export namespace Prisma {
   export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
-  export const QueryMode: {
-    default: 'default',
-    insensitive: 'insensitive'
-  };
-
-  export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
-
-
   /**
    * Field references
    */
@@ -5670,6 +5737,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'String[]'
+   */
+  export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
+    
+
+
+  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -5677,9 +5751,23 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'DateTime[]'
+   */
+  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -5701,6 +5789,13 @@ export namespace Prisma {
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
   /**
    * Deep Input Types
@@ -5771,14 +5866,15 @@ export namespace Prisma {
     AND?: AthleteWhereInput | AthleteWhereInput[]
     OR?: AthleteWhereInput[]
     NOT?: AthleteWhereInput | AthleteWhereInput[]
-    id?: StringFilter<"Athlete"> | string
+    id?: IntFilter<"Athlete"> | number
     firstName?: StringFilter<"Athlete"> | string
     lastName?: StringFilter<"Athlete"> | string
-    dateOfBirth?: DateTimeNullableFilter<"Athlete"> | Date | string | null
-    gradeLevel?: IntNullableFilter<"Athlete"> | number | null
-    coachId?: StringFilter<"Athlete"> | string
+    birthday?: DateTimeFilter<"Athlete"> | Date | string
+    grade?: IntFilter<"Athlete"> | number
+    time1600m?: IntFilter<"Athlete"> | number
     createdAt?: DateTimeFilter<"Athlete"> | Date | string
     updatedAt?: DateTimeFilter<"Athlete"> | Date | string
+    coachId?: StringFilter<"Athlete"> | string
     coach?: XOR<UserScalarRelationFilter, UserWhereInput>
     workoutResults?: WorkoutResultListRelationFilter
   }
@@ -5787,27 +5883,29 @@ export namespace Prisma {
     id?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
-    dateOfBirth?: SortOrderInput | SortOrder
-    gradeLevel?: SortOrderInput | SortOrder
-    coachId?: SortOrder
+    birthday?: SortOrder
+    grade?: SortOrder
+    time1600m?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    coachId?: SortOrder
     coach?: UserOrderByWithRelationInput
     workoutResults?: WorkoutResultOrderByRelationAggregateInput
   }
 
   export type AthleteWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
+    id?: number
     AND?: AthleteWhereInput | AthleteWhereInput[]
     OR?: AthleteWhereInput[]
     NOT?: AthleteWhereInput | AthleteWhereInput[]
     firstName?: StringFilter<"Athlete"> | string
     lastName?: StringFilter<"Athlete"> | string
-    dateOfBirth?: DateTimeNullableFilter<"Athlete"> | Date | string | null
-    gradeLevel?: IntNullableFilter<"Athlete"> | number | null
-    coachId?: StringFilter<"Athlete"> | string
+    birthday?: DateTimeFilter<"Athlete"> | Date | string
+    grade?: IntFilter<"Athlete"> | number
+    time1600m?: IntFilter<"Athlete"> | number
     createdAt?: DateTimeFilter<"Athlete"> | Date | string
     updatedAt?: DateTimeFilter<"Athlete"> | Date | string
+    coachId?: StringFilter<"Athlete"> | string
     coach?: XOR<UserScalarRelationFilter, UserWhereInput>
     workoutResults?: WorkoutResultListRelationFilter
   }, "id">
@@ -5816,11 +5914,12 @@ export namespace Prisma {
     id?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
-    dateOfBirth?: SortOrderInput | SortOrder
-    gradeLevel?: SortOrderInput | SortOrder
-    coachId?: SortOrder
+    birthday?: SortOrder
+    grade?: SortOrder
+    time1600m?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    coachId?: SortOrder
     _count?: AthleteCountOrderByAggregateInput
     _avg?: AthleteAvgOrderByAggregateInput
     _max?: AthleteMaxOrderByAggregateInput
@@ -5832,14 +5931,15 @@ export namespace Prisma {
     AND?: AthleteScalarWhereWithAggregatesInput | AthleteScalarWhereWithAggregatesInput[]
     OR?: AthleteScalarWhereWithAggregatesInput[]
     NOT?: AthleteScalarWhereWithAggregatesInput | AthleteScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Athlete"> | string
+    id?: IntWithAggregatesFilter<"Athlete"> | number
     firstName?: StringWithAggregatesFilter<"Athlete"> | string
     lastName?: StringWithAggregatesFilter<"Athlete"> | string
-    dateOfBirth?: DateTimeNullableWithAggregatesFilter<"Athlete"> | Date | string | null
-    gradeLevel?: IntNullableWithAggregatesFilter<"Athlete"> | number | null
-    coachId?: StringWithAggregatesFilter<"Athlete"> | string
+    birthday?: DateTimeWithAggregatesFilter<"Athlete"> | Date | string
+    grade?: IntWithAggregatesFilter<"Athlete"> | number
+    time1600m?: IntWithAggregatesFilter<"Athlete"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Athlete"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Athlete"> | Date | string
+    coachId?: StringWithAggregatesFilter<"Athlete"> | string
   }
 
   export type TrainingPlanWhereInput = {
@@ -5909,7 +6009,7 @@ export namespace Prisma {
     OR?: WorkoutResultWhereInput[]
     NOT?: WorkoutResultWhereInput | WorkoutResultWhereInput[]
     id?: StringFilter<"WorkoutResult"> | string
-    athleteId?: StringFilter<"WorkoutResult"> | string
+    athleteId?: IntFilter<"WorkoutResult"> | number
     date?: DateTimeFilter<"WorkoutResult"> | Date | string
     type?: StringFilter<"WorkoutResult"> | string
     details?: JsonFilter<"WorkoutResult">
@@ -5936,7 +6036,7 @@ export namespace Prisma {
     AND?: WorkoutResultWhereInput | WorkoutResultWhereInput[]
     OR?: WorkoutResultWhereInput[]
     NOT?: WorkoutResultWhereInput | WorkoutResultWhereInput[]
-    athleteId?: StringFilter<"WorkoutResult"> | string
+    athleteId?: IntFilter<"WorkoutResult"> | number
     date?: DateTimeFilter<"WorkoutResult"> | Date | string
     type?: StringFilter<"WorkoutResult"> | string
     details?: JsonFilter<"WorkoutResult">
@@ -5956,8 +6056,10 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: WorkoutResultCountOrderByAggregateInput
+    _avg?: WorkoutResultAvgOrderByAggregateInput
     _max?: WorkoutResultMaxOrderByAggregateInput
     _min?: WorkoutResultMinOrderByAggregateInput
+    _sum?: WorkoutResultSumOrderByAggregateInput
   }
 
   export type WorkoutResultScalarWhereWithAggregatesInput = {
@@ -5965,7 +6067,7 @@ export namespace Prisma {
     OR?: WorkoutResultScalarWhereWithAggregatesInput[]
     NOT?: WorkoutResultScalarWhereWithAggregatesInput | WorkoutResultScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"WorkoutResult"> | string
-    athleteId?: StringWithAggregatesFilter<"WorkoutResult"> | string
+    athleteId?: IntWithAggregatesFilter<"WorkoutResult"> | number
     date?: DateTimeWithAggregatesFilter<"WorkoutResult"> | Date | string
     type?: StringWithAggregatesFilter<"WorkoutResult"> | string
     details?: JsonWithAggregatesFilter<"WorkoutResult">
@@ -6042,11 +6144,11 @@ export namespace Prisma {
   }
 
   export type AthleteCreateInput = {
-    id?: string
     firstName: string
     lastName: string
-    dateOfBirth?: Date | string | null
-    gradeLevel?: number | null
+    birthday: Date | string
+    grade: number
+    time1600m: number
     createdAt?: Date | string
     updatedAt?: Date | string
     coach: UserCreateNestedOneWithoutAthletesInput
@@ -6054,23 +6156,24 @@ export namespace Prisma {
   }
 
   export type AthleteUncheckedCreateInput = {
-    id?: string
+    id?: number
     firstName: string
     lastName: string
-    dateOfBirth?: Date | string | null
-    gradeLevel?: number | null
-    coachId: string
+    birthday: Date | string
+    grade: number
+    time1600m: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    coachId: string
     workoutResults?: WorkoutResultUncheckedCreateNestedManyWithoutAthleteInput
   }
 
   export type AthleteUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gradeLevel?: NullableIntFieldUpdateOperationsInput | number | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    grade?: IntFieldUpdateOperationsInput | number
+    time1600m?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     coach?: UserUpdateOneRequiredWithoutAthletesNestedInput
@@ -6078,47 +6181,50 @@ export namespace Prisma {
   }
 
   export type AthleteUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gradeLevel?: NullableIntFieldUpdateOperationsInput | number | null
-    coachId?: StringFieldUpdateOperationsInput | string
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    grade?: IntFieldUpdateOperationsInput | number
+    time1600m?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coachId?: StringFieldUpdateOperationsInput | string
     workoutResults?: WorkoutResultUncheckedUpdateManyWithoutAthleteNestedInput
   }
 
   export type AthleteCreateManyInput = {
-    id?: string
+    id?: number
     firstName: string
     lastName: string
-    dateOfBirth?: Date | string | null
-    gradeLevel?: number | null
-    coachId: string
+    birthday: Date | string
+    grade: number
+    time1600m: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    coachId: string
   }
 
   export type AthleteUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gradeLevel?: NullableIntFieldUpdateOperationsInput | number | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    grade?: IntFieldUpdateOperationsInput | number
+    time1600m?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AthleteUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gradeLevel?: NullableIntFieldUpdateOperationsInput | number | null
-    coachId?: StringFieldUpdateOperationsInput | string
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    grade?: IntFieldUpdateOperationsInput | number
+    time1600m?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coachId?: StringFieldUpdateOperationsInput | string
   }
 
   export type TrainingPlanCreateInput = {
@@ -6204,7 +6310,7 @@ export namespace Prisma {
 
   export type WorkoutResultUncheckedCreateInput = {
     id?: string
-    athleteId: string
+    athleteId: number
     date: Date | string
     type: string
     details: JsonNullValueInput | InputJsonValue
@@ -6226,7 +6332,7 @@ export namespace Prisma {
 
   export type WorkoutResultUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    athleteId?: StringFieldUpdateOperationsInput | string
+    athleteId?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: StringFieldUpdateOperationsInput | string
     details?: JsonNullValueInput | InputJsonValue
@@ -6237,7 +6343,7 @@ export namespace Prisma {
 
   export type WorkoutResultCreateManyInput = {
     id?: string
-    athleteId: string
+    athleteId: number
     date: Date | string
     type: string
     details: JsonNullValueInput | InputJsonValue
@@ -6258,7 +6364,7 @@ export namespace Prisma {
 
   export type WorkoutResultUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    athleteId?: StringFieldUpdateOperationsInput | string
+    athleteId?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: StringFieldUpdateOperationsInput | string
     details?: JsonNullValueInput | InputJsonValue
@@ -6269,8 +6375,8 @@ export namespace Prisma {
 
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[]
-    notIn?: string[]
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -6278,13 +6384,14 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -6292,13 +6399,14 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -6350,8 +6458,8 @@ export namespace Prisma {
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[]
-    notIn?: string[]
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -6359,6 +6467,7 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
     not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
@@ -6367,8 +6476,8 @@ export namespace Prisma {
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -6376,6 +6485,7 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
     not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
@@ -6384,8 +6494,8 @@ export namespace Prisma {
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -6396,26 +6506,15 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | null
-    notIn?: Date[] | string[] | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type UserScalarRelationFilter = {
@@ -6437,71 +6536,75 @@ export namespace Prisma {
     id?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
-    dateOfBirth?: SortOrder
-    gradeLevel?: SortOrder
-    coachId?: SortOrder
+    birthday?: SortOrder
+    grade?: SortOrder
+    time1600m?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    coachId?: SortOrder
   }
 
   export type AthleteAvgOrderByAggregateInput = {
-    gradeLevel?: SortOrder
+    id?: SortOrder
+    grade?: SortOrder
+    time1600m?: SortOrder
   }
 
   export type AthleteMaxOrderByAggregateInput = {
     id?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
-    dateOfBirth?: SortOrder
-    gradeLevel?: SortOrder
-    coachId?: SortOrder
+    birthday?: SortOrder
+    grade?: SortOrder
+    time1600m?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    coachId?: SortOrder
   }
 
   export type AthleteMinOrderByAggregateInput = {
     id?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
-    dateOfBirth?: SortOrder
-    gradeLevel?: SortOrder
-    coachId?: SortOrder
+    birthday?: SortOrder
+    grade?: SortOrder
+    time1600m?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    coachId?: SortOrder
   }
 
   export type AthleteSumOrderByAggregateInput = {
-    gradeLevel?: SortOrder
+    id?: SortOrder
+    grade?: SortOrder
+    time1600m?: SortOrder
   }
 
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | null
-    notIn?: Date[] | string[] | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type TrainingPlanCountOrderByAggregateInput = {
@@ -6533,6 +6636,20 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
   export type JsonFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
@@ -6542,13 +6659,18 @@ export namespace Prisma {
 
   export type JsonFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string
+    path?: string[]
     mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
     string_contains?: string | StringFieldRefInput<$PrismaModel>
     string_starts_with?: string | StringFieldRefInput<$PrismaModel>
     string_ends_with?: string | StringFieldRefInput<$PrismaModel>
     array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
@@ -6566,6 +6688,10 @@ export namespace Prisma {
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type WorkoutResultAvgOrderByAggregateInput = {
+    athleteId?: SortOrder
   }
 
   export type WorkoutResultMaxOrderByAggregateInput = {
@@ -6587,6 +6713,10 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
+
+  export type WorkoutResultSumOrderByAggregateInput = {
+    athleteId?: SortOrder
+  }
   export type JsonWithAggregatesFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
@@ -6596,13 +6726,18 @@ export namespace Prisma {
 
   export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string
+    path?: string[]
     mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
     string_contains?: string | StringFieldRefInput<$PrismaModel>
     string_starts_with?: string | StringFieldRefInput<$PrismaModel>
     string_ends_with?: string | StringFieldRefInput<$PrismaModel>
     array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedJsonFilter<$PrismaModel>
@@ -6683,12 +6818,8 @@ export namespace Prisma {
     connect?: WorkoutResultWhereUniqueInput | WorkoutResultWhereUniqueInput[]
   }
 
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
     increment?: number
     decrement?: number
     multiply?: number
@@ -6731,6 +6862,10 @@ export namespace Prisma {
     deleteMany?: WorkoutResultScalarWhereInput | WorkoutResultScalarWhereInput[]
   }
 
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
   export type AthleteCreateNestedOneWithoutWorkoutResultsInput = {
     create?: XOR<AthleteCreateWithoutWorkoutResultsInput, AthleteUncheckedCreateWithoutWorkoutResultsInput>
     connectOrCreate?: AthleteCreateOrConnectWithoutWorkoutResultsInput
@@ -6747,8 +6882,8 @@ export namespace Prisma {
 
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[]
-    notIn?: string[]
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -6761,8 +6896,8 @@ export namespace Prisma {
 
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -6775,8 +6910,8 @@ export namespace Prisma {
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -6786,8 +6921,8 @@ export namespace Prisma {
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[]
-    notIn?: string[]
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -6803,8 +6938,8 @@ export namespace Prisma {
 
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -6814,8 +6949,8 @@ export namespace Prisma {
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -6831,8 +6966,8 @@ export namespace Prisma {
 
   export type NestedIntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -6842,8 +6977,8 @@ export namespace Prisma {
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -6854,10 +6989,37 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | null
-    notIn?: Date[] | string[] | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -6867,8 +7029,8 @@ export namespace Prisma {
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | null
-    notIn?: Date[] | string[] | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -6877,33 +7039,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
   export type NestedJsonFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -6914,33 +7049,39 @@ export namespace Prisma {
 
   export type NestedJsonFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string
+    path?: string[]
     mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
     string_contains?: string | StringFieldRefInput<$PrismaModel>
     string_starts_with?: string | StringFieldRefInput<$PrismaModel>
     string_ends_with?: string | StringFieldRefInput<$PrismaModel>
     array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type AthleteCreateWithoutCoachInput = {
-    id?: string
     firstName: string
     lastName: string
-    dateOfBirth?: Date | string | null
-    gradeLevel?: number | null
+    birthday: Date | string
+    grade: number
+    time1600m: number
     createdAt?: Date | string
     updatedAt?: Date | string
     workoutResults?: WorkoutResultCreateNestedManyWithoutAthleteInput
   }
 
   export type AthleteUncheckedCreateWithoutCoachInput = {
-    id?: string
+    id?: number
     firstName: string
     lastName: string
-    dateOfBirth?: Date | string | null
-    gradeLevel?: number | null
+    birthday: Date | string
+    grade: number
+    time1600m: number
     createdAt?: Date | string
     updatedAt?: Date | string
     workoutResults?: WorkoutResultUncheckedCreateNestedManyWithoutAthleteInput
@@ -6953,6 +7094,7 @@ export namespace Prisma {
 
   export type AthleteCreateManyCoachInputEnvelope = {
     data: AthleteCreateManyCoachInput | AthleteCreateManyCoachInput[]
+    skipDuplicates?: boolean
   }
 
   export type AthleteUpsertWithWhereUniqueWithoutCoachInput = {
@@ -6975,14 +7117,15 @@ export namespace Prisma {
     AND?: AthleteScalarWhereInput | AthleteScalarWhereInput[]
     OR?: AthleteScalarWhereInput[]
     NOT?: AthleteScalarWhereInput | AthleteScalarWhereInput[]
-    id?: StringFilter<"Athlete"> | string
+    id?: IntFilter<"Athlete"> | number
     firstName?: StringFilter<"Athlete"> | string
     lastName?: StringFilter<"Athlete"> | string
-    dateOfBirth?: DateTimeNullableFilter<"Athlete"> | Date | string | null
-    gradeLevel?: IntNullableFilter<"Athlete"> | number | null
-    coachId?: StringFilter<"Athlete"> | string
+    birthday?: DateTimeFilter<"Athlete"> | Date | string
+    grade?: IntFilter<"Athlete"> | number
+    time1600m?: IntFilter<"Athlete"> | number
     createdAt?: DateTimeFilter<"Athlete"> | Date | string
     updatedAt?: DateTimeFilter<"Athlete"> | Date | string
+    coachId?: StringFilter<"Athlete"> | string
   }
 
   export type UserCreateWithoutAthletesInput = {
@@ -7035,6 +7178,7 @@ export namespace Prisma {
 
   export type WorkoutResultCreateManyAthleteInputEnvelope = {
     data: WorkoutResultCreateManyAthleteInput | WorkoutResultCreateManyAthleteInput[]
+    skipDuplicates?: boolean
   }
 
   export type UserUpsertWithoutAthletesInput = {
@@ -7087,7 +7231,7 @@ export namespace Prisma {
     OR?: WorkoutResultScalarWhereInput[]
     NOT?: WorkoutResultScalarWhereInput | WorkoutResultScalarWhereInput[]
     id?: StringFilter<"WorkoutResult"> | string
-    athleteId?: StringFilter<"WorkoutResult"> | string
+    athleteId?: IntFilter<"WorkoutResult"> | number
     date?: DateTimeFilter<"WorkoutResult"> | Date | string
     type?: StringFilter<"WorkoutResult"> | string
     details?: JsonFilter<"WorkoutResult">
@@ -7097,25 +7241,26 @@ export namespace Prisma {
   }
 
   export type AthleteCreateWithoutWorkoutResultsInput = {
-    id?: string
     firstName: string
     lastName: string
-    dateOfBirth?: Date | string | null
-    gradeLevel?: number | null
+    birthday: Date | string
+    grade: number
+    time1600m: number
     createdAt?: Date | string
     updatedAt?: Date | string
     coach: UserCreateNestedOneWithoutAthletesInput
   }
 
   export type AthleteUncheckedCreateWithoutWorkoutResultsInput = {
-    id?: string
+    id?: number
     firstName: string
     lastName: string
-    dateOfBirth?: Date | string | null
-    gradeLevel?: number | null
-    coachId: string
+    birthday: Date | string
+    grade: number
+    time1600m: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    coachId: string
   }
 
   export type AthleteCreateOrConnectWithoutWorkoutResultsInput = {
@@ -7135,65 +7280,69 @@ export namespace Prisma {
   }
 
   export type AthleteUpdateWithoutWorkoutResultsInput = {
-    id?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gradeLevel?: NullableIntFieldUpdateOperationsInput | number | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    grade?: IntFieldUpdateOperationsInput | number
+    time1600m?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     coach?: UserUpdateOneRequiredWithoutAthletesNestedInput
   }
 
   export type AthleteUncheckedUpdateWithoutWorkoutResultsInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gradeLevel?: NullableIntFieldUpdateOperationsInput | number | null
-    coachId?: StringFieldUpdateOperationsInput | string
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    grade?: IntFieldUpdateOperationsInput | number
+    time1600m?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coachId?: StringFieldUpdateOperationsInput | string
   }
 
   export type AthleteCreateManyCoachInput = {
-    id?: string
+    id?: number
     firstName: string
     lastName: string
-    dateOfBirth?: Date | string | null
-    gradeLevel?: number | null
+    birthday: Date | string
+    grade: number
+    time1600m: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type AthleteUpdateWithoutCoachInput = {
-    id?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gradeLevel?: NullableIntFieldUpdateOperationsInput | number | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    grade?: IntFieldUpdateOperationsInput | number
+    time1600m?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workoutResults?: WorkoutResultUpdateManyWithoutAthleteNestedInput
   }
 
   export type AthleteUncheckedUpdateWithoutCoachInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gradeLevel?: NullableIntFieldUpdateOperationsInput | number | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    grade?: IntFieldUpdateOperationsInput | number
+    time1600m?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workoutResults?: WorkoutResultUncheckedUpdateManyWithoutAthleteNestedInput
   }
 
   export type AthleteUncheckedUpdateManyWithoutCoachInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gradeLevel?: NullableIntFieldUpdateOperationsInput | number | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    grade?: IntFieldUpdateOperationsInput | number
+    time1600m?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

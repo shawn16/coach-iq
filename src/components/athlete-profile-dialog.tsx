@@ -9,25 +9,10 @@ import {
 import { format, differenceInYears } from "date-fns";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
-// Update types to match src/types/athlete.ts
-interface Athlete {
-  id: number | string;
-  firstName: string;
-  lastName: string;
-  birthday: string | Date;
-  grade: number;
-  time1600m: string;
-}
-
-interface ProjectedTimes {
-  time5k: string;
-  time3200m: string;
-  time800m: string;
-}
+import { AthleteDisplay, ProjectedTimes } from "@/types/athlete";
 
 interface AthleteProfileDialogProps {
-  athlete: Athlete | null;
+  athlete: AthleteDisplay | null;
   projectedTimes: ProjectedTimes | null;
   isOpen: boolean;
   onClose: () => void;
@@ -55,7 +40,7 @@ export function AthleteProfileDialog({
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-gray-50">
-            {athlete.firstName} {athlete.lastName}
+            {athlete.first_name} {athlete.last_name}
           </DialogTitle>
         </DialogHeader>
 
@@ -72,7 +57,7 @@ export function AthleteProfileDialog({
                     Full Name
                   </p>
                   <p className="font-medium text-gray-900 dark:text-gray-100">
-                    {athlete.firstName} {athlete.lastName}
+                    {athlete.first_name} {athlete.last_name}
                   </p>
                 </div>
                 <div>
