@@ -1,0 +1,106 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Your rule content
+
+# Technology Stack & Development Rules
+
+## 1. Technology Stack
+- **Front-End**: Next.js (React-based) with functional components and hooks. Use Tailwind CSS for responsive styling as shown in the UI mockups.
+- **State Management**: React Context or Redux for global state management. Use React Hook Form for efficient form handling.
+- **Data Visualization**: Recharts or D3.js for performance graphs and data visualization.
+- **Back-End**: Hybrid approach with Next.js API routes for standard CRUD operations and Python FastAPI for AI/ML processing.
+- **Authentication**: NextAuth.js or Auth0 for secure user authentication.
+- **Database**: PostgreSQL as primary database with potential TimescaleDB extension for time-series capabilities. Redis for caching frequent queries.
+- **AI/ML Stack**: Python ecosystem (scikit-learn, TensorFlow, PyTorch) for machine learning models. Hugging Face Transformers for NLP in the Assistant Coach feature. Pandas/NumPy for data manipulation and Prophet or ARIMA for time series forecasting.
+- **Hosting/Deployment**: Vercel for Next.js application hosting. Railway or Heroku for Python FastAPI service. AWS RDS or DigitalOcean for managed PostgreSQL database.
+- **File Storage**: AWS S3 or equivalent for storing profile images and team logos.
+- **CI/CD**: GitHub Actions for CI/CD pipeline.
+
+## 2. Coding Style and Conventions
+- **Type Safety**: Use TypeScript for improved type safety and development experience.
+- **Naming**: Use camelCase for variables and functions, PascalCase for components and interfaces.
+- **Formatting**: Indent with 2 spaces. Use single quotes for strings.
+- **File Structure**: Organize code into modular folders:
+  - `/components` - Reusable UI components
+  - `/pages` - Next.js page components
+  - `/lib` - Utility functions and helpers
+  - `/hooks` - Custom React hooks
+  - `/services` - API integration and services
+  - `/types` - TypeScript type definitions
+  - `/styles` - Global styles and Tailwind configuration
+  - `/public` - Static assets
+- **Components**: All React components should be functional components with hooks. No class components.
+- **Async Operations**: Use async/await for asynchronous operations and promises.
+- **Comments**: Add concise comments for complex logic. Use JSDoc for function documentation.
+
+## 3. Development Workflows
+- **Agile Practices**: Break features into small, testable tasks based on the user stories in the PRD.
+- **Version Control**: Use Git with descriptive commit messages following conventional commits format.
+- **Branching**: Follow Git Flow with feature branches and pull requests for code reviews.
+- **Testing**: Write unit tests with Jest and React Testing Library. Use Cypress for end-to-end testing.
+- **Documentation**: Maintain API documentation and update the PRD as needed.
+
+## 4. Best Practices
+- **Error Handling**: Implement comprehensive error handling with try/catch blocks and appropriate user feedback.
+- **Security**:
+  - Enforce HTTPS for all communications
+  - Implement proper authentication and authorization
+  - Sanitize user inputs to prevent injection attacks
+  - Hash sensitive data (e.g., passwords)
+- **Performance**: 
+  - Optimize database queries and implement caching strategies
+  - Use React Query for efficient server state management and caching
+  - Implement code splitting and lazy loading for improved performance
+- **Accessibility**: Follow WCAG 2.1 guidelines to ensure the application is accessible to all users.
+- **Responsive Design**: Implement mobile-responsive design for use on various devices (desktop, tablets, smartphones).
+
+## 5. Code Quality Rules
+- **Always prefer simple solutions**: Choose straightforward approaches over complex ones.
+- **Avoid duplication**: Check for existing functionality before implementing similar features.
+- **Environment awareness**: Write code that handles different environments (dev, test, prod).
+- **Conservative changes**: Only make changes that are requested or well understood.
+- **Pattern consistency**: Don't introduce new patterns or technologies without exhausting existing options.
+- **Code organization**: Keep the codebase clean and organized.
+- **No one-off scripts**: Avoid writing scripts in files that will only run once.
+- **File size limits**: Keep files under 200-300 lines of code. Refactor when exceeding this limit.
+- **No mock data in production**: Only use mock data for tests, never for dev or prod environments.
+- **Environment variable protection**: Never overwrite .env files without confirmation.
+
+## 6. AI Assistant Development
+- **NLP Integration**: Implement natural language processing for the Assistant Coach feature using Hugging Face Transformers.
+- **Time Series Analysis**: Implement performance trend analysis using Python's data science stack.
+- **Predictive Modeling**: Create race projection models based on historical performance data.
+- **Anomaly Detection**: Develop models to identify potential overtraining or injury risks.
+- **Context Awareness**: Design the Assistant to maintain conversation context and provide relevant recommendations.
+
+## 7. User Interface Implementation
+- **Design System**: Follow the purple primary color theme with lightning bolt logo as specified in the PRD.
+- **Component Library**: Create a reusable component library based on the UI mockups.
+- **Navigation**: Implement the sidebar navigation structure with Planning, Training, and Settings sections.
+- **Responsive Design**: Ensure all interfaces are usable on mobile devices, particularly the Workout Execution screens.
+- **Visual Feedback**: Implement status indicators and visual progress tracking as specified in the PRD.
+
+## 8. Database Schema
+- Design database schema based on the entity relationships outlined in the PRD:
+  - Users/Coaches table
+  - Athletes table
+  - Teams table
+  - Training Plans table
+  - Workouts table
+  - Results table
+  - Performance Metrics table
+
+## 9. Performance Standards
+- Application response time should be less than 2 seconds for standard operations
+- AI Assistant responses should be generated within 5 seconds
+- Support for teams with up to 50 athletes initially, scaling to 200+ athletes in future versions
+- Application uptime of 99.5% or better
+
+## 10. Docker & Development Environment
+- Use Docker for consistent development and deployment environments
+- Provide a clear README with setup instructions
+- Include development environment configuration for both Next.js and Python services

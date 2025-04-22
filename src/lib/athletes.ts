@@ -76,7 +76,7 @@ export async function addAthlete(
   }
 
   // Revalidate the athletes page to refresh the data
-  revalidatePath("/athletes");
+  revalidatePath("/planning/athletes");
 
   return toAthleteDisplay(data as Athlete);
 }
@@ -94,7 +94,7 @@ export async function deleteAthlete(id: number): Promise<boolean> {
   }
 
   // Revalidate the athletes page to refresh the data
-  revalidatePath("/athletes");
+  revalidatePath("/planning/athletes");
 
   return true;
 }
@@ -137,7 +137,7 @@ export async function updateAthlete(
   }
 
   // Revalidate the athletes page to refresh the data
-  revalidatePath("/athletes");
+  revalidatePath("/planning/athletes");
 
   return toAthleteDisplay(data as Athlete);
 }

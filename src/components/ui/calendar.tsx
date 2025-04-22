@@ -52,6 +52,7 @@ function Calendar({
         ...classNames,
       }}
       components={{
+        // @ts-expect-error - Bypassing potential type mismatch for DayPicker IconLeft prop
         IconLeft: () => <ChevronLeft className="h-4 w-4" />,
         IconRight: () => <ChevronRight className="h-4 w-4" />,
       }}

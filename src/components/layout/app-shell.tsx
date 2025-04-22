@@ -1,308 +1,244 @@
 "use client";
 
-import type React from "react";
-import { useState, useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 import {
-  BarChart3,
-  Calendar,
-  ClipboardList,
-  Dumbbell,
-  LineChart,
   Menu,
   Settings,
   Users,
   Zap,
+  ClipboardCheck,
+  BarChart2,
   Info,
-  ChevronRight,
-  ChevronLeft,
+  Calendar,
+  LineChart,
+  Dumbbell,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import Link from "next/link";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
+const routes = [
+  {
+    title: "PLANNING",
+    items: [
+      {
+        title: "Athletes",
+        href: "/athletes",
+        icon: Users,
+        iconColor: "text-amber-500",
+        bgColor: "bg-amber-50 dark:bg-amber-900/20",
+      },
+      {
+        title: "Training Plan",
+        href: "/training-plan",
+        icon: ClipboardCheck,
+        iconColor: "text-purple-500",
+        bgColor: "bg-purple-50 dark:bg-purple-900/20",
+      },
+      {
+        title: "Training Plan Builder",
+        href: "/training-plan-builder",
+        icon: Calendar,
+        iconColor: "text-purple-500",
+        bgColor: "bg-purple-50 dark:bg-purple-900/20",
+      },
+      {
+        title: "Progression Builder",
+        href: "/progression-builder",
+        icon: LineChart,
+        iconColor: "text-blue-500",
+        bgColor: "bg-blue-50 dark:bg-blue-900/20",
+      },
+    ],
+  },
+  {
+    title: "TRAINING",
+    items: [
+      {
+        title: "Workout Execution",
+        href: "/workout-execution",
+        icon: Dumbbell,
+        iconColor: "text-green-500",
+        bgColor: "bg-green-50 dark:bg-green-900/20",
+      },
+      {
+        title: "Workout Results",
+        href: "/workout-results",
+        icon: BarChart2,
+        iconColor: "text-rose-500",
+        bgColor: "bg-rose-50 dark:bg-rose-900/20",
+      },
+      {
+        title: "Assistant Coach",
+        href: "/assistant-coach",
+        icon: Zap,
+        iconColor: "text-blue-500",
+        bgColor: "bg-blue-50 dark:bg-blue-900/20",
+      },
+    ],
+  },
+  {
+    title: "SETTINGS",
+    items: [
+      {
+        title: "Settings",
+        href: "/settings",
+        icon: Settings,
+        iconColor: "text-gray-500",
+        bgColor: "bg-gray-50 dark:bg-gray-800/30",
+      },
+      {
+        title: "About",
+        href: "/about",
+        icon: Info,
+        iconColor: "text-gray-500",
+        bgColor: "bg-gray-50 dark:bg-gray-800/30",
+      },
+    ],
+  },
+];
+
 export function AppShell({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const router = useRouter();
-  const [open, setOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const pathname = usePathname();
 
-  const isMediumScreen = useMediaQuery(
-    "(min-width: 768px) and (max-width: 1023px)"
-  );
-
+  // On initial load, set collapsed state for desktop
   useEffect(() => {
-    if (isMediumScreen) {
+    // Default to collapsed on desktop
+    if (isDesktop) {
       setCollapsed(true);
-    } else {
-      setCollapsed(false);
     }
-  }, [isMediumScreen]);
+  }, []);
 
-  const routes = [
-    {
-      heading: "PLANNING",
-      links: [
-        {
-          href: "/planning/athletes",
-          label: "Athletes",
-          icon: <Users className="h-5 w-5 text-amber-500" />,
-        },
-        {
-          href: "/planning/training-plan",
-          label: "Training Plan",
-          icon: <ClipboardList className="h-5 w-5 text-indigo-500" />,
-        },
-        {
-          href: "/planning/plan-builder",
-          label: "Training Plan Builder",
-          icon: <Calendar className="h-5 w-5 text-purple-500" />,
-        },
-        {
-          href: "/planning/progression-builder",
-          label: "Progression Builder",
-          icon: <LineChart className="h-5 w-5 text-blue-500" />,
-        },
-      ],
-    },
-    {
-      heading: "TRAINING",
-      links: [
-        {
-          href: "/training/workout-execution",
-          label: "Workout Execution",
-          icon: <Dumbbell className="h-5 w-5 text-emerald-500" />,
-        },
-        {
-          href: "/training/workout-results",
-          label: "Workout Results",
-          icon: <BarChart3 className="h-5 w-5 text-rose-500" />,
-        },
-        {
-          href: "/training/assistant-coach",
-          label: "Assistant Coach",
-          icon: <Zap className="h-5 w-5 text-cyan-500" />,
-        },
-      ],
-    },
-    {
-      heading: "SETTINGS",
-      links: [
-        {
-          href: "/settings",
-          label: "Settings",
-          icon: <Settings className="h-5 w-5 text-slate-500" />,
-        },
-        {
-          href: "/about",
-          label: "About",
-          icon: <Info className="h-5 w-5 text-gray-500" />,
-        },
-      ],
-    },
-  ];
+  // Close sidebar when navigating on mobile
+  useEffect(() => {
+    if (!isDesktop) {
+      setIsSidebarOpen(false);
+    }
+  }, [pathname, isDesktop]);
 
-  const handleNavigation = (href: string) => {
-    setOpen(false);
-    router.push(href);
+  // Initialize sidebar states based on screen size
+  useEffect(() => {
+    if (isDesktop) {
+      setIsSidebarOpen(true);
+    } else {
+      setIsSidebarOpen(false);
+    }
+  }, [isDesktop]);
+
+  const toggleSidebar = () => {
+    if (isDesktop) {
+      setCollapsed(!collapsed);
+    } else {
+      setIsSidebarOpen(!isSidebarOpen);
+    }
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Desktop Sidebar */}
-      <div
-        suppressHydrationWarning
-        className={cn(
-          "hidden md:flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-sm transition-all duration-300",
-          collapsed ? "w-16" : "w-64"
-        )}
-      >
-        {/* Sidebar Header */}
-        <div
-          className={cn(
-            "border-b border-gray-200 dark:border-gray-700 flex items-center",
-            collapsed ? "justify-center p-4" : "p-6"
-          )}
-        >
-          {collapsed ? (
-            <div className="bg-indigo-600 text-white p-1 rounded-md">
-              <Zap className="h-5 w-5" />
+    <div className="flex min-h-screen w-full flex-col">
+      <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-white dark:bg-gray-950 px-4 md:px-6 shadow-sm">
+        <div className="flex items-center gap-2">
+          <button
+            className="inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors hover:bg-purple-50 hover:text-[#6941C6] dark:hover:bg-purple-950 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-400 md:hidden"
+            onClick={toggleSidebar}
+          >
+            <Menu className="h-5 w-5" />
+            <span className="sr-only">Toggle Menu</span>
+          </button>
+          <Link href="/" className="flex items-center gap-2">
+            <div className="flex items-center justify-center h-10 w-10 bg-[#6941C6] dark:bg-[#6941C6] rounded-md">
+              <Zap className="h-6 w-6 text-white" />
             </div>
-          ) : (
-            <button
-              onClick={() => router.push("/")}
-              className="flex items-center gap-2 font-bold text-xl text-indigo-600 dark:text-indigo-400"
-            >
-              <div className="bg-indigo-600 text-white p-1 rounded-md">
-                <Zap className="h-5 w-5" />
-              </div>
-              CoachIQ
-            </button>
-          )}
+            <span className="font-bold text-xl md:inline-block text-[#6941C6] dark:text-[#6941C6]">
+              Coach IQ
+            </span>
+          </Link>
         </div>
+        <div className="flex-1"></div>
+        <div className="flex items-center gap-4">
+          <ThemeToggle />
+        </div>
+      </header>
 
-        {/* Collapse/Expand Button */}
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="absolute top-20 -right-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full p-1 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 z-10"
-          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          {collapsed ? (
-            <ChevronRight className="h-4 w-4 text-gray-500" />
-          ) : (
-            <ChevronLeft className="h-4 w-4 text-gray-500" />
+      <div className="flex flex-1">
+        {/* Mobile backdrop */}
+        {isSidebarOpen && !isDesktop && (
+          <div
+            className="fixed inset-0 z-10 bg-black/50"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
+
+        <aside
+          className={cn(
+            "fixed inset-y-0 left-0 z-20 mt-16 transform overflow-hidden border-r bg-white dark:bg-gray-950 transition-all duration-300 md:static",
+            isDesktop
+              ? collapsed
+                ? "md:w-[68px]" // Exact width for the collapsed sidebar
+                : "w-64 translate-x-0"
+              : isSidebarOpen
+              ? "w-64 translate-x-0"
+              : "-translate-x-full"
           )}
-        </button>
-
-        {/* Scrollable Navigation Area */}
-        <ScrollArea className="flex-1">
-          <nav className={cn("grid gap-2 py-4", collapsed ? "px-2" : "px-4")}>
-            {routes.map((section, i) => (
-              <div key={i} className="mb-6">
-                {!collapsed && (
-                  <h4 className="mb-2 px-2 text-xs font-semibold text-gray-500 dark:text-gray-400">
-                    {section.heading}
-                  </h4>
-                )}
-                {section.links.map((link, j) => (
-                  <TooltipProvider key={j} delayDuration={300}>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button
-                          onClick={() => handleNavigation(link.href)}
+        >
+          <ScrollArea className="h-[calc(100vh-4rem)]">
+            <nav className={cn("grid gap-1 py-4", collapsed ? "px-2" : "px-4")}>
+              {routes.map((section, i) => (
+                <div key={i} className="mb-6">
+                  {!collapsed && (
+                    <h4 className="mb-2 px-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+                      {section.title}
+                    </h4>
+                  )}
+                  <div className="grid gap-1">
+                    {section.items.map((item, j) => {
+                      const Icon = item.icon;
+                      const isActive = pathname === item.href;
+                      return (
+                        <Link
+                          key={j}
+                          href={item.href}
                           className={cn(
-                            "flex items-center gap-3 rounded-md py-2.5 text-sm font-medium transition-colors w-full",
-                            collapsed ? "justify-center px-2" : "px-3",
-                            pathname === link.href
-                              ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300"
-                              : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60"
+                            "flex items-center gap-3 px-3 py-2 text-sm font-medium transition-colors rounded-md",
+                            isActive
+                              ? collapsed
+                                ? ""
+                                : "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white"
+                              : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100",
+                            collapsed &&
+                              "flex-col justify-center items-center px-0 py-1"
                           )}
                         >
-                          {link.icon}
-                          {!collapsed && link.label}
-                        </button>
-                      </TooltipTrigger>
-                      {collapsed && (
-                        <TooltipContent side="right">
-                          {link.label}
-                        </TooltipContent>
-                      )}
-                    </Tooltip>
-                  </TooltipProvider>
-                ))}
-              </div>
-            ))}
-          </nav>
-        </ScrollArea>
-
-        {/* Sidebar Footer */}
-        <div
-          className={cn(
-            "border-t border-gray-200 dark:border-gray-700 flex items-center mt-auto",
-            collapsed ? "justify-center p-3" : "justify-between p-4"
-          )}
-        >
-          <ThemeToggle />
-          {!collapsed && (
-            <span className="text-xs text-gray-500 dark:text-gray-400">
-              v1.0.0
-            </span>
-          )}
-        </div>
-      </div>
-
-      {/* Mobile Layout Area */}
-      <div className="flex flex-col flex-1">
-        {/* Mobile Header */}
-        <Sheet open={open} onOpenChange={setOpen}>
-          <div className="md:hidden flex items-center h-16 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 sticky top-0 z-10">
-            <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="mr-4">
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">Toggle sidebar</span>
-              </Button>
-            </SheetTrigger>
-            <button
-              onClick={() => router.push("/")}
-              className="flex items-center gap-2 font-bold text-xl text-indigo-600 dark:text-indigo-400"
-            >
-              <div className="bg-indigo-600 text-white p-1 rounded-md">
-                <Zap className="h-5 w-5" />
-              </div>
-              CoachIQ
-            </button>
-            <div className="ml-auto">
-              <ThemeToggle />
-            </div>
-          </div>
-
-          {/* Mobile Sidebar Content (Sheet) */}
-          <SheetContent
-            side="left"
-            className="w-64 p-0 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col"
-          >
-            {/* Sheet Header */}
-            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-              <button
-                onClick={() => {
-                  setOpen(false);
-                  router.push("/");
-                }}
-                className="flex items-center gap-2 font-bold text-xl text-indigo-600 dark:text-indigo-400"
-              >
-                <div className="bg-indigo-600 text-white p-1 rounded-md">
-                  <Zap className="h-5 w-5" />
-                </div>
-                CoachIQ
-              </button>
-            </div>
-            {/* Scrollable Navigation Area */}
-            <ScrollArea className="flex-1">
-              <nav className="grid gap-2 px-4 py-4">
-                {routes.map((section, i) => (
-                  <div key={i} className="mb-6">
-                    <h4 className="mb-2 px-2 text-xs font-semibold text-gray-500 dark:text-gray-400">
-                      {section.heading}
-                    </h4>
-                    {section.links.map((link, j) => (
-                      <button
-                        key={j}
-                        onClick={() => handleNavigation(link.href)}
-                        className={cn(
-                          "flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors",
-                          pathname === link.href
-                            ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300"
-                            : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60"
-                        )}
-                      >
-                        {link.icon}
-                        {link.label}
-                      </button>
-                    ))}
+                          <div
+                            className={cn(
+                              "flex items-center justify-center rounded-md",
+                              item.bgColor,
+                              collapsed ? "h-12 w-12" : "h-8 w-8"
+                            )}
+                          >
+                            <Icon className={cn("h-5 w-5", item.iconColor)} />
+                          </div>
+                          {!collapsed && (
+                            <span className="text-base">{item.title}</span>
+                          )}
+                        </Link>
+                      );
+                    })}
                   </div>
-                ))}
-              </nav>
-            </ScrollArea>
-            {/* Sheet Footer */}
-            <div className="p-4 border-t border-gray-200 dark:border-gray-700 mt-auto">
-              <span className="text-xs text-gray-500 dark:text-gray-400">
-                v1.0.0
-              </span>
-            </div>
-          </SheetContent>
-        </Sheet>
+                </div>
+              ))}
+            </nav>
+          </ScrollArea>
+        </aside>
 
-        {/* Main Content Area */}
-        <main className="flex-1 overflow-auto p-6">{children}</main>
+        <main className="flex-1 p-4 md:p-6 bg-gray-50 dark:bg-gray-900">
+          {children}
+        </main>
       </div>
     </div>
   );
