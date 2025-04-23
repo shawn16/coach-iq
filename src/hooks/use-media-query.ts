@@ -1,24 +1,21 @@
-import * as React from "react";
+import { useEffect, useState } from "react";
 
-export function useMediaQuery(query: string) {
-  const [value, setValue] = React.useState(false);
+export function useMediaQuery(query: string): boolean {
+  const [matches, setMatches] = useState(false);
 
-  React.useEffect(() => {
-    function onChange(event: MediaQueryListEvent) {
-      setValue(event.matches);
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    if (media.matches !== matches) {
+      setMatches(media.matches);
     }
 
-    // Ensure window is defined (runs only on client)
-    if (typeof window !== "undefined") {
-      const result = window.matchMedia(query);
-      setValue(result.matches);
-      result.addEventListener("change", onChange);
+    const listener = () => setMatches(media.matches);
+    window.addEventListener("resize", listener);
 
-      return () => result.removeEventListener("change", onChange);
-    }
-    // Return an empty cleanup function if window is not defined (SSR)
-    return () => {};
-  }, [query]);
+    return () => {
+      window.removeEventListener("resize", listener);
+    };
+  }, [matches, query]);
 
-  return value;
+  return matches;
 }

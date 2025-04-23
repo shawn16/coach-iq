@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { format, differenceInYears } from "date-fns";
+import { format } from "date-fns";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { AthleteDisplay, ProjectedTimes } from "@/types/athlete";
@@ -16,6 +16,7 @@ interface AthleteProfileDialogProps {
   projectedTimes: ProjectedTimes | null;
   isOpen: boolean;
   onClose: () => void;
+  calculateAge: (birthday: string | Date) => number | null;
 }
 
 export function AthleteProfileDialog({
@@ -23,6 +24,7 @@ export function AthleteProfileDialog({
   projectedTimes,
   isOpen,
   onClose,
+  calculateAge,
 }: AthleteProfileDialogProps) {
   // Return null if data is missing or dialog is closed
   if (!isOpen || !athlete || !projectedTimes) return null;
@@ -32,7 +34,7 @@ export function AthleteProfileDialog({
     typeof athlete.birthday === "string"
       ? new Date(athlete.birthday)
       : athlete.birthday;
-  const age = differenceInYears(new Date(), birthDate);
+  const age = calculateAge(athlete.birthday);
   const formattedBirthday = format(birthDate, "MMMM d, yyyy");
 
   return (

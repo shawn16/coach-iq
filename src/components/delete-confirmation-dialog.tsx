@@ -14,25 +14,26 @@ interface DeleteConfirmationDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  athleteName: string;
+  title: string;
+  description: string;
 }
 
 export function DeleteConfirmationDialog({
   isOpen,
   onClose,
   onConfirm,
-  athleteName,
+  title,
+  description,
 }: DeleteConfirmationDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-gray-900 dark:text-gray-50">
-            Confirm Deletion
+            {title}
           </DialogTitle>
           <DialogDescription className="text-gray-600 dark:text-gray-400 mt-2">
-            Are you sure you want to delete {athleteName || "this athlete"}?
-            This action cannot be undone.
+            {description}
           </DialogDescription>
         </DialogHeader>
 

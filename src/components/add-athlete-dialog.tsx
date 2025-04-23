@@ -30,12 +30,12 @@ import { AthleteInput } from "@/types/athlete";
  * @interface AddAthleteDialogProps
  * @property {boolean} isOpen - Controls whether the dialog is displayed
  * @property {() => void} onClose - Function to call when dialog should close
- * @property {(athlete: AthleteInput) => void} onAddAthlete - Function to call with new athlete data
+ * @property {(athlete: AthleteInput) => void} onAdd - Function to call with new athlete data
  */
 interface AddAthleteDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onAddAthlete: (athlete: AthleteInput) => void;
+  onAdd: (athlete: AthleteInput) => void;
 }
 
 /**
@@ -63,7 +63,7 @@ const initialFormData = {
 export function AddAthleteDialog({
   isOpen,
   onClose,
-  onAddAthlete,
+  onAdd,
 }: AddAthleteDialogProps) {
   // State to track form input values
   const [formData, setFormData] = useState(initialFormData);
@@ -220,7 +220,7 @@ export function AddAthleteDialog({
       };
 
       // Pass data up to parent component
-      onAddAthlete(athleteToAdd);
+      onAdd(athleteToAdd);
 
       // Close the dialog
       onClose();

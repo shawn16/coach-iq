@@ -3,7 +3,6 @@ import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import type React from "react";
 import { cn } from "@/lib/utils";
-import { AppShell } from "@/components/layout/app-shell";
 
 export const metadata = {
   title: "Coach IQ",
@@ -30,9 +29,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body suppressHydrationWarning>
-        <Providers>
-          <AppShell>{children}</AppShell>
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

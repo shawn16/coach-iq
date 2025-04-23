@@ -19,7 +19,7 @@ interface AthleteTableProps {
     time800m: string;
   }; // Pass down calculation
   onSort: (column: keyof AthleteDisplay) => void;
-  onOpenProfile: (athlete: AthleteDisplay) => void;
+  onRowClick: (athlete: AthleteDisplay) => void;
   onDeleteClick: (athlete: AthleteDisplay, e: React.MouseEvent) => void;
   onEditClick: (athlete: AthleteDisplay, e: React.MouseEvent) => void;
 }
@@ -31,7 +31,7 @@ export function AthleteTable({
   calculateAge,
   calculateProjectedTimes,
   onSort,
-  onOpenProfile,
+  onRowClick,
   onDeleteClick,
   onEditClick,
 }: AthleteTableProps) {
@@ -118,7 +118,7 @@ export function AthleteTable({
               <tr
                 key={athlete.id}
                 className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer"
-                onClick={() => onOpenProfile(athlete)} // Use prop
+                onClick={() => onRowClick(athlete)}
               >
                 <td className="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
                   {athlete.last_name}

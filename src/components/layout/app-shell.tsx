@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -102,45 +102,53 @@ const routes = [
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
+  // Use a ref to track if this is the first render
+  const isFirstRender = React.useRef(true);
   const [collapsed, setCollapsed] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const pathname = usePathname();
 
-  // On initial load, set collapsed state for desktop
+  // Log pathname for debugging
   useEffect(() => {
-    // Default to collapsed on desktop
-    if (isDesktop) {
-      setCollapsed(true);
-    }
-  }, []);
+    console.log("Current pathname:", pathname);
+  }, [pathname]);
 
-  // Close sidebar when navigating on mobile
-  useEffect(() => {
-    if (!isDesktop) {
-      setIsSidebarOpen(false);
-    }
-  }, [pathname, isDesktop]);
-
-  // Initialize sidebar states based on screen size
-  useEffect(() => {
-    if (isDesktop) {
-      setIsSidebarOpen(true);
-    } else {
-      setIsSidebarOpen(false);
-    }
-  }, [isDesktop]);
-
-  const toggleSidebar = () => {
+  // Use useCallback to memoize the toggle function
+  const toggleSidebar = useCallback(() => {
     if (isDesktop) {
       setCollapsed(!collapsed);
     } else {
       setIsSidebarOpen(!isSidebarOpen);
     }
-  };
+  }, [collapsed, isSidebarOpen, isDesktop]);
+
+  // Initialize sidebar state only once on first render
+  useEffect(() => {
+    // This runs only once on mount
+    if (isFirstRender.current) {
+      // Set initial state based on screen size
+      setCollapsed(false);
+      setIsSidebarOpen(true);
+      // It's important to set this otherwise the sidebar could disappear
+      isFirstRender.current = false;
+      console.log("Initial sidebar setup complete");
+    }
+  }, []);
+
+  // Handle responsive behavior after initialization
+  useEffect(() => {
+    // Skip on first render since we already set initial state
+    if (!isFirstRender.current) {
+      // Close sidebar when navigating on mobile only
+      if (!isDesktop) {
+        setIsSidebarOpen(false);
+      }
+    }
+  }, [pathname, isDesktop]);
 
   return (
-    <div className="flex min-h-screen w-full flex-col">
+    <div className="flex min-h-screen w-full flex-col" key="app-shell-wrapper">
       <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-white dark:bg-gray-950 px-4 md:px-6 shadow-sm">
         <div className="flex items-center gap-2">
           <button
@@ -176,14 +184,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
         <aside
           className={cn(
-            "fixed inset-y-0 left-0 z-20 mt-16 transform overflow-hidden border-r bg-white dark:bg-gray-950 transition-all duration-300 md:static",
+            "fixed inset-y-0 left-0 z-20 mt-16 transform overflow-hidden border-r bg-white dark:bg-gray-950 transition-all duration-300",
             isDesktop
-              ? collapsed
-                ? "md:w-[68px]" // Exact width for the collapsed sidebar
-                : "w-64 translate-x-0"
-              : isSidebarOpen
+              ? // On desktop, always keep sidebar visible and just adjust width
+                collapsed
+                ? "md:w-[68px] md:static md:translate-x-0"
+                : "md:w-64 md:static md:translate-x-0"
+              : // On mobile, use translate for showing/hiding
+              isSidebarOpen
               ? "w-64 translate-x-0"
-              : "-translate-x-full"
+              : "w-64 -translate-x-full"
           )}
         >
           <ScrollArea className="h-[calc(100vh-4rem)]">

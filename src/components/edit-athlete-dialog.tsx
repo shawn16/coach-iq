@@ -28,7 +28,7 @@ interface EditAthleteDialogProps {
   athlete: AthleteDisplay | null;
   isOpen: boolean;
   onClose: () => void;
-  onUpdateAthlete: (id: number, athlete: AthleteInput) => void;
+  onUpdate: (id: number, athlete: AthleteInput) => void;
 }
 
 /**
@@ -45,7 +45,7 @@ export function EditAthleteDialog({
   athlete,
   isOpen,
   onClose,
-  onUpdateAthlete,
+  onUpdate,
 }: EditAthleteDialogProps) {
   // State to track form input values
   const [formData, setFormData] = useState({
@@ -223,7 +223,7 @@ export function EditAthleteDialog({
       };
 
       // Pass data up to parent component
-      onUpdateAthlete(athlete.id, athleteToUpdate);
+      onUpdate(athlete.id, athleteToUpdate);
 
       // Close the dialog
       onClose();
