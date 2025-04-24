@@ -1,0 +1,25 @@
+  version: '3.8'
+  services:
+    db:
+      image: postgres:15
+      container_name: coach_iq_postgres_dev
+      restart: always
+      environment:
+        POSTGRES_USER: coachdev
+        POSTGRES_PASSWORD: MasonCade16
+        POSTGRES_DB: postgres
+        POSTGRES_INITDB_ARGS: "--auth=trust"
+      ports:
+        - "5432:5432"
+      volumes:
+        - postgres_dev_data:/var/lib/postgresql/data
+        - ./docker/init:/docker-entrypoint-initdb.d
+
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U coachdev -d postgres"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+
+  volumes:
+    postgres_dev_data:

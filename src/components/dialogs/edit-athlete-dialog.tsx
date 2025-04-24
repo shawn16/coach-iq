@@ -3,7 +3,6 @@
 import * as React from "react";
 import { format } from "date-fns";
 import { Pencil } from "lucide-react";
-import { parseTimeToMilliseconds } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -18,25 +17,24 @@ import {
 import { AthleteForm, AthleteFormData } from "@/components/forms/athlete-form"; // Import the form
 
 // Interface for the existing athlete data received as prop
+// Align with the actual data structure if needed
 interface Athlete {
-  id: string;
+  id: string | number; // Allow number if ID is int
   first_name: string;
   last_name: string;
-  birthday: string; // Assuming API returns string
+  birthday: string; // Expecting YYYY-MM-DD string from API/table
   grade: number;
-  time_1600m: number;
-  projected_5k?: string;
-  projected_3200m?: string;
-  projected_800m?: string;
+  time_1600m: number; // Expecting milliseconds from API/table
+  // Add other fields if present in the prop
 }
 
-// Interface for the data sent to the API for updating
-interface UpdateApiAthleteData {
+// Interface for the data sent to the API for updating - Align with backend
+interface UpdateApiPayload {
   first_name: string;
   last_name: string;
-  birthday: string | null; // Expecting yyyy-MM-dd string
+  birthday: string; // Expecting yyyy-MM-dd string
   grade: number;
-  time_1600m?: number | null; // Milliseconds
+  time_1600m_str: string; // Expecting mandatory string format MM:SS.ms
 }
 
 // Define the props for the EditAthleteDialog component
@@ -62,30 +60,34 @@ export function EditAthleteDialog({
     setIsSubmitting(true);
     setApiError(null);
 
-    // Validate and parse time string from the form data
-    const time1600mMs = parseTimeToMilliseconds(formData.time_1600m_str);
-    if (formData.time_1600m_str && time1600mMs === null) {
-      setApiError("Invalid 1600m time format. Use MM:SS.ms");
+    // Remove redundant time parsing - Form already validates format
+    // Backend will parse the string
+
+    // Validate birthday exists (although form should ensure this)
+    if (!formData.birthday) {
+      setApiError("Birthday data missing from form.");
       setIsSubmitting(false);
       return;
     }
 
-    // Prepare data for API (format date, parse grade)
-    const apiData: UpdateApiAthleteData = {
+    // Prepare data for API - Ensure structure matches backend expectations
+    const apiData: UpdateApiPayload = {
       first_name: formData.first_name,
       last_name: formData.last_name,
-      birthday: formData.birthday
-        ? format(formData.birthday, "yyyy-MM-dd")
-        : null,
+      birthday: format(formData.birthday, "yyyy-MM-dd"), // Format Date to string
       grade: parseInt(formData.grade, 10),
-      time_1600m: time1600mMs ?? null,
+      time_1600m_str: formData.time_1600m_str, // Send the validated string
     };
 
-    console.log("Submitting updated athlete (API data):", apiData);
+    console.log(
+      `Submitting updated athlete ${athlete.id} (API payload):`,
+      apiData
+    );
 
     try {
-      const response = await fetch(`/api/athletes/${athlete.id}`, {
-        method: "PUT",
+      // Ensure athlete.id is converted to string if needed for URL
+      const response = await fetch(`/api/athletes/${athlete.id.toString()}`, {
+        method: "PUT", // Use PUT method
         headers: {
           "Content-Type": "application/json",
         },
@@ -115,14 +117,17 @@ export function EditAthleteDialog({
     }
   };
 
-  // Prepare initialData for the AthleteForm
-  const initialFormData = {
-    first_name: athlete.first_name,
-    last_name: athlete.last_name,
-    birthday: athlete.birthday, // Pass the original string/date
-    grade: athlete.grade,
-    time_1600m: athlete.time_1600m,
-  };
+  // Memoize initialFormData to prevent unnecessary re-renders of AthleteForm's useEffect
+  const initialFormData = React.useMemo(() => {
+    console.log("Recalculating initialFormData for memo"); // Add log for debugging memo
+    return {
+      first_name: athlete.first_name,
+      last_name: athlete.last_name,
+      birthday: athlete.birthday,
+      grade: athlete.grade.toString(),
+      time_1600m: athlete.time_1600m,
+    };
+  }, [athlete]); // Dependency array includes the athlete prop
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -150,7 +155,6 @@ export function EditAthleteDialog({
           onSubmit={handleFormSubmit}
           apiError={apiError}
           isSubmitting={isSubmitting}
-          submitButtonText="Save Changes" // Specific button text
           // Reset form via key when dialog opens OR when the athlete prop changes
           key={open ? `edit-athlete-${athlete.id}` : "edit-athlete-closed"}
         />

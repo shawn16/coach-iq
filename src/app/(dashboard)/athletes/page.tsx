@@ -3,7 +3,14 @@
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Download, Search, ChevronDown, ChevronUp, Trash } from "lucide-react";
+import {
+  Download,
+  Search,
+  ChevronDown,
+  ChevronUp,
+  Trash,
+  Pencil,
+} from "lucide-react";
 import {
   Table,
   TableBody,
@@ -21,6 +28,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AddAthleteDialog } from "@/components/dialogs/add-athlete-dialog";
 import { EditAthleteDialog } from "@/components/dialogs/edit-athlete-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface Athlete {
   id: string;
@@ -45,6 +62,9 @@ export default function AthletesPage() {
   const [selectedGrade, setSelectedGrade] = useState<string>("All Grades");
   const [sortField, setSortField] = useState<SortField>("last_name");
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [athleteToDelete, setAthleteToDelete] = useState<Athlete | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Available grades for filtering
   const gradeOptions = ["All Grades", "9th", "10th", "11th", "12th"];
@@ -176,6 +196,51 @@ export default function AthletesPage() {
       <ChevronDown className="ml-1 h-4 w-4 inline text-indigo-600" />
     );
   };
+
+  // --- Delete Logic Start ---
+  const handleDeleteClick = (athlete: Athlete, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent row click
+    setAthleteToDelete(athlete);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!athleteToDelete) return;
+
+    setIsDeleting(true);
+    setError(null); // Clear previous errors
+
+    try {
+      const response = await fetch(`/api/athletes/${athleteToDelete.id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.error ||
+            `Failed to delete athlete (HTTP ${response.status})`
+        );
+      }
+
+      // Success
+      setIsDeleteDialogOpen(false);
+      setAthleteToDelete(null);
+      // TODO: Add success toast notification here if library is available
+      console.log("Athlete deleted successfully");
+      fetchAthletes(); // Refresh the list
+    } catch (err) {
+      console.error("Failed to delete athlete:", err);
+      setError(
+        err instanceof Error ? err.message : "An unknown delete error occurred"
+      );
+      // Keep dialog open to show error? Or close and use toast?
+      // For now, we'll let it stay open if there was an error during delete attempt
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+  // --- Delete Logic End ---
 
   return (
     <div className="space-y-4 p-4 md:p-6">
@@ -351,11 +416,24 @@ export default function AthletesPage() {
                             <EditAthleteDialog
                               athlete={athlete}
                               onAthleteUpdated={handleAthleteChange}
+                              trigger={
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="h-8 w-8 text-blue-500 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                                  aria-label={`Edit ${athlete.first_name} ${athlete.last_name}`}
+                                >
+                                  <Pencil className="h-4 w-4" />
+                                </Button>
+                              }
                             />
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="h-8 w-8 text-destructive hover:bg-destructive/10"
+                              onClick={(e) => handleDeleteClick(athlete, e)}
+                              className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+                              aria-label={`Delete ${athlete.first_name} ${athlete.last_name}`}
                             >
                               <Trash className="h-4 w-4" />
                             </Button>
@@ -381,6 +459,37 @@ export default function AthletesPage() {
           )}
         </div>
       </div>
+
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the
+              athlete{" "}
+              {athleteToDelete &&
+                `"${athleteToDelete.first_name} ${athleteToDelete.last_name}"`}
+              and remove their data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          {error && (
+            <p className="text-sm text-red-600 text-center">Error: {error}</p>
+          )}
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDelete}
+              disabled={isDeleting}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {isDeleting ? "Deleting..." : "Yes, delete athlete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

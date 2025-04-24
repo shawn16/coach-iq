@@ -3,7 +3,6 @@
 import * as React from "react";
 import { format } from "date-fns";
 import { Plus } from "lucide-react";
-import { parseTimeToMilliseconds } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,13 +15,13 @@ import {
 } from "@/components/ui/dialog";
 import { AthleteForm, AthleteFormData } from "@/components/forms/athlete-form";
 
-// Interface for the actual data sent to API
-interface NewApiAthleteData {
+// Interface for the data sent to API - Align with backend payload
+interface ApiPayload {
   first_name: string;
   last_name: string;
-  birthday: string | null; // Expecting yyyy-MM-dd string
+  birthday: string; // Expecting yyyy-MM-dd string
   grade: number;
-  time_1600m?: number | null; // Milliseconds
+  time_1600m_str: string; // Expecting mandatory string format
 }
 
 // Props remain the same, but callback data might change based on API needs
@@ -46,26 +45,26 @@ export function AddAthleteDialog({
     setIsSubmitting(true);
     setApiError(null);
 
-    // Validate and parse time string from the form data
-    const time1600mMs = parseTimeToMilliseconds(formData.time_1600m_str);
-    if (formData.time_1600m_str && time1600mMs === null) {
-      setApiError("Invalid 1600m time format. Use MM:SS.ms");
+    // Remove redundant time parsing - Form already validates format
+    // Backend will parse the string
+
+    // Validate birthday exists (although form should ensure this)
+    if (!formData.birthday) {
+      setApiError("Birthday data missing from form.");
       setIsSubmitting(false);
       return;
     }
 
-    // Prepare data for API (format date, parse grade)
-    const apiData: NewApiAthleteData = {
+    // Prepare data for API - Ensure structure matches backend expectations
+    const apiData: ApiPayload = {
       first_name: formData.first_name,
       last_name: formData.last_name,
-      birthday: formData.birthday
-        ? format(formData.birthday, "yyyy-MM-dd")
-        : null,
-      grade: parseInt(formData.grade, 10), // Grade comes as string from Select
-      time_1600m: time1600mMs ?? null, // Send null if empty/invalid
+      birthday: format(formData.birthday, "yyyy-MM-dd"), // Format Date to string
+      grade: parseInt(formData.grade, 10),
+      time_1600m_str: formData.time_1600m_str, // Send the validated string
     };
 
-    console.log("Submitting new athlete (API data):", apiData);
+    console.log("Submitting new athlete (API payload):", apiData);
 
     try {
       const response = await fetch("/api/athletes", {
@@ -122,7 +121,6 @@ export function AddAthleteDialog({
           onSubmit={handleFormSubmit}
           apiError={apiError}
           isSubmitting={isSubmitting}
-          submitButtonText="Add Athlete"
           key={open ? "athlete-form-open" : "athlete-form-closed"}
         />
 

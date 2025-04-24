@@ -1,18 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { cn, formatMillisecondsToTime } from "@/lib/utils"; // Import format util
-import { Button } from "@/components/ui/button";
+import { format, parse, isValid } from "date-fns";
+import { formatMillisecondsToTime, parseTimeToMilliseconds } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -42,57 +34,97 @@ interface InitialData {
 interface AthleteFormProps {
   initialData?: InitialData | null;
   onSubmit: (data: AthleteFormData) => void; // Parent handles API call
-  submitButtonText: string;
   isSubmitting?: boolean; // Optional: for disabling button during submission
   apiError?: string | null; // Optional: display error from parent
-  onCancel?: () => void; // Optional: hook for cancel action
   formId?: string; // Optional ID for linking external submit button
+}
+
+// Helper function to safely get initial string value
+function getInitialString(value: unknown): string {
+  // Handle null/undefined explicitly, then convert
+  if (value === null || value === undefined) return "";
+  return value.toString();
+}
+
+// Helper function to safely get initial birthday string
+function getInitialBirthdayStr(
+  value: string | Date | undefined | null
+): string {
+  if (!value) return "";
+  try {
+    const parsedDate = new Date(value);
+    if (!isNaN(parsedDate.getTime())) {
+      return format(parsedDate, "yyyy-MM-dd");
+    }
+  } catch (error) {
+    console.error("Error parsing initial birthday value:", value, error);
+  }
+  return ""; // Return empty string if parsing fails
+}
+
+// Helper function to safely get initial time string
+function getInitialTimeStr(value: number | undefined | null): string {
+  return formatMillisecondsToTime(value) || "";
 }
 
 export function AthleteForm({
   initialData,
   onSubmit,
-  submitButtonText,
   isSubmitting = false,
   apiError,
-  onCancel,
   formId,
 }: AthleteFormProps) {
-  // State for form fields
-  const [firstName, setFirstName] = React.useState("");
-  const [lastName, setLastName] = React.useState("");
-  const [birthday, setBirthday] = React.useState<Date | undefined>(undefined);
-  const [grade, setGrade] = React.useState<string>("");
-  const [time1600mStr, setTime1600mStr] = React.useState("");
+  // --- LOGGING START ---
+  console.log("AthleteForm received initialData:", initialData);
+  // --- LOGGING END ---
+
+  // Initialize state directly from props
+  const [firstName, setFirstName] = React.useState(() =>
+    getInitialString(initialData?.first_name)
+  );
+  const [lastName, setLastName] = React.useState(() =>
+    getInitialString(initialData?.last_name)
+  );
+  const [birthdayStr, setBirthdayStr] = React.useState(() =>
+    getInitialBirthdayStr(initialData?.birthday)
+  );
+  const [grade, setGrade] = React.useState(() =>
+    getInitialString(initialData?.grade)
+  );
+  const [time1600mStr, setTime1600mStr] = React.useState(() =>
+    getInitialTimeStr(initialData?.time_1600m)
+  );
   const [internalError, setInternalError] = React.useState<string | null>(null);
 
-  // Populate form when initialData changes (for edit)
+  // Populate form when initialData PROP REFERENCE changes (for edit)
+  // This should now mainly handle resetting if initialData goes from value -> null/undefined
+  // or if the actual athlete being edited changes (less likely)
   React.useEffect(() => {
+    console.log(
+      "AthleteForm useEffect triggered with initialData:",
+      initialData
+    );
     if (initialData) {
-      setFirstName(initialData.first_name || "");
-      setLastName(initialData.last_name || "");
-
-      let initialBday: Date | undefined = undefined;
-      if (initialData.birthday) {
-        try {
-          const parsedDate = new Date(initialData.birthday);
-          if (!isNaN(parsedDate.getTime())) {
-            initialBday = parsedDate;
-          }
-        } catch (e) {
-          console.error("Error parsing initial birthday:", e);
-        }
-      }
-      setBirthday(initialBday);
-
-      setGrade(initialData.grade?.toString() || "");
-      setTime1600mStr(formatMillisecondsToTime(initialData.time_1600m) || "");
-      setInternalError(null);
+      // Re-sync state if initialData prop reference changes
+      // This might be redundant now with useState initializer, but safe
+      setFirstName(getInitialString(initialData.first_name));
+      setLastName(getInitialString(initialData.last_name));
+      setBirthdayStr(getInitialBirthdayStr(initialData.birthday));
+      const gradeStr = getInitialString(initialData.grade);
+      console.log(
+        `AthleteForm useEffect setting grade state to: '${gradeStr}'`
+      );
+      setGrade(gradeStr);
+      setTime1600mStr(getInitialTimeStr(initialData.time_1600m));
+      setInternalError(null); // Also reset internal error on data change
     } else {
-      // Reset form if initialData is removed (e.g., switching modes)
+      // Reset form if initialData prop becomes null/undefined
+      console.log(
+        "AthleteForm useEffect resetting form due to falsy initialData"
+      );
       setFirstName("");
       setLastName("");
-      setBirthday(undefined);
+      setBirthdayStr("");
       setGrade("");
       setTime1600mStr("");
       setInternalError(null);
@@ -103,28 +135,59 @@ export function AthleteForm({
     e.preventDefault();
     setInternalError(null);
 
-    // Basic client-side validation
-    if (!birthday) {
-      setInternalError("Birthday is required");
+    // Try parsing the birthday string (YYYY-MM-DD from input type="date")
+    let parsedBirthday: Date | undefined = undefined;
+    if (birthdayStr) {
+      // Use date-fns parse for YYYY-MM-DD format
+      const parsed = parse(birthdayStr, "yyyy-MM-dd", new Date());
+      if (isValid(parsed)) {
+        parsedBirthday = parsed;
+      } else {
+        // This validation might be less necessary as type="date" enforces format
+        setInternalError("Invalid Birthday date.");
+        return;
+      }
+    } else {
+      // Added check for empty string, as type="date" can be cleared
+      setInternalError("Birthday is required.");
       return;
     }
+
+    // Now done inside this handler:
+    if (!parsedBirthday) {
+      setInternalError("Birthday is required and must be valid (YYYY-MM-DD).");
+      return;
+    }
+
+    // Add validation for Grade
     if (!grade) {
       setInternalError("Grade is required");
       return;
     }
 
-    // Note: Time parsing validation is handled in the parent dialog
-    // before calling the API, as it involves the parse util.
-    // Alternatively, could pass the parse util here or do basic regex check.
+    // Add validation for time1600mStr
+    if (!time1600mStr) {
+      setInternalError("1600m PR is required.");
+      return;
+    }
+    const time1600mMs = parseTimeToMilliseconds(time1600mStr);
+    if (time1600mMs === null) {
+      setInternalError("Invalid 1600m time format. Use MM:SS.ms");
+      return;
+    }
 
     onSubmit({
       first_name: firstName,
       last_name: lastName,
-      birthday: birthday, // Pass Date object
+      birthday: parsedBirthday,
       grade: grade,
-      time_1600m_str: time1600mStr,
+      time_1600m_str: time1600mStr, // Pass the validated string
     });
   };
+
+  // --- LOGGING START ---
+  console.log(`AthleteForm rendering with grade state: '${grade}'`);
+  // --- LOGGING END ---
 
   return (
     <form id={formId} onSubmit={handleSubmit} className="space-y-6 pt-4">
@@ -164,37 +227,16 @@ export function AthleteForm({
           <Label htmlFor="birthday">
             Birthday <span className="text-red-500">*</span>
           </Label>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant={"outline"}
-                className={cn(
-                  "w-full justify-start text-left font-normal",
-                  !birthday && "text-muted-foreground"
-                )}
-                disabled={isSubmitting}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {birthday ? (
-                  format(birthday, "MM/dd/yyyy")
-                ) : (
-                  <span>mm/dd/yyyy</span>
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={birthday}
-                onSelect={setBirthday}
-                initialFocus
-                captionLayout="dropdown"
-                fromYear={1990}
-                toYear={new Date().getFullYear()}
-                required // Note: HTML required doesn't work directly on Calendar, validation done in handleSubmit
-              />
-            </PopoverContent>
-          </Popover>
+          {/* Use standard Input with type="date" */}
+          <Input
+            id="birthday"
+            type="date"
+            value={birthdayStr}
+            onChange={(e) => setBirthdayStr(e.target.value)}
+            required
+            disabled={isSubmitting}
+            className="block w-full"
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="grade">
