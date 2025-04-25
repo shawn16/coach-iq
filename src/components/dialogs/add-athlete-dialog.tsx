@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { AthleteForm, AthleteFormData } from "@/components/forms/athlete-form";
+import { toast } from "sonner";
 
 // Interface for the data sent to API - Align with backend payload
 interface ApiPayload {
@@ -82,16 +83,22 @@ export function AddAthleteDialog({
         );
       }
 
+      const newAthlete = await response.json(); // Get new athlete data if needed
+
       // Success
+      toast.success(
+        `Athlete "${apiData.first_name} ${apiData.last_name}" added successfully!`
+      );
       setOpen(false); // Close dialog
       if (onAthleteAdded) {
         onAthleteAdded(); // Trigger refresh
       }
     } catch (error) {
       console.error("API Error:", error);
-      setApiError(
-        error instanceof Error ? error.message : "An unknown error occurred"
-      );
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred";
+      setApiError(errorMessage); // Show error in dialog if needed
+      toast.error(`Failed to add athlete: ${errorMessage}`); // Show error toast
     } finally {
       setIsSubmitting(false);
     }

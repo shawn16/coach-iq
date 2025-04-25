@@ -15,6 +15,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { AthleteForm, AthleteFormData } from "@/components/forms/athlete-form"; // Import the form
+import { toast } from "sonner";
 
 // Interface for the existing athlete data received as prop
 // Align with the actual data structure if needed
@@ -103,15 +104,19 @@ export function EditAthleteDialog({
       }
 
       // Success
+      toast.success(
+        `Athlete "${apiData.first_name} ${apiData.last_name}" updated successfully!`
+      );
       setOpen(false); // Close dialog
       if (onAthleteUpdated) {
         onAthleteUpdated(); // Trigger refresh
       }
     } catch (error) {
       console.error("API Error:", error);
-      setApiError(
-        error instanceof Error ? error.message : "An unknown error occurred"
-      );
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred";
+      setApiError(errorMessage);
+      toast.error(`Failed to update athlete: ${errorMessage}`);
     } finally {
       setIsSubmitting(false);
     }

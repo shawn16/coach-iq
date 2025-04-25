@@ -6,6 +6,9 @@ import prisma from "../../../lib/prisma";
 import { Prisma } from "@/generated/prisma/client";
 // Import the time parsing utility
 import { parseTimeToMilliseconds } from "@/lib/utils";
+// Import NextAuth utilities
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../auth/[...nextauth]/route"; // Adjust path if needed
 
 // Disable SSL certificate validation in development only
 // WARNING: This is insecure and should NEVER be used in production
@@ -16,24 +19,20 @@ import { parseTimeToMilliseconds } from "@/lib/utils";
 // Sample data as a fallback in case there are connection issues
 // Removed sampleAthletes array
 
-// Define a type for the selected athlete data
-interface SelectedAthlete {
-  id: number;
-  firstName: string;
-  lastName: string;
-  birthday: Date;
-  grade: number;
-  time1600m: number | null; // Prisma Int can be null
-}
-
+// --- GET Handler (Protected) ---
 export async function GET() {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const coachId = session.user.id;
+
   try {
-    // Fetch data using Prisma
-    console.log("Attempting to fetch athletes using Prisma...");
-    // Note: Prisma returns Date objects for DateTime fields
-    // and Int for Int fields directly.
-    // Adjust field names to match Prisma schema (camelCase)
+    console.log(`Fetching athletes for coach ID: ${coachId}`);
+    // Fetch only athletes linked to the logged-in coach
     const athletes = await prisma.athlete.findMany({
+      where: { coachId: coachId }, // Filter by coachId
       orderBy: {
         lastName: "asc",
       },
@@ -41,38 +40,34 @@ export async function GET() {
         id: true,
         firstName: true,
         lastName: true,
-        birthday: true, // Keep as Date object
+        birthday: true,
         grade: true,
-        time1600m: true, // Keep as Int
+        time1600m: true,
       },
     });
     console.log(
-      `Successfully fetched ${athletes.length} athletes using Prisma.`
+      `Successfully fetched ${athletes.length} athletes for coach ${coachId}`
     );
 
-    // Enhance the data with projected times (same logic as before)
-    // Use the specific type for the mapped data
-    const enhancedData = athletes.map((athlete: SelectedAthlete) => {
-      // Use nullish coalescing for potentially null time1600m
-      const time1600m = athlete.time1600m ?? 0;
-      return {
-        id: athlete.id.toString(), // Convert id to string if needed by frontend
-        first_name: athlete.firstName, // Map to snake_case if needed
-        last_name: athlete.lastName, // Map to snake_case if needed
-        birthday: athlete.birthday.toISOString().split("T")[0], // Format Date to YYYY-MM-DD string
-        grade: athlete.grade,
-        time_1600m: time1600m, // Map to snake_case if needed
-        projected_5k: time1600m ? formatTimeForDisplay(time1600m * 3.1) : "-",
-        projected_3200m: time1600m ? formatTimeForDisplay(time1600m * 2) : "-",
-        projected_800m: time1600m ? formatTimeForDisplay(time1600m * 0.5) : "-",
-      };
+    // Enhance data (same as before)
+    const enhancedData = athletes.map((athlete: { id: number; firstName: string; lastName: string; birthday: Date; grade: number; time1600m: number | null }) => {
+       const time1600m = athlete.time1600m ?? 0;
+       return {
+            id: athlete.id.toString(),
+            first_name: athlete.firstName,
+            last_name: athlete.lastName,
+            birthday: athlete.birthday.toISOString().split("T")[0],
+            grade: athlete.grade,
+            time_1600m: time1600m,
+            projected_5k: time1600m ? formatTimeForDisplay(time1600m * 3.1) : "-",
+            projected_3200m: time1600m ? formatTimeForDisplay(time1600m * 2) : "-",
+            projected_800m: time1600m ? formatTimeForDisplay(time1600m * 0.5) : "-",
+        };
     });
 
     return NextResponse.json(enhancedData);
   } catch (error) {
-    // Log the error
-    console.error("Error fetching athletes using Prisma:", error);
-    // Return a proper error response
+    console.error(`Error fetching athletes for coach ${coachId}:`, error);
     return NextResponse.json(
       { error: "Failed to fetch athletes" },
       { status: 500 }
@@ -92,7 +87,7 @@ function formatTimeForDisplay(milliseconds: number): string {
     .padStart(2, "0")}`;
 }
 
-// --- POST Handler ---
+// --- POST Handler (Protected) ---
 
 // Define expected request body structure
 interface NewAthletePayload {
@@ -104,15 +99,17 @@ interface NewAthletePayload {
 }
 
 export async function POST(request: Request) {
-  console.log("Received POST request to /api/athletes");
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const coachId = session.user.id; // Get ID from session
+
+  console.log(`Received POST request to /api/athletes for coach: ${coachId}`);
   try {
     const body: NewAthletePayload = await request.json();
     console.log("Request body:", body);
-
-    // --- Temporary Hardcoded Coach ID ---
-    // TODO: Replace with actual authenticated user ID from session/token
-    const tempCoachId = "hardcoded-coach-cuid"; // MUST replace later
-    // --- End Temporary ---
 
     // Basic Validation (add check for time_1600m_str)
     if (!body.first_name || !body.last_name || !body.birthday || !body.grade || !body.time_1600m_str) {
@@ -151,7 +148,7 @@ export async function POST(request: Request) {
       grade: body.grade,
       time1600m: time1600mMs, // Assign parsed milliseconds directly
       coach: {
-        connect: { id: tempCoachId }
+        connect: { id: coachId } // Connect using session user ID
       },
     };
 

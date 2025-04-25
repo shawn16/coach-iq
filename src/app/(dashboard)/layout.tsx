@@ -29,6 +29,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { AuthStatus } from "@/components/auth-status";
 
 export default function DashboardLayout({
   children,
@@ -309,10 +310,40 @@ export default function DashboardLayout({
         </SheetContent>
       </Sheet>
 
-      {/* Main content */}
-      <main className="flex-1 overflow-auto bg-gray-50 dark:bg-gray-900">
-        {children}
-      </main>
+      {/* Main content area */}
+      <div className="flex flex-col flex-1">
+        {/* Header bar */}
+        <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background px-4 md:px-6 shadow-sm">
+          {/* Mobile menu trigger */}
+          <div className="md:hidden">
+            <Sheet open={open} onOpenChange={setOpen}>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="icon">
+                  <Menu className="h-6 w-6" />
+                  <span className="sr-only">Toggle navigation menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-64 p-0">
+                {/* Mobile Sidebar Content - Reuse logic? */}
+                {/* TODO: Populate mobile sidebar nav */}
+                <div className="p-4">Mobile Nav Here</div>
+              </SheetContent>
+            </Sheet>
+          </div>
+
+          {/* Spacer or Left Aligned Items */}
+          <div className="flex-1"></div>
+
+          {/* Right Aligned Items (Theme Toggle, Auth Status) */}
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <AuthStatus />
+          </div>
+        </header>
+
+        {/* Page Content */}
+        <main className="flex-1 p-4 md:p-6">{children}</main>
+      </div>
     </div>
   );
 }

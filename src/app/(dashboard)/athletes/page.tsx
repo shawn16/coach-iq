@@ -38,6 +38,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 interface Athlete {
   id: string;
@@ -208,7 +209,7 @@ export default function AthletesPage() {
     if (!athleteToDelete) return;
 
     setIsDeleting(true);
-    setError(null); // Clear previous errors
+    setError(null);
 
     try {
       const response = await fetch(`/api/athletes/${athleteToDelete.id}`, {
@@ -224,18 +225,18 @@ export default function AthletesPage() {
       }
 
       // Success
+      toast.success(
+        `Athlete "${athleteToDelete.first_name} ${athleteToDelete.last_name}" deleted successfully!`
+      );
       setIsDeleteDialogOpen(false);
       setAthleteToDelete(null);
-      // TODO: Add success toast notification here if library is available
-      console.log("Athlete deleted successfully");
       fetchAthletes(); // Refresh the list
     } catch (err) {
       console.error("Failed to delete athlete:", err);
-      setError(
-        err instanceof Error ? err.message : "An unknown delete error occurred"
-      );
-      // Keep dialog open to show error? Or close and use toast?
-      // For now, we'll let it stay open if there was an error during delete attempt
+      const errorMessage =
+        err instanceof Error ? err.message : "An unknown delete error occurred";
+      setError(errorMessage); // Keep showing error in dialog
+      toast.error(`Failed to delete athlete: ${errorMessage}`);
     } finally {
       setIsDeleting(false);
     }

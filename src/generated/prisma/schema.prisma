@@ -16,13 +16,54 @@ datasource db {
 
 // User model (for coaches)
 model User {
-  id           String    @id @default(cuid())
-  email        String    @unique
-  name         String?
-  passwordHash String? // Assuming password-based auth for now
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  athletes     Athlete[] // Relation to athletes managed by this coach
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique // Email can be null initially for some flows
+  emailVerified DateTime? // When email was verified
+  image         String? // Profile image URL
+  passwordHash  String? // For Credentials provider
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  accounts      Account[] // Relation to OAuth accounts
+  sessions      Session[] // Relation to user sessions
+  athletes      Athlete[] // Relation to athletes managed by this coach
+}
+
+// NextAuth Models
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
 
 // Athlete model
@@ -36,7 +77,7 @@ model Athlete {
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
   coachId        String // Foreign key to User (Coach)
-  coach          User            @relation(fields: [coachId], references: [id])
+  coach          User            @relation(fields: [coachId], references: [id], onDelete: Cascade)
   workoutResults WorkoutResult[] // Relation to workout results
 }
 
@@ -54,8 +95,8 @@ model TrainingPlan {
 // Workout Result model (Simplified for now)
 model WorkoutResult {
   id        String   @id @default(cuid())
-  athleteId Int // Foreign key to Athlete (Changed to Int)
-  athlete   Athlete  @relation(fields: [athleteId], references: [id])
+  athleteId Int
+  athlete   Athlete  @relation(fields: [athleteId], references: [id], onDelete: Cascade)
   date      DateTime
   type      String // e.g., "Interval", "Tempo", "Long Run"
   details   Json // Flexible field for workout-specific data (distance, reps, pace, etc.)

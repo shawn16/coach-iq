@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { Prisma } from "@/generated/prisma/client";
 import { parseTimeToMilliseconds } from "@/lib/utils";
+// Import NextAuth utilities
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../../auth/[...nextauth]/route"; // Adjust path
 
 // Interface for the expected PUT request body
 interface UpdateAthletePayload {
@@ -12,19 +15,36 @@ interface UpdateAthletePayload {
   time_1600m_str: string; // Expecting mandatory string format
 }
 
-// PUT handler for updating an athlete
+// --- PUT handler (Protected) ---
 export async function PUT(
   request: Request,
   { params }: { params: { athleteId: string } }
 ) {
-  const id = parseInt(params.athleteId, 10);
-  console.log(`Received PUT request for athlete ID: ${id}`);
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const coachId = session.user.id;
 
+  const id = parseInt(params.athleteId, 10);
   if (isNaN(id)) {
     return NextResponse.json({ error: "Invalid athlete ID" }, { status: 400 });
   }
 
+  console.log(`Received PUT request for athlete ID: ${id} from coach: ${coachId}`);
+
   try {
+    // Verify athlete belongs to the coach before proceeding
+    const athlete = await prisma.athlete.findUnique({
+      where: { id: id, coachId: coachId }, // Check both ID and coachId
+    });
+
+    if (!athlete) {
+      console.log(`AuthZ Error: Athlete ${id} not found or does not belong to coach ${coachId}`);
+      return NextResponse.json({ error: "Athlete not found or access denied" }, { status: 404 }); // Or 403
+    }
+
+    // Now proceed with parsing and updating
     const body: UpdateAthletePayload = await request.json();
     console.log("Request body:", body);
 
@@ -77,11 +97,6 @@ export async function PUT(
       return NextResponse.json({ error: "Invalid JSON payload" }, { status: 400 });
     }
 
-    // Check for Prisma record not found error (P2025) more safely
-    if (typeof error === 'object' && error !== null && 'code' in error && error.code === 'P2025') {
-        return NextResponse.json({ error: "Athlete not found" }, { status: 404 });
-    }
-
     let errorMessage = "Failed to update athlete";
     if (typeof error === 'object' && error !== null) {
       if ('message' in error && typeof error.message === 'string') {
@@ -95,47 +110,49 @@ export async function PUT(
   }
 }
 
-// --- DELETE Handler ---
+// --- DELETE Handler (Protected) ---
 export async function DELETE(
-  request: Request, // request might not be used but is part of the signature
+  request: Request,
   { params }: { params: { athleteId: string } }
 ) {
-  const id = parseInt(params.athleteId, 10);
-  console.log(`Received DELETE request for athlete ID: ${id}`);
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const coachId = session.user.id;
 
+  const id = parseInt(params.athleteId, 10);
   if (isNaN(id)) {
     return NextResponse.json({ error: "Invalid athlete ID" }, { status: 400 });
   }
 
+  console.log(`Received DELETE request for athlete ID: ${id} from coach: ${coachId}`);
+
   try {
-    // Attempt to delete the athlete
-    await prisma.athlete.delete({
-      where: { id: id },
+     // Verify athlete belongs to the coach before deleting
+    const athlete = await prisma.athlete.findUnique({
+      where: { id: id, coachId: coachId }, // Check both ID and coachId
     });
 
-    console.log(`Successfully deleted athlete ID: ${id}`);
+    if (!athlete) {
+      console.log(`AuthZ Error: Athlete ${id} not found or does not belong to coach ${coachId} for deletion`);
+       // Return 404 even if it exists but doesn't belong to user
+      return NextResponse.json({ error: "Athlete not found or access denied" }, { status: 404 });
+    }
 
-    // Return a success response, often 204 No Content for DELETE
-    // Or 200 OK with a success message
-    // return new Response(null, { status: 204 });
+    // Attempt to delete the athlete
+    await prisma.athlete.delete({
+      where: { id: id }, // Already verified ownership
+    });
+
     return NextResponse.json({ message: "Athlete deleted successfully" }, { status: 200 });
 
   } catch (error: unknown) {
     console.error(`Error deleting athlete ID ${id}:`, error);
 
-    // Check for Prisma record not found error (P2025)
-    if (typeof error === 'object' && error !== null && 'code' in error && error.code === 'P2025') {
-        // Arguably, deleting a non-existent resource isn't strictly an error (idempotent)
-        // but returning 404 is common practice.
-        return NextResponse.json({ error: "Athlete not found" }, { status: 404 });
-    }
-
-    // Handle other potential errors (e.g., foreign key constraints if athlete has results)
-    // Add more specific Prisma error handling if needed (like P2003 for foreign key violation)
     let errorMessage = "Failed to delete athlete";
-     if (typeof error === 'object' && error !== null) {
+    if (typeof error === 'object' && error !== null) {
       if ('message' in error && typeof error.message === 'string') {
-        // Customize message for common DB errors if desired
         errorMessage = `Database error: ${error.message}`;
       } else if (error instanceof Error) {
         errorMessage = `Server error: ${error.message}`;
