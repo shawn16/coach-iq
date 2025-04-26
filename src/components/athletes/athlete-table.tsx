@@ -1,6 +1,7 @@
 "use client";
 
 import type React from "react";
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, Trash2, Pencil } from "lucide-react";
@@ -35,6 +36,12 @@ export function AthleteTable({
   onDeleteClick,
   onEditClick,
 }: AthleteTableProps) {
+  const [filterGrade, setFilterGrade] = useState<string | null>(null);
+
+  const filteredAthletes = filterGrade
+    ? athletes.filter((athlete) => athlete.grade === filterGrade)
+    : athletes;
+
   // Helper to render sortable table headers
   const renderSortableHeader = (
     columnKey: keyof AthleteDisplay,
@@ -71,6 +78,25 @@ export function AthleteTable({
 
   return (
     <div className="overflow-x-auto">
+      <div className="mb-4 flex items-center gap-4">
+        <label htmlFor="grade-filter" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          Filter by Grade:
+        </label>
+        <select
+          id="grade-filter"
+          className="border border-gray-300 dark:border-gray-700 rounded-md p-2"
+          value={filterGrade || ""}
+          onChange={(e) => setFilterGrade(e.target.value || null)}
+        >
+          <option value="">All Grades</option>
+          {[...new Set(athletes.map((athlete) => athlete.grade))].map((grade) => (
+            <option key={grade} value={grade}>
+              {grade}th
+            </option>
+          ))}
+        </select>
+      </div>
+
       <table className="w-full text-sm text-left">
         <thead className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
           <tr>
@@ -101,7 +127,7 @@ export function AthleteTable({
           </tr>
         </thead>
         <tbody>
-          {athletes.map((athlete) => {
+          {filteredAthletes.map((athlete) => {
             const projectedTimes = calculateProjectedTimes(athlete.time1600m);
             const age = calculateAge(athlete.birthday);
             const birthDateForFormat =
@@ -154,7 +180,7 @@ export function AthleteTable({
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={(e) => onEditClick(athlete, e)} // Use new prop
+                      onClick={(e) => onEditClick(athlete, e)}
                       className="h-8 w-8 text-blue-500 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20"
                       aria-label={`Edit ${athlete.first_name} ${athlete.last_name}`}
                     >
@@ -163,7 +189,7 @@ export function AthleteTable({
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={(e) => onDeleteClick(athlete, e)} // Use prop
+                      onClick={(e) => onDeleteClick(athlete, e)}
                       className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
                       aria-label={`Delete ${athlete.first_name} ${athlete.last_name}`}
                     >
@@ -174,8 +200,7 @@ export function AthleteTable({
               </tr>
             );
           })}
-          {/* Empty state row */}
-          {athletes.length === 0 && (
+          {filteredAthletes.length === 0 && (
             <tr>
               <td
                 colSpan={10}

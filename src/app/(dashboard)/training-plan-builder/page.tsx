@@ -26,6 +26,8 @@ import {
   workoutTypes,
   generateInitialPlanData,
   WeekData,
+  workoutLibrary,
+  progressionLibrary,
 } from "@/lib/sample-data/builder-data";
 import { TrainingPlanTable } from "@/components/training-plan-table";
 import {
@@ -37,6 +39,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { WorkoutCard } from "@/components/workout-card";
+import { ProgressionCard } from "@/components/progression-card";
 
 // --- Component ---
 
@@ -161,11 +165,27 @@ export default function TrainingPlanBuilderPage() {
   };
 
   const removeWeek = (weekId: number) => {
-    // TODO: Implement remove week
+    setPlanData((prevPlanData) => prevPlanData.filter((week) => week.id !== weekId));
   };
 
   const moveWeek = (weekId: number, direction: "up" | "down") => {
-    // TODO: Implement move week
+    setPlanData((prevPlanData) => {
+      const index = prevPlanData.findIndex((week) => week.id === weekId);
+      if (index === -1) return prevPlanData;
+
+      const newPlanData = [...prevPlanData];
+      const targetIndex = direction === "up" ? index - 1 : index + 1;
+
+      if (targetIndex < 0 || targetIndex >= newPlanData.length) return prevPlanData;
+
+      // Swap weeks
+      [newPlanData[index], newPlanData[targetIndex]] = [
+        newPlanData[targetIndex],
+        newPlanData[index],
+      ];
+
+      return newPlanData;
+    });
   };
 
   const formatDateRange = (start: Date, end: Date) => {
@@ -236,10 +256,7 @@ export default function TrainingPlanBuilderPage() {
                     <div>
                       <Label>Start Date *</Label>
                       <div className="flex items-center gap-1">
-                        <DatePicker
-                          date={startDate}
-                          setDate={handleStartDateChange}
-                        />
+                        <DatePicker date={startDate} setDate={handleStartDateChange} />
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <Info className="h-4 w-4 text-gray-400 cursor-help" />
@@ -389,7 +406,7 @@ export default function TrainingPlanBuilderPage() {
                 workoutTypes={workoutTypes}
                 onCellClick={handleCellClick}
                 onKeyDown={handleKeyDown}
-                onRemoveWeek={removeWeek}
+                removeWeek={removeWeek}
                 onMoveWeek={moveWeek}
               />
             </div>
@@ -401,20 +418,30 @@ export default function TrainingPlanBuilderPage() {
                 <CardTitle>Workout Builder</CardTitle>
               </CardHeader>
               <CardContent>
-                <p>Workout builder content goes here...</p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {workoutLibrary.map((workout) => (
+                    <WorkoutCard key={workout.id} workout={workout} />
+                  ))}
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
+
           <TabsContent value="progressionBuilder">
             <Card>
               <CardHeader>
-                <CardTitle>Progression Builder</CardTitle>
+                <CardTitle>Workout Progressions</CardTitle>
               </CardHeader>
               <CardContent>
-                <p>Progression builder content goes here...</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {progressionLibrary.map((progression) => (
+                    <ProgressionCard key={progression.id} progression={progression} />
+                  ))}
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
+
           <TabsContent value="assignAthletes">
             <Card>
               <CardHeader>
