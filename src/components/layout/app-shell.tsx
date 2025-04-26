@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -101,48 +101,95 @@ const routes = [
   },
 ];
 
+const MIN_SIDEBAR_WIDTH = 68;
+const DEFAULT_SIDEBAR_WIDTH = 256;
+const MAX_SIDEBAR_WIDTH = 500;
+const COLLAPSE_THRESHOLD = 100;
+
 export function AppShell({ children }: { children: React.ReactNode }) {
-  // Use a ref to track if this is the first render
-  const isFirstRender = React.useRef(true);
-  const [collapsed, setCollapsed] = useState(false);
+  const isFirstRender = useRef(true);
+  const [sidebarWidth, setSidebarWidth] = useState(DEFAULT_SIDEBAR_WIDTH);
+  const [isResizing, setIsResizing] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const pathname = usePathname();
+  const sidebarRef = useRef<HTMLElement>(null);
 
-  // Log pathname for debugging
+  const isCollapsed = sidebarWidth < COLLAPSE_THRESHOLD;
+
   useEffect(() => {
     console.log("Current pathname:", pathname);
   }, [pathname]);
 
-  // Use useCallback to memoize the toggle function
+  const startResizing = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsResizing(true);
+    console.log("Start resizing");
+  }, []);
+
+  const stopResizing = useCallback(() => {
+    if (isResizing) {
+      setIsResizing(false);
+      console.log("Stop resizing");
+    }
+  }, [isResizing]);
+
+  const resize = useCallback(
+    (e: MouseEvent) => {
+      if (isResizing && sidebarRef.current) {
+        const newWidth =
+          e.clientX - sidebarRef.current.getBoundingClientRect().left;
+        const clampedWidth = Math.max(
+          MIN_SIDEBAR_WIDTH,
+          Math.min(newWidth, MAX_SIDEBAR_WIDTH)
+        );
+        setSidebarWidth(clampedWidth);
+      }
+    },
+    [isResizing]
+  );
+
+  useEffect(() => {
+    if (isResizing) {
+      window.addEventListener("mousemove", resize);
+      window.addEventListener("mouseup", stopResizing);
+    } else {
+      window.removeEventListener("mousemove", resize);
+      window.removeEventListener("mouseup", stopResizing);
+    }
+    return () => {
+      window.removeEventListener("mousemove", resize);
+      window.removeEventListener("mouseup", stopResizing);
+    };
+  }, [isResizing, resize, stopResizing]);
+
   const toggleSidebar = useCallback(() => {
     if (isDesktop) {
-      setCollapsed(!collapsed);
+      setSidebarWidth((prevWidth) =>
+        prevWidth > MIN_SIDEBAR_WIDTH
+          ? MIN_SIDEBAR_WIDTH
+          : DEFAULT_SIDEBAR_WIDTH
+      );
     } else {
       setIsSidebarOpen(!isSidebarOpen);
     }
-  }, [collapsed, isSidebarOpen, isDesktop]);
+  }, [isSidebarOpen, isDesktop]);
 
-  // Initialize sidebar state only once on first render
   useEffect(() => {
-    // This runs only once on mount
     if (isFirstRender.current) {
-      // Set initial state based on screen size
-      setCollapsed(false);
+      setSidebarWidth(DEFAULT_SIDEBAR_WIDTH);
       setIsSidebarOpen(true);
-      // It's important to set this otherwise the sidebar could disappear
       isFirstRender.current = false;
       console.log("Initial sidebar setup complete");
     }
   }, []);
 
-  // Handle responsive behavior after initialization
   useEffect(() => {
-    // Skip on first render since we already set initial state
     if (!isFirstRender.current) {
-      // Close sidebar when navigating on mobile only
       if (!isDesktop) {
         setIsSidebarOpen(false);
+      } else {
+        setIsSidebarOpen(true);
       }
     }
   }, [pathname, isDesktop]);
@@ -152,7 +199,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-white dark:bg-gray-950 px-4 md:px-6 shadow-sm">
         <div className="flex items-center gap-2">
           <button
-            className="inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors hover:bg-purple-50 hover:text-[#6941C6] dark:hover:bg-purple-950 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-400 md:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors hover:bg-purple-50 hover:text-[#6941C6] dark:hover:bg-purple-950 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-400"
             onClick={toggleSidebar}
           >
             <Menu className="h-5 w-5" />
@@ -173,8 +220,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      <div className="flex flex-1">
-        {/* Mobile backdrop */}
+      <div className="flex flex-1 relative">
         {isSidebarOpen && !isDesktop && (
           <div
             className="fixed inset-0 z-10 bg-black/50"
@@ -183,25 +229,25 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         )}
 
         <aside
+          ref={sidebarRef}
           className={cn(
-            "fixed inset-y-0 left-0 z-20 mt-16 transform overflow-hidden border-r bg-white dark:bg-gray-950 transition-all duration-300",
+            "relative inset-y-0 left-0 z-20 mt-0 flex-shrink-0 overflow-hidden border-r bg-white dark:bg-gray-950 transition-transform duration-300",
             isDesktop
-              ? // On desktop, always keep sidebar visible and just adjust width
-                collapsed
-                ? "md:w-[68px] md:static md:translate-x-0"
-                : "md:w-64 md:static md:translate-x-0"
-              : // On mobile, use translate for showing/hiding
-              isSidebarOpen
-              ? "w-64 translate-x-0"
-              : "w-64 -translate-x-full"
+              ? "static transform-none h-[calc(100vh-4rem)]"
+              : isSidebarOpen
+              ? "fixed w-64 translate-x-0 mt-16 h-[calc(100vh-4rem)]"
+              : "fixed w-64 -translate-x-full mt-16 h-[calc(100vh-4rem)]"
           )}
+          style={{ width: isDesktop ? `${sidebarWidth}px` : undefined }}
         >
-          <ScrollArea className="h-[calc(100vh-4rem)]">
-            <nav className={cn("grid gap-1 py-4", collapsed ? "px-2" : "px-4")}>
+          <ScrollArea className="h-full">
+            <nav
+              className={cn("grid gap-1 py-4", isCollapsed ? "px-2" : "px-4")}
+            >
               {routes.map((section, i) => (
                 <div key={i} className="mb-6">
-                  {!collapsed && (
-                    <h4 className="mb-2 px-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+                  {!isCollapsed && (
+                    <h4 className="mb-2 px-2 text-sm font-medium text-gray-500 dark:text-gray-400 overflow-hidden text-ellipsis whitespace-nowrap">
                       {section.title}
                     </h4>
                   )}
@@ -213,28 +259,30 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                         <Link
                           key={j}
                           href={item.href}
+                          title={item.title}
                           className={cn(
-                            "flex items-center gap-3 px-3 py-2 text-sm font-medium transition-colors rounded-md",
+                            "flex items-center gap-3 text-sm font-medium transition-colors rounded-md",
+                            isCollapsed
+                              ? "justify-center px-0 py-2"
+                              : "px-3 py-2",
                             isActive
-                              ? collapsed
-                                ? ""
-                                : "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white"
-                              : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100",
-                            collapsed &&
-                              "flex-col justify-center items-center px-0 py-1"
+                              ? "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white"
+                              : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100"
                           )}
                         >
                           <div
                             className={cn(
-                              "flex items-center justify-center rounded-md",
+                              "flex flex-shrink-0 items-center justify-center rounded-md",
                               item.bgColor,
-                              collapsed ? "h-12 w-12" : "h-8 w-8"
+                              isCollapsed ? "h-10 w-10" : "h-8 w-8"
                             )}
                           >
                             <Icon className={cn("h-5 w-5", item.iconColor)} />
                           </div>
-                          {!collapsed && (
-                            <span className="text-base">{item.title}</span>
+                          {!isCollapsed && (
+                            <span className="flex-grow overflow-hidden text-ellipsis whitespace-nowrap text-base">
+                              {item.title}
+                            </span>
                           )}
                         </Link>
                       );
@@ -244,9 +292,23 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               ))}
             </nav>
           </ScrollArea>
+          {isDesktop && (
+            <div
+              onMouseDown={startResizing}
+              className="absolute right-0 top-0 bottom-0 w-4 cursor-col-resize group z-40"
+            >
+              <div className="w-[1px] h-full bg-gray-200 dark:bg-gray-700 group-hover:bg-purple-500 transition-colors ml-auto mr-1"></div>
+            </div>
+          )}
         </aside>
 
-        <main className="flex-1 p-4 md:p-6 bg-gray-50 dark:bg-gray-900">
+        <main
+          className={cn(
+            "flex-1 p-4 md:p-6 bg-gray-50 dark:bg-gray-900 transition-all duration-300 ease-in-out",
+            isDesktop ? "" : "mt-16"
+          )}
+          style={{ marginLeft: isDesktop ? `${sidebarWidth}px` : undefined }}
+        >
           {children}
         </main>
       </div>
