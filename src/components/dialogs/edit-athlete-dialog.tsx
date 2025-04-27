@@ -43,6 +43,8 @@ interface EditAthleteDialogProps {
   athlete: Athlete;
   trigger?: React.ReactNode;
   onAthleteUpdated?: () => void; // Callback after updating
+  isOpen?: boolean; // Optional prop to control dialog visibility externally
+  onClose?: () => void; // Optional callback when dialog closes
 }
 
 const EDIT_ATHLETE_FORM_ID = "edit-athlete-form"; // Unique ID for the form
@@ -51,10 +53,24 @@ export function EditAthleteDialog({
   athlete,
   trigger,
   onAthleteUpdated,
+  isOpen,
+  onClose,
 }: EditAthleteDialogProps) {
-  const [open, setOpen] = React.useState(false);
+  // Use controlled state if provided, otherwise use internal state
+  const [internalOpen, setInternalOpen] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [apiError, setApiError] = React.useState<string | null>(null);
+
+  // Determine if dialog is open based on props or internal state
+  const open = isOpen !== undefined ? isOpen : internalOpen;
+  const setOpen = (value: boolean) => {
+    if (isOpen === undefined) {
+      setInternalOpen(value);
+    } else if (!value && onClose) {
+      // If dialog is controlled externally and is being closed
+      onClose();
+    }
+  };
 
   // This function is passed to AthleteForm's onSubmit prop
   const handleFormSubmit = async (formData: AthleteFormData) => {

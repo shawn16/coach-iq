@@ -1,28 +1,33 @@
-"use client";
+// This file defines the AthleteTable component, which is responsible for displaying a list of athletes in a table format.
+// It provides features like sorting, filtering by grade, and displaying calculated data such as age and projected race times.
+// The component is interactive, allowing users to sort columns, filter data, and perform actions like editing or deleting athletes.
+// It integrates utility functions for calculations and formatting, ensuring data is presented in a user-friendly way.
+
+"use client"; // This directive ensures the component is rendered on the client side, enabling interactivity.
 
 import type React from "react";
-import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { ArrowUpDown, Trash2, Pencil } from "lucide-react";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
-import { AthleteDisplay } from "@/types/athlete"; // Import AthleteDisplay type
+import { useState } from "react"; // React hook for managing component state.
+import { Badge } from "@/components/ui/badge"; // Badge component for displaying grade labels.
+import { Button } from "@/components/ui/button"; // Button component for interactive actions.
+import { ArrowUpDown, Trash2, Pencil } from "lucide-react"; // Icons for sorting and action buttons.
+import { format } from "date-fns"; // Utility for formatting dates.
+import { cn } from "@/lib/utils"; // Utility for conditionally combining class names.
+import { AthleteDisplay } from "@/types/athlete"; // Type definition for AthleteDisplay to ensure type safety.
 
 interface AthleteTableProps {
-  athletes: AthleteDisplay[];
-  sortColumn: keyof AthleteDisplay | null;
-  sortDirection: "asc" | "desc";
-  calculateAge: (birthday: string | Date) => number | null; // Pass down calculation function
+  athletes: AthleteDisplay[]; // List of athletes to display in the table.
+  sortColumn: keyof AthleteDisplay | null; // The column currently used for sorting.
+  sortDirection: "asc" | "desc"; // The direction of sorting (ascending or descending).
+  calculateAge: (birthday: string | Date) => number | null; // Function to calculate an athlete's age based on their birthday.
   calculateProjectedTimes: (time1600m: string) => {
     time5k: string;
     time3200m: string;
     time800m: string;
-  }; // Pass down calculation
-  onSort: (column: keyof AthleteDisplay) => void;
-  onRowClick: (athlete: AthleteDisplay) => void;
-  onDeleteClick: (athlete: AthleteDisplay, e: React.MouseEvent) => void;
-  onEditClick: (athlete: AthleteDisplay, e: React.MouseEvent) => void;
+  }; // Function to calculate projected race times based on the 1600m time.
+  onSort: (column: keyof AthleteDisplay) => void; // Callback for handling column sorting.
+  onRowClick: (athlete: AthleteDisplay) => void; // Callback for handling row clicks.
+  onDeleteClick: (athlete: AthleteDisplay, e: React.MouseEvent) => void; // Callback for handling delete button clicks.
+  onEditClick: (athlete: AthleteDisplay, e: React.MouseEvent) => void; // Callback for handling edit button clicks.
 }
 
 export function AthleteTable({
@@ -36,20 +41,27 @@ export function AthleteTable({
   onDeleteClick,
   onEditClick,
 }: AthleteTableProps) {
+  // State to manage the selected grade filter.
+  // This allows users to filter the table by grade level.
   const [filterGrade, setFilterGrade] = useState<string | null>(null);
 
+  // Filter the list of athletes based on the selected grade.
+  // If no grade is selected, all athletes are displayed.
   const filteredAthletes = filterGrade
     ? athletes.filter((athlete) => athlete.grade === filterGrade)
     : athletes;
 
-  // Helper to render sortable table headers
+  // Helper function to render sortable table headers.
+  // This function adds sorting functionality to specific columns.
   const renderSortableHeader = (
     columnKey: keyof AthleteDisplay,
     label: string
   ) => {
+    // Determine if the column is sortable.
     const isSortable = ["last_name", "grade", "time1600m"].includes(
       columnKey as string
     );
+    // Check if the column is currently sorted.
     const isSorted = sortColumn === columnKey;
 
     return (
@@ -78,6 +90,7 @@ export function AthleteTable({
 
   return (
     <div className="overflow-x-auto">
+      {/* Filter section for selecting a grade. */}
       <div className="mb-4 flex items-center gap-4">
         <label htmlFor="grade-filter" className="text-sm font-medium text-gray-700 dark:text-gray-300">
           Filter by Grade:
@@ -97,6 +110,7 @@ export function AthleteTable({
         </select>
       </div>
 
+      {/* Table displaying athlete data. */}
       <table className="w-full text-sm text-left">
         <thead className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
           <tr>
@@ -128,17 +142,23 @@ export function AthleteTable({
         </thead>
         <tbody>
           {filteredAthletes.map((athlete) => {
+            // Calculate projected race times based on the athlete's 1600m time.
             const projectedTimes = calculateProjectedTimes(athlete.time1600m);
-            const age = calculateAge(athlete.birthday);
-            const birthDateForFormat =
-              typeof athlete.birthday === "string"
-                ? new Date(athlete.birthday)
+            // Calculate the athlete's age based on their birthday.
+            // First ensure we have a proper Date object
+            const birthDateObj = typeof athlete.birthday === "string" 
+                ? new Date(athlete.birthday) 
                 : athlete.birthday;
+            
+            const age = calculateAge(birthDateObj);
+
+            // Format the athlete's birthday for display.
             const formattedBirthday =
-              birthDateForFormat instanceof Date &&
-              !isNaN(birthDateForFormat.getTime())
-                ? format(birthDateForFormat, "MM/dd/yyyy")
+              birthDateObj instanceof Date && !isNaN(birthDateObj.getTime())
+                ? format(birthDateObj, "MM/dd/yyyy")
                 : "N/A";
+
+            console.log("Athlete time1600m:", athlete.time1600m); // Debug log to verify time1600m value
 
             return (
               <tr
@@ -177,6 +197,7 @@ export function AthleteTable({
                 </td>
                 <td className="px-4 py-3 text-center">
                   <div className="flex justify-center space-x-1">
+                    {/* Edit button to trigger the onEditClick callback. */}
                     <Button
                       variant="ghost"
                       size="icon"
@@ -186,6 +207,7 @@ export function AthleteTable({
                     >
                       <Pencil className="h-4 w-4" />
                     </Button>
+                    {/* Delete button to trigger the onDeleteClick callback. */}
                     <Button
                       variant="ghost"
                       size="icon"
@@ -214,4 +236,9 @@ export function AthleteTable({
       </table>
     </div>
   );
+
+  // Next Step Suggestion: Add pagination or infinite scrolling to handle large datasets efficiently.
 }
+
+// Common Beginner Mistake: Forgetting to handle cases where athlete data is null or undefined.
+// Always validate data before using it to avoid runtime errors.

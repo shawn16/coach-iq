@@ -19,6 +19,7 @@ export function formatDateToMMDDYYYY(date: Date): string {
 }
 
 export function calculateAge(birthDate: Date): number {
+  console.log("calculateAge input:", birthDate); // Debug log to verify input
   if (
     !birthDate ||
     !(birthDate instanceof Date) ||

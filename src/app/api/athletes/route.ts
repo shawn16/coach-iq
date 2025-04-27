@@ -58,7 +58,7 @@ export async function GET() {
             last_name: athlete.lastName,
             birthday: athlete.birthday.toISOString().split("T")[0],
             grade: athlete.grade,
-            time_1600m: time1600m,
+            time1600m: formatTimeForDisplay(time1600m), // Format milliseconds to MM:SS.MS format
             projected_5k: time1600m ? formatTimeForDisplay(time1600m * 3.1) : "-",
             projected_3200m: time1600m ? formatTimeForDisplay(time1600m * 2) : "-",
             projected_800m: time1600m ? formatTimeForDisplay(time1600m * 0.5) : "-",

@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { X } from "lucide-react";
+import { WorkoutBuilder } from "./WorkoutBuilder";
 
 // --- Component Interface ---
 interface AddWorkoutDialogProps {
@@ -95,137 +96,23 @@ export function AddWorkoutDialog({
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="builder" className="space-y-4">
-            <div className="space-y-2">
-              <Label
-                htmlFor="workout-type"
-                className="text-gray-700 dark:text-gray-300"
-              >
-                Workout Type
-              </Label>
-              <Select value={workoutType} onValueChange={setWorkoutType}>
-                <SelectTrigger className="border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
-                  <SelectValue placeholder="Select workout type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="distance">Distance Run</SelectItem>
-                  <SelectItem value="interval">Interval</SelectItem>
-                  <SelectItem value="fartlek">Fartlek</SelectItem>
-                  <SelectItem value="tempo">Tempo</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label
-                  htmlFor="distance"
-                  className="text-gray-700 dark:text-gray-300"
-                >
-                  {workoutType === "fartlek" ? "Total Distance" : "Distance"}
-                </Label>
-                <div className="flex">
-                  <Input
-                    id="distance"
-                    type="number"
-                    value={distance}
-                    onChange={(e) => setDistance(e.target.value)}
-                    className="rounded-r-none border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
-                  />
-                  <Select value={unit} onValueChange={setUnit}>
-                    <SelectTrigger className="w-20 rounded-l-none border-l-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="m">m</SelectItem>
-                      <SelectItem value="km">km</SelectItem>
-                      <SelectItem value="mi">mi</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label
-                  htmlFor="intensity"
-                  className="text-gray-700 dark:text-gray-300"
-                >
-                  Intensity (%)
-                </Label>
-                <Input
-                  id="intensity"
-                  type="number"
-                  value={intensity}
-                  onChange={(e) => setIntensity(e.target.value)}
-                  className="border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
-                />
-              </div>
-
-              {workoutType !== "distance" && (
-                <>
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="rest"
-                      className="text-gray-700 dark:text-gray-300"
-                    >
-                      Rest
-                    </Label>
-                    <div className="flex">
-                      <Input
-                        id="rest"
-                        type="number"
-                        value={rest}
-                        onChange={(e) => setRest(e.target.value)}
-                        className="rounded-r-none border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
-                      />
-                      <Select value={restUnit} onValueChange={setRestUnit}>
-                        <SelectTrigger className="w-20 rounded-l-none border-l-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="min">min</SelectItem>
-                          <SelectItem value="sec">sec</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  {workoutType === "interval" && (
-                    <div className="space-y-2">
-                      <Label
-                        htmlFor="reps"
-                        className="text-gray-700 dark:text-gray-300"
-                      >
-                        Repetitions
-                      </Label>
-                      <Input
-                        id="reps"
-                        type="number"
-                        value={reps}
-                        onChange={(e) => setReps(e.target.value)}
-                        className="border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
-                      />
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-
-            <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
-              <Label className="text-gray-700 dark:text-gray-300">
-                Preview:
-              </Label>
-              <div className="mt-1 p-2 bg-gray-50 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
-                {workoutType === "distance" &&
-                  `${distance}${unit}@${intensity}%`}
-                {workoutType === "interval" &&
-                  `${reps}x${distance}${unit}@${intensity}% w/${rest}'${restUnit}`}
-                {workoutType === "fartlek" &&
-                  `1-2-3-2-1 w/${rest}'${restUnit} H (${distance} total)`}
-                {workoutType === "tempo" &&
-                  `${distance}${unit}@${intensity}% w/${rest}'`}
-              </div>
-            </div>
+          <TabsContent value="builder">
+            <WorkoutBuilder
+              workoutType={workoutType}
+              setWorkoutType={setWorkoutType}
+              distance={distance}
+              setDistance={setDistance}
+              unit={unit}
+              setUnit={setUnit}
+              intensity={intensity}
+              setIntensity={setIntensity}
+              rest={rest}
+              setRest={setRest}
+              restUnit={restUnit}
+              setRestUnit={setRestUnit}
+              reps={reps}
+              setReps={setReps}
+            />
           </TabsContent>
 
           <TabsContent value="custom" className="space-y-4">

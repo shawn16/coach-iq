@@ -6,13 +6,14 @@ import { revalidatePath } from "next/cache";
 
 // Convert a database athlete record to a display athlete with formatted time
 export function toAthleteDisplay(athlete: Athlete): AthleteDisplay {
+  console.log("toAthleteDisplay input time1600m:", athlete.time1600m); // Updated log to use correct field name
   return {
     id: athlete.id,
     first_name: athlete.first_name,
     last_name: athlete.last_name,
     birthday: athlete.birthday,
     grade: athlete.grade,
-    time1600m: msToTimeString(athlete.time_1600m),
+    time1600m: msToTimeString(athlete.time1600m),
     created_at: athlete.created_at,
     updated_at: athlete.updated_at,
   };
@@ -27,6 +28,20 @@ export async function getAthletes(): Promise<AthleteDisplay[]> {
     .from("athletes")
     .select("*")
     .order("last_name", { ascending: true });
+
+  // Raw query results logging
+  console.log('=============================================');
+  console.log('RAW QUERY RESULT FROM SUPABASE');
+  console.log('=============================================');
+  console.log(JSON.stringify(data, null, 2));
+  console.log('First athlete:', data && data.length > 0 ? data[0] : 'No athletes');
+  console.log('=============================================');
+
+  // More detailed logging of the time1600m field
+  if (data && data.length > 0) {
+    console.log('First athlete time1600m:', data[0].time1600m);
+    console.log('Field names in athlete:', Object.keys(data[0]).join(', '));
+  }
 
   if (error) {
     console.error("Error fetching athletes:", error);
@@ -112,7 +127,7 @@ export function prepareAthleteForDb(athleteInput: {
     last_name: athleteInput.lastName,
     birthday: athleteInput.birthday,
     grade: athleteInput.grade,
-    time_1600m: timeStringToMs(athleteInput.time1600m),
+    time1600m: timeStringToMs(athleteInput.time1600m), // Updated to use correct field name
   };
 }
 

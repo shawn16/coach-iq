@@ -38,6 +38,7 @@ export function calculateProjectedTimes(time1600ms: number): {
   time3200m: string;
   time800m: string;
 } {
+  console.log("calculateProjectedTimes input:", time1600ms); // Debug log to verify input
   if (!time1600ms) {
     return {
       time5k: "N/A",

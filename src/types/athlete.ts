@@ -11,13 +11,13 @@ export interface Athlete {
   last_name: string;
   birthday: string; // Date in ISO format
   grade: number;
-  time_1600m: number; // Time in milliseconds
+  time1600m: number; // Time in milliseconds
   created_at?: string;
   updated_at?: string;
 }
 
 // For the UI display in time format
-export interface AthleteDisplay extends Omit<Athlete, "time_1600m"> {
+export interface AthleteDisplay extends Omit<Athlete, "time1600m"> {
   time1600m: string; // Format as "4:45.30"
 }
 
@@ -27,7 +27,7 @@ export interface AthleteInput {
   last_name: string;
   birthday: string; // Date in ISO format
   grade: number;
-  time_1600m: number; // Time in milliseconds
+  time1600m: number; // Time in milliseconds
 }
 
 // Data structure for calculated projected times
