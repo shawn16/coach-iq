@@ -345,71 +345,78 @@ export default function TrainingPlanBuilderPage() {
 
             <Card>
               <CardHeader>
-                <CardTitle>
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-5 w-5 text-blue-600" /> Plan Preview
-                  </div>
+                <CardTitle className="flex items-center">
+                  <Clock className="h-5 w-5 text-blue-600 mr-2" /> Plan Preview
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-md border dark:border-gray-700">
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <h3 className="font-semibold text-lg">
+                <div className="bg-white dark:bg-gray-900 p-6 rounded-md border border-gray-200 dark:border-gray-700">
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-3">
+                    <div className="flex items-center gap-3">
+                      <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-50">
                         {planName || "Unnamed Plan"}
                       </h3>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <span className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 px-2 py-0.5 rounded text-xs font-medium capitalize">
-                          {planType}
-                        </span>
-                        <span>|</span>
-                        <span>{formatDateRange(startDate, endDate)}</span>
-                      </div>
+                      <span className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 px-2.5 py-0.5 rounded-full text-xs font-medium">
+                        {planType === "xc" ? "Cross Country" : 
+                         planType === "track" ? "Track" : 
+                         planType === "road" ? "Road" : "Custom"}
+                      </span>
                     </div>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      {format(startDate, "MM/dd/yyyy")} - {format(endDate, "MM/dd/yyyy")}
+                    </span>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-4">
+                  
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
                     {description || "No description provided."}
                   </p>
-                  <div className="grid grid-cols-3 gap-4 text-center">
-                    <div>
-                      <p className="text-xs text-muted-foreground">Duration</p>
-                      <p className="font-medium">
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-md border border-gray-200 dark:border-gray-700">
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Duration</p>
+                      <p className="font-medium text-gray-900 dark:text-gray-100">
                         {weeks} {weeks === 1 ? "week" : "weeks"}
                       </p>
                     </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">
-                        Total Workouts
-                      </p>
-                      <p className="font-medium">
-                        {planData.length * 5} estimated
+                    <div className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-md border border-gray-200 dark:border-gray-700">
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Total Workouts</p>
+                      <p className="font-medium text-gray-900 dark:text-gray-100">
+                        {planData.length * 3} estimated
                       </p>
                     </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Athletes</p>
-                      <p className="font-medium">Not assigned yet</p>
+                    <div className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-md border border-gray-200 dark:border-gray-700">
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Athletes</p>
+                      <p className="font-medium text-gray-900 dark:text-gray-100">Not assigned yet</p>
                     </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <div>
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-semibold">Training Schedule</h2>
-                <Button variant="outline" size="sm">
-                  <Plus className="h-4 w-4 mr-1" /> Add Week
-                </Button>
-              </div>
-              <TrainingPlanTable
-                planData={planData}
-                workoutTypes={workoutTypes}
-                onCellClick={handleCellClick}
-                onKeyDown={handleKeyDown}
-                removeWeek={removeWeek}
-                onMoveWeek={moveWeek}
-              />
-            </div>
+            <Card>
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <CardTitle>
+                    <div className="flex items-center gap-2">
+                      <CalendarIcon className="h-5 w-5 text-green-600" /> Training Schedule
+                    </div>
+                  </CardTitle>
+                  <Button variant="outline" size="sm">
+                    <Plus className="h-4 w-4 mr-1" /> Add Week
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <TrainingPlanTable
+                  planData={planData}
+                  workoutTypes={workoutTypes}
+                  onCellClick={handleCellClick}
+                  onKeyDown={handleKeyDown}
+                  removeWeek={removeWeek}
+                  onMoveWeek={moveWeek}
+                />
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="workoutBuilder">
