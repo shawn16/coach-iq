@@ -16,17 +16,18 @@ datasource db {
 
 // User model (for coaches)
 model User {
-  id            String    @id @default(cuid())
+  id            String         @id @default(cuid())
   name          String?
-  email         String?   @unique // Email can be null initially for some flows
+  email         String?        @unique // Email can be null initially for some flows
   emailVerified DateTime? // When email was verified
   image         String? // Profile image URL
   passwordHash  String? // For Credentials provider
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   accounts      Account[] // Relation to OAuth accounts
   sessions      Session[] // Relation to user sessions
   athletes      Athlete[] // Relation to athletes managed by this coach
+  trainingPlans TrainingPlan[] // Relation to training plans created by this coach
 }
 
 // NextAuth Models
@@ -68,28 +69,109 @@ model VerificationToken {
 
 // Athlete model
 model Athlete {
-  id             Int             @id @default(autoincrement())
-  firstName      String
-  lastName       String
-  birthday       DateTime        @db.Date
-  grade          Int
-  time1600m      Int
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  coachId        String // Foreign key to User (Coach)
-  coach          User            @relation(fields: [coachId], references: [id], onDelete: Cascade)
-  workoutResults WorkoutResult[] // Relation to workout results
+  id                  Int                   @id @default(autoincrement())
+  firstName           String
+  lastName            String
+  birthday            DateTime              @db.Date
+  grade               Int
+  time1600m           Int
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  coachId             String // Foreign key to User (Coach)
+  coach               User                  @relation(fields: [coachId], references: [id], onDelete: Cascade)
+  workoutResults      WorkoutResult[] // Relation to workout results
+  trainingPlanAthletes TrainingPlanAthlete[] // Relation to training plans
 }
 
-// Training Plan model (Simplified for now)
+// Enhanced Training Plan model
 model TrainingPlan {
-  id          String    @id @default(cuid())
-  name        String
-  description String?
-  startDate   DateTime?
-  endDate     DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id              String                @id @default(cuid())
+  title           String
+  description     String?               @db.Text
+  duration        String                // e.g. "12 weeks" - display format
+  durationWeeks   Int                   // numeric value for calculations
+  startDate       DateTime
+  endDate         DateTime
+  progress        Int?                  // percentage completed (0-100)
+  type            String?               // "endurance", "speed", "strength", "marathon", "standard"
+  planType        String?               // additional classification e.g. "xc" for cross country
+  totalWorkouts   Int?                  // count of all workouts in the plan
+  isCompleted     Boolean               @default(false)
+  
+  // Relations
+  userId          String                // coach who created the plan
+  user            User                  @relation(fields: [userId], references: [id])
+  weeks           PlanWeek[]            // weeks of the training plan
+  athletes        TrainingPlanAthlete[] // athletes assigned to this plan
+  
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  
+  @@index([userId])
+}
+
+// Many-to-many relationship between Training Plans and Athletes
+model TrainingPlanAthlete {
+  trainingPlan    TrainingPlan          @relation(fields: [trainingPlanId], references: [id], onDelete: Cascade)
+  trainingPlanId  String
+  athlete         Athlete               @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+  athleteId       Int
+  assignedAt      DateTime              @default(now())
+
+  @@id([trainingPlanId, athleteId])
+  @@index([athleteId])
+  @@index([trainingPlanId])
+}
+
+// Weekly plan data
+model PlanWeek {
+  id              String                @id @default(cuid())
+  weekNumber      Int
+  dateRange       String                // e.g. "5/24-5/30"
+  seasonPhase     String?               // e.g. "Summer Week 1"
+  
+  // Relations
+  trainingPlan    TrainingPlan          @relation(fields: [trainingPlanId], references: [id], onDelete: Cascade)
+  trainingPlanId  String
+  workouts        PlanWorkout[]
+
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  
+  @@index([trainingPlanId])
+  @@unique([trainingPlanId, weekNumber])
+}
+
+// Workout types
+model WorkoutType {
+  id              String                @id @default(cuid())
+  name            String
+  color           String                // CSS classes for styling
+  workouts        PlanWorkout[]
+  
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  
+  @@unique([name])
+}
+
+// Workout for a specific week and type
+model PlanWorkout {
+  id              String                @id @default(cuid())
+  details         String?               @db.Text // workout description e.g. "10m@80%"
+  
+  // Relations
+  week            PlanWeek              @relation(fields: [weekId], references: [id], onDelete: Cascade)
+  weekId          String
+  workoutType     WorkoutType           @relation(fields: [workoutTypeId], references: [id])
+  workoutTypeId   String
+  
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  
+  @@index([weekId])
+  @@index([workoutTypeId])
+  @@unique([weekId, workoutTypeId]) // Each week can only have one workout of a specific type
 }
 
 // Workout Result model (Simplified for now)

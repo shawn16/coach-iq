@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -41,23 +41,121 @@ export default function DashboardLayout({
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [sidebarWidth, setSidebarWidth] = useState(280); // Increased default sidebar width
+  const [isResizing, setIsResizing] = useState(false);
+  const sidebarRef = useRef<HTMLElement | null>(null);
+  const startWidthRef = useRef<number>(280);
+  const startPosRef = useRef<number>(0);
+
+  // Minimum and maximum sidebar widths
+  const MIN_SIDEBAR_WIDTH = 64; // Width when showing only icons
+  const MAX_SIDEBAR_WIDTH = 360; // Increased maximum sidebar width
+
+  // Toggle sidebar between collapsed and expanded
+  const toggleSidebar = useCallback(() => {
+    const newCollapsed = !collapsed;
+    setCollapsed(newCollapsed);
+
+    // Set appropriate width based on collapsed state
+    if (newCollapsed) {
+      setSidebarWidth(MIN_SIDEBAR_WIDTH);
+    } else {
+      // Expand to previous width or default
+      const savedWidth =
+        typeof window !== "undefined"
+          ? window.localStorage.getItem("sidebarExpandedWidth")
+          : null;
+      setSidebarWidth(savedWidth ? parseInt(savedWidth, 10) : 280);
+    }
+
+    // Save to localStorage
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("sidebarCollapsed", newCollapsed.toString());
+    }
+  }, [collapsed, MIN_SIDEBAR_WIDTH]);
 
   // Check if screen is medium (tablet)
   const isMediumScreen = useMediaQuery(
     "(min-width: 768px) and (max-width: 1023px)"
   );
 
-  // Use useEffect to ensure the component is mounted before rendering
+  // Use useEffect to ensure the component is mounted before rendering and load saved width
   useEffect(() => {
     setMounted(true);
 
-    // Auto-collapse sidebar on medium screens
-    if (isMediumScreen) {
-      setCollapsed(true);
-    } else {
-      setCollapsed(false);
+    // Try to get saved width from localStorage
+    if (typeof window !== "undefined") {
+      const savedWidth = window.localStorage.getItem("sidebarWidth");
+      const savedCollapsed = window.localStorage.getItem("sidebarCollapsed");
+
+      // Auto-collapse sidebar on medium screens
+      if (isMediumScreen) {
+        setCollapsed(true);
+        setSidebarWidth(MIN_SIDEBAR_WIDTH);
+      } else {
+        // If we have saved values, use them
+        if (savedWidth && !isMediumScreen) {
+          const width = parseInt(savedWidth, 10);
+          setSidebarWidth(width);
+          setCollapsed(
+            width <= MIN_SIDEBAR_WIDTH + 20 || savedCollapsed === "true"
+          );
+        } else {
+          setCollapsed(false);
+          setSidebarWidth(280);
+        }
+      }
     }
-  }, [isMediumScreen]);
+  }, [isMediumScreen, MIN_SIDEBAR_WIDTH]);
+
+  // Use effect to save sidebar width in localStorage when it changes
+  useEffect(() => {
+    if (mounted && !isResizing && typeof window !== "undefined") {
+      // Don't save width during active resizing (wait until released)
+      window.localStorage.setItem("sidebarWidth", sidebarWidth.toString());
+      window.localStorage.setItem("sidebarCollapsed", collapsed.toString());
+    }
+  }, [sidebarWidth, collapsed, mounted, isResizing]);
+
+  // Add effect to save expanded width separately when not collapsed
+  useEffect(() => {
+    if (
+      mounted &&
+      !collapsed &&
+      !isResizing &&
+      sidebarWidth > MIN_SIDEBAR_WIDTH &&
+      typeof window !== "undefined"
+    ) {
+      window.localStorage.setItem(
+        "sidebarExpandedWidth",
+        sidebarWidth.toString()
+      );
+    }
+  }, [mounted, collapsed, isResizing, sidebarWidth, MIN_SIDEBAR_WIDTH]);
+
+  // Add effect to handle route changes
+  useEffect(() => {
+    // When route changes, ensure we're maintaining sidebar state
+    if (mounted && typeof window !== "undefined") {
+      const savedWidth = window.localStorage.getItem("sidebarWidth");
+      if (savedWidth) {
+        const width = parseInt(savedWidth, 10);
+        // Only update if significantly different to avoid unnecessary rerenders
+        if (Math.abs(width - sidebarWidth) > 10) {
+          setSidebarWidth(width);
+        }
+      }
+    }
+  }, [pathname, mounted, sidebarWidth]);
+
+  // Console log for debugging
+  useEffect(() => {
+    if (mounted && sidebarRef.current) {
+      console.log("Sidebar ref:", sidebarRef.current);
+      console.log("Current width:", sidebarWidth);
+      console.log("Collapsed state:", collapsed);
+    }
+  }, [mounted, sidebarWidth, collapsed]);
 
   // Update the routes array to move Athletes to the PLANNING section
   const routes = [
@@ -140,16 +238,23 @@ export default function DashboardLayout({
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Desktop sidebar - collapsed or expanded based on screen size */}
-      <div
+      <aside
+        ref={sidebarRef}
+        style={{
+          width: `${sidebarWidth}px`,
+          minWidth: collapsed ? `${MIN_SIDEBAR_WIDTH}px` : undefined,
+          transition: isResizing ? "none" : "width 0.2s ease-out",
+          flex: "none", // Prevent flex resizing
+        }}
         className={cn(
-          "hidden md:flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-sm transition-all duration-300",
-          collapsed ? "w-16" : "w-64"
+          "hidden md:flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-sm relative",
+          isResizing && "transition-none"
         )}
       >
         <div
           className={cn(
             "border-b border-gray-200 dark:border-gray-700 flex items-center",
-            collapsed ? "justify-center p-4" : "p-6"
+            collapsed ? "justify-center p-4" : "px-6 py-3"
           )}
         >
           {collapsed ? (
@@ -171,7 +276,7 @@ export default function DashboardLayout({
 
         {/* Collapse/Expand button */}
         <button
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={toggleSidebar}
           className="absolute top-20 -right-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full p-1 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 z-10"
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
@@ -201,18 +306,18 @@ export default function DashboardLayout({
                             "flex items-center gap-3 rounded-md py-2.5 text-sm font-medium transition-colors w-full",
                             collapsed ? "justify-center px-2" : "px-3",
                             pathname === link.href
-                              ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300"
+                              ? "relative after:absolute after:inset-0 after:rounded-md after:bg-indigo-50 after:z-[-1] dark:after:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300"
                               : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60"
                           )}
                         >
                           {link.icon}
-                          {!collapsed && link.label}
+                          {sidebarWidth > MIN_SIDEBAR_WIDTH + 20 && (
+                            <span className="truncate">{link.label}</span>
+                          )}
                         </button>
                       </TooltipTrigger>
-                      {collapsed && (
-                        <TooltipContent side="right">
-                          {link.label}
-                        </TooltipContent>
+                      {sidebarWidth <= MIN_SIDEBAR_WIDTH + 20 && (
+                        <TooltipContent side="right">{link.label}</TooltipContent>
                       )}
                     </Tooltip>
                   </TooltipProvider>
@@ -234,7 +339,59 @@ export default function DashboardLayout({
             </span>
           )}
         </div>
-      </div>
+        {/* Simple, reliable resize handle */}
+        <div 
+          className="absolute top-0 right-0 w-4 h-full cursor-ew-resize z-20"
+          onMouseDown={(e) => {
+            e.preventDefault();
+            
+            // Get initial mouse position
+            const initialX = e.clientX;
+            const initialWidth = sidebarWidth;
+            
+            function onMouseMove(moveEvent) {
+              // Calculate how far the mouse has moved
+              const newWidth = initialWidth + (moveEvent.clientX - initialX);
+              
+              // Apply constraints
+              const constrainedWidth = Math.max(
+                MIN_SIDEBAR_WIDTH, 
+                Math.min(MAX_SIDEBAR_WIDTH, newWidth)
+              );
+              
+              // Update width directly
+              setSidebarWidth(constrainedWidth);
+              
+              // Update collapsed state
+              if (constrainedWidth <= MIN_SIDEBAR_WIDTH + 20) {
+                setCollapsed(true);
+              } else {
+                setCollapsed(false);
+              }
+            }
+            
+            function onMouseUp() {
+              // Clean up
+              document.removeEventListener('mousemove', onMouseMove);
+              document.removeEventListener('mouseup', onMouseUp);
+              
+              // Save final width
+              if (typeof window !== 'undefined') {
+                window.localStorage.setItem('sidebarWidth', sidebarWidth.toString());
+                if (sidebarWidth > MIN_SIDEBAR_WIDTH + 20) {
+                  window.localStorage.setItem('sidebarExpandedWidth', sidebarWidth.toString());
+                }
+              }
+            }
+            
+            // Add listeners directly to document
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+          }}
+        >
+          <div className="w-[3px] h-full bg-gray-200 dark:bg-gray-700 hover:bg-indigo-500 dark:hover:bg-indigo-400"></div>
+        </div>
+      </aside>
 
       {/* Mobile sidebar with sheet */}
       <Sheet open={open} onOpenChange={setOpen}>
@@ -290,12 +447,12 @@ export default function DashboardLayout({
                       className={cn(
                         "flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors",
                         pathname === link.href
-                          ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300"
+                          ? "relative after:absolute after:inset-0 after:rounded-md after:bg-indigo-50 after:z-[-1] dark:after:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300"
                           : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60"
                       )}
                     >
                       {link.icon}
-                      {link.label}
+                      <span className="truncate">{link.label}</span>
                     </button>
                   ))}
                 </div>
@@ -313,7 +470,7 @@ export default function DashboardLayout({
       {/* Main content area */}
       <div className="flex flex-col flex-1">
         {/* Header bar */}
-        <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background px-4 md:px-6 shadow-sm">
+        <header className="sticky top-0 z-10 flex h-14 items-center justify-between border-b bg-background px-4 md:px-6 py-3 shadow-sm">
           {/* Mobile menu trigger */}
           <div className="md:hidden">
             <Sheet open={open} onOpenChange={setOpen}>

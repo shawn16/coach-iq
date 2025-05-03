@@ -170,10 +170,51 @@ exports.Prisma.AthleteScalarFieldEnum = {
 
 exports.Prisma.TrainingPlanScalarFieldEnum = {
   id: 'id',
-  name: 'name',
+  title: 'title',
   description: 'description',
+  duration: 'duration',
+  durationWeeks: 'durationWeeks',
   startDate: 'startDate',
   endDate: 'endDate',
+  progress: 'progress',
+  type: 'type',
+  planType: 'planType',
+  totalWorkouts: 'totalWorkouts',
+  isCompleted: 'isCompleted',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TrainingPlanAthleteScalarFieldEnum = {
+  trainingPlanId: 'trainingPlanId',
+  athleteId: 'athleteId',
+  assignedAt: 'assignedAt'
+};
+
+exports.Prisma.PlanWeekScalarFieldEnum = {
+  id: 'id',
+  weekNumber: 'weekNumber',
+  dateRange: 'dateRange',
+  seasonPhase: 'seasonPhase',
+  trainingPlanId: 'trainingPlanId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WorkoutTypeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  color: 'color',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PlanWorkoutScalarFieldEnum = {
+  id: 'id',
+  details: 'details',
+  weekId: 'weekId',
+  workoutTypeId: 'workoutTypeId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -222,6 +263,10 @@ exports.Prisma.ModelName = {
   VerificationToken: 'VerificationToken',
   Athlete: 'Athlete',
   TrainingPlan: 'TrainingPlan',
+  TrainingPlanAthlete: 'TrainingPlanAthlete',
+  PlanWeek: 'PlanWeek',
+  WorkoutType: 'WorkoutType',
+  PlanWorkout: 'PlanWorkout',
   WorkoutResult: 'WorkoutResult'
 };
 

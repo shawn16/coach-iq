@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 // Simplified version without Dialog component
 export function CreatePlanDialog() {
@@ -17,8 +18,8 @@ export function CreatePlanDialog() {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    duration: "12",
-    startDate: "",
+    durationWeeks: "12",
+    startDate: new Date().toISOString().slice(0, 10), // Default to today in YYYY-MM-DD format
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,15 +31,52 @@ export function CreatePlanDialog() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      // Submit data to the API
+      const response = await fetch('/api/training-plans', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: formData.title,
+          description: formData.description,
+          durationWeeks: parseInt(formData.durationWeeks),
+          startDate: formData.startDate,
+          type: 'standard' // Default type
+        }),
+      });
 
-    console.log("Creating plan:", formData);
-    setIsSubmitting(false);
-    setIsOpen(false);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create training plan');
+      }
 
-    // Navigate to training plan page
-    router.push("/training-plan");
+      const data = await response.json();
+      console.log("Plan created successfully:", data);
+      
+      // Show success message
+      toast.success("Training plan created successfully");
+      
+      // Reset form
+      setFormData({
+        title: "",
+        description: "",
+        durationWeeks: "12",
+        startDate: new Date().toISOString().slice(0, 10),
+      });
+      
+      // Close dialog
+      setIsOpen(false);
+      
+      // Hard redirect to the training plan page to ensure fresh data load
+      window.location.href = "/training-plan";
+    } catch (error) {
+      console.error("Error creating training plan:", error);
+      toast.error("Failed to create training plan");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!isOpen) {
@@ -114,22 +152,23 @@ export function CreatePlanDialog() {
                 value={formData.startDate}
                 onChange={handleInputChange}
                 className="col-span-3 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
+                required
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label
-                htmlFor="duration"
+                htmlFor="durationWeeks"
                 className="text-right text-gray-700 dark:text-gray-300"
               >
                 Duration (weeks)
               </Label>
               <Input
-                id="duration"
-                name="duration"
+                id="durationWeeks"
+                name="durationWeeks"
                 type="number"
                 min="1"
                 max="52"
-                value={formData.duration}
+                value={formData.durationWeeks}
                 onChange={handleInputChange}
                 className="col-span-3 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
                 required
