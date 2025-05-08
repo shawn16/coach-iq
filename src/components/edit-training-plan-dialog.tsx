@@ -1,3 +1,6 @@
+// This file contains the EditTrainingPlanDialog component
+// Provides a dialog form UI for editing existing training plans
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -16,6 +19,7 @@ import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { addDays, format } from "date-fns";
 
+// Props for the EditTrainingPlanDialog component
 interface EditTrainingPlanDialogProps {
   planId: string;
   initialData: {
@@ -31,6 +35,10 @@ interface EditTrainingPlanDialogProps {
   onUpdateSuccess: () => void;
 }
 
+/**
+ * Dialog component for editing existing training plans
+ * Allows modification of plan details, dates, and duration
+ */
 export function EditTrainingPlanDialog({
   planId,
   initialData,
@@ -46,6 +54,7 @@ export function EditTrainingPlanDialog({
     return match ? parseInt(match[1], 10) : 12;
   };
 
+  // Form state for the training plan data
   const [formData, setFormData] = useState({
     title: initialData.title,
     description: initialData.description,
@@ -59,12 +68,17 @@ export function EditTrainingPlanDialog({
     planType: initialData.planType || "xc", // Default to Cross Country if not specified
   });
 
+  /**
+   * Updates form data when inputs change
+   */
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Calculate end date based on start date and duration
+  /**
+   * Calculates end date based on start date and duration
+   */
   const calculateEndDate = () => {
     const startDate = new Date(formData.startDate);
     const durationWeeks = parseInt(formData.durationWeeks);
@@ -73,6 +87,9 @@ export function EditTrainingPlanDialog({
     return format(endDate, "MMM d, yyyy");
   };
 
+  /**
+   * Submits the form to update the training plan
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);

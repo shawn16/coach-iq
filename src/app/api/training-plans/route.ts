@@ -1,8 +1,15 @@
+// This file contains API route handlers for training plans
+// Handles GET and POST operations for the /api/training-plans endpoint
+
 import { NextRequest, NextResponse } from 'next/server';
 import { getTrainingPlans, createTrainingPlan } from '@/lib/training-plans';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth'; // Updated import path
 
+/**
+ * GET handler for fetching all training plans for the current user
+ * Returns both active and completed plans
+ */
 export async function GET(req: NextRequest) {
   try {
     // Get user from session
@@ -26,6 +33,10 @@ export async function GET(req: NextRequest) {
   }
 }
 
+/**
+ * POST handler for creating a new training plan
+ * Validates required fields and creates a new plan with weeks
+ */
 export async function POST(req: NextRequest) {
   try {
     // Get user from session

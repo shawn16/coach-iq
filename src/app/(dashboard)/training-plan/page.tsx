@@ -1,3 +1,6 @@
+// This file contains the main Training Plans list page component
+// Displays active and completed training plans with tabs for switching between them
+
 "use client";
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
@@ -12,6 +15,10 @@ import {
   TrainingPlan,
 } from "@/components/training-plan-card";
 
+/**
+ * Main component for the Training Plans page
+ * Shows a tabbed interface with active and completed training plans
+ */
 export default function TrainingPlanPage() {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,7 +32,10 @@ export default function TrainingPlanPage() {
 
   const plansPerPage = 5;
 
-  // Fetch training plans from the API
+  /**
+   * Fetches training plans from the API
+   * Gets both active and completed plans
+   */
   const fetchTrainingPlans = async () => {
     try {
       setLoading(true);
@@ -58,6 +68,7 @@ export default function TrainingPlanPage() {
   useEffect(() => {
     fetchTrainingPlans();
     
+    // Refetch data when the browser tab becomes visible again
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
         fetchTrainingPlans();
@@ -71,29 +82,39 @@ export default function TrainingPlanPage() {
     };
   }, []);
 
-  // Handle navigation programmatically
+  /**
+   * Navigates to the detailed view of a training plan
+   */
   const handleViewDetails = (id: string) => {
     router.push(`/training-plan/${id}`);
   };
   
-  // Handle edit plan
+  /**
+   * Opens the edit dialog for a training plan
+   */
   const handleEditPlan = (id: string) => {
     setSelectedPlan(id);
     setShowEditDialog(true);
   };
 
-  // Reset pagination when switching tabs
+  /**
+   * Handles tab changes between active and completed plans
+   */
   const handleTabChange = (value: string) => {
     setActiveTab(value as 'active' | 'completed');
     setCurrentPage(1);
   };
 
-  // Get plans without filtering
+  /**
+   * Filters plans (can be extended for search functionality)
+   */
   const filterPlans = (plans: TrainingPlan[]) => {
     return plans;
   };
 
-  // Get paginated plans
+  /**
+   * Gets the current page of plans with pagination
+   */
   const getPaginatedPlans = (plans: TrainingPlan[]) => {
     const filteredPlans = filterPlans(plans);
     const startIndex = (currentPage - 1) * plansPerPage;

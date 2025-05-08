@@ -1,262 +1,357 @@
+// This file contains the WorkoutEditor component
+// Used for creating and editing workouts within training plans
+
 "use client";
 
-import { useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
+import { 
+  Form, 
+  FormControl, 
+  FormDescription, 
+  FormField, 
+  FormItem, 
+  FormLabel 
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+import { Button } from "@/components/ui/button";
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
 } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Plus, Trash2, X } from "lucide-react";
-import { WorkoutInput, IntensityLevel } from "@/types/training";
-import { IntervalSetEditor } from "./IntervalSetEditor";
+import { Textarea } from "@/components/ui/textarea";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Workout } from "@/types/training";
 
+/**
+ * Schema for validating workout form data
+ */
+const workoutSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  type: z.string().min(1, "Type is required"),
+  description: z.string(),
+  duration: z.string(),
+  intensityLevel: z.string(),
+  equipment: z.string().optional(),
+  notes: z.string().optional(),
+});
+
+/**
+ * Type for workout form values
+ */
+type WorkoutFormValues = z.infer<typeof workoutSchema>;
+
+/**
+ * Props for the WorkoutEditor component
+ */
 interface WorkoutEditorProps {
-  day: number;
-  initialWorkout?: WorkoutInput;
-  onSave: (workout: WorkoutInput) => void;
+  initialData?: Partial<Workout>;
+  onSave: (data: WorkoutFormValues) => void;
   onCancel: () => void;
-  onDelete?: (day: number) => void;
+  isLoading?: boolean;
 }
 
-export function WorkoutEditor({
-  day,
-  initialWorkout,
-  onSave,
+/**
+ * Workout intensity level options for selection
+ */
+const intensityLevels = ["Low", "Moderate", "High", "Very High", "Maximum"];
+
+/**
+ * Workout type options for selection
+ */
+const workoutTypes = [
+  "Strength", 
+  "Endurance", 
+  "Recovery", 
+  "Speed", 
+  "Technique", 
+  "Flexibility",
+  "Cross Training",
+  "Race Simulation"
+];
+
+/**
+ * Component for creating and editing workouts
+ * Handles form validation and submission
+ */
+export function WorkoutEditor({ 
+  initialData = {}, 
+  onSave, 
   onCancel,
-  onDelete,
+  isLoading = false
 }: WorkoutEditorProps) {
-  const [workout, setWorkout] = useState<WorkoutInput>({
-    day,
-    title: initialWorkout?.title || "",
-    description: initialWorkout?.description || "",
-    type: initialWorkout?.type || "easy_run",
-    intensity: initialWorkout?.intensity || "easy",
-    duration: initialWorkout?.duration || undefined,
-    distance: initialWorkout?.distance || undefined,
-    notes: initialWorkout?.notes || "",
-    sets: initialWorkout?.sets || [],
+  // Exercise input management
+  const [exerciseInput, setExerciseInput] = useState("");
+  const [exercises, setExercises] = useState<string[]>([]);
+
+  // Form setup with validation schema
+  const form = useForm<WorkoutFormValues>({
+    resolver: zodResolver(workoutSchema),
+    defaultValues: {
+      title: initialData.title || "",
+      type: initialData.type || "",
+      description: initialData.description || "",
+      duration: initialData.duration || "",
+      intensityLevel: initialData.intensityLevel || "Moderate",
+      equipment: initialData.equipment || "",
+      notes: initialData.notes || "",
+    },
   });
 
-  const [hasIntervals, setHasIntervals] = useState(
-    initialWorkout?.type === "interval"
-  );
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setWorkout((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setWorkout((prev) => ({
-      ...prev,
-      [name]: value ? parseInt(value, 10) : undefined,
-    }));
-  };
-
-  const handleSelectChange = (name: string, value: string) => {
-    setWorkout((prev) => ({ ...prev, [name]: value }));
-
-    if (name === "type") {
-      setHasIntervals(value === "interval");
-
-      if (
-        value === "interval" &&
-        (!workout.sets || workout.sets.length === 0)
-      ) {
-        setWorkout((prev) => ({
-          ...prev,
-          sets: [
-            {
-              reps: 4,
-              distance: 400,
-              rest: 60,
-              pace: "",
-              notes: "",
-            },
-          ],
-        }));
-      }
+  /**
+   * Add an exercise to the list
+   */
+  const addExercise = () => {
+    if (exerciseInput.trim()) {
+      setExercises([...exercises, exerciseInput.trim()]);
+      setExerciseInput("");
     }
   };
 
-  const addIntervalSet = () => {
-    setWorkout((prev) => ({
-      ...prev,
-      sets: [
-        ...(prev.sets || []),
-        {
-          reps: 4,
-          distance: 400,
-          rest: 60,
-          pace: "",
-          notes: "",
-        },
-      ],
-    }));
+  /**
+   * Remove an exercise from the list
+   */
+  const removeExercise = (index: number) => {
+    const updatedExercises = [...exercises];
+    updatedExercises.splice(index, 1);
+    setExercises(updatedExercises);
   };
 
-  const updateIntervalSet = (
-    index: number,
-    field: string,
-    value: string | number
-  ) => {
-    setWorkout((prev) => {
-      const updatedSets = [...(prev.sets || [])];
-      updatedSets[index] = {
-        ...updatedSets[index],
-        [field]:
-          typeof value === "string"
-            ? value
-            : value
-            ? parseInt(value.toString(), 10)
-            : undefined,
-      };
-      return { ...prev, sets: updatedSets };
+  /**
+   * Handle form submission
+   */
+  const onSubmit = (data: WorkoutFormValues) => {
+    onSave({
+      ...data,
+      // Add exercises to the form data
     });
   };
 
-  const removeIntervalSet = (index: number) => {
-    setWorkout((prev) => {
-      const updatedSets = [...(prev.sets || [])];
-      updatedSets.splice(index, 1);
-      return { ...prev, sets: updatedSets };
-    });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!workout.title.trim()) {
-      alert("Please enter a workout title");
-      return;
+  // Initialize exercises if available in initial data
+  useEffect(() => {
+    if (initialData.exercises && Array.isArray(initialData.exercises)) {
+      setExercises(initialData.exercises);
     }
-
-    onSave(workout);
-  };
-
-  const handleDelete = () => {
-    if (onDelete && confirm("Are you sure you want to delete this workout?")) {
-      onDelete(day);
-    }
-  };
+  }, [initialData.exercises]);
 
   return (
-    <Card className="border-gray-200 dark:border-gray-700 shadow-sm">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <div className="space-y-1">
-          <CardTitle className="text-xl font-bold text-gray-900 dark:text-gray-50">
-            {initialWorkout ? "Edit Workout" : "Add Workout"} - Day {day}
-          </CardTitle>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            {initialWorkout
-              ? "Update the details of this workout"
-              : "Configure a new workout for this day"}
-          </p>
-        </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onCancel}
-          className="h-8 w-8"
-        >
-          <X className="h-4 w-4" />
-        </Button>
-      </CardHeader>
-      <form onSubmit={handleSubmit}>
-        <CardContent className="space-y-6 pt-4">
-          {/* Basic Info: Title and Type */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="title">Workout Title</Label>
-              <Input
-                id="title"
-                name="title"
-                value={workout.title}
-                onChange={handleInputChange}
-                placeholder="e.g., Long Run with Strides"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="type">Workout Type</Label>
-              <Select
-                value={workout.type}
-                onValueChange={(value) => handleSelectChange("type", value)}
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        {/* Workout title */}
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Workout Title</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter workout title" {...field} />
+              </FormControl>
+              <FormDescription>
+                Give your workout a descriptive title
+              </FormDescription>
+            </FormItem>
+          )}
+        />
+        
+        {/* Workout type */}
+        <FormField
+          control={form.control}
+          name="type"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Workout Type</FormLabel>
+              <Select 
+                onValueChange={field.onChange} 
+                defaultValue={field.value}
               >
-                <SelectTrigger id="type">
-                  <SelectValue placeholder="Select workout type" />
-                </SelectTrigger>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select workout type" />
+                  </SelectTrigger>
+                </FormControl>
                 <SelectContent>
-                  <SelectItem value="easy_run">Easy Run</SelectItem>
-                  <SelectItem value="long_run">Long Run</SelectItem>
-                  <SelectItem value="tempo_run">Tempo Run</SelectItem>
-                  <SelectItem value="interval">Intervals</SelectItem>
-                  <SelectItem value="hills">Hills</SelectItem>
-                  <SelectItem value="fartlek">Fartlek</SelectItem>
-                  <SelectItem value="recovery">Recovery</SelectItem>
-                  <SelectItem value="race">Race</SelectItem>
-                  <SelectItem value="cross_training">Cross Training</SelectItem>
-                  <SelectItem value="rest">Rest Day</SelectItem>
+                  {workoutTypes.map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
-            </div>
-          </div>
-
-          {/* Intervals Section (only shown for interval workouts) */}
-          {hasIntervals && (
-            <IntervalSetEditor
-              sets={workout.sets}
-              onAddSet={addIntervalSet}
-              onUpdateSet={updateIntervalSet}
-              onRemoveSet={removeIntervalSet}
-            />
+              <FormDescription>
+                The primary focus of this workout
+              </FormDescription>
+            </FormItem>
           )}
-        </CardContent>
-
-        <CardFooter className="flex justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
-          <div className="flex gap-2">
-            <Button type="button" variant="outline" onClick={onCancel}>
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Cancel
-            </Button>
-            {initialWorkout && onDelete && (
-              <Button
-                type="button"
-                variant="outline"
-                className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 dark:border-red-800 dark:hover:bg-red-900/20"
-                onClick={handleDelete}
+        />
+        
+        {/* Workout description */}
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Textarea 
+                  placeholder="Enter workout description" 
+                  className="min-h-[100px]"
+                  {...field} 
+                />
+              </FormControl>
+              <FormDescription>
+                Provide a description of the workout's purpose
+              </FormDescription>
+            </FormItem>
+          )}
+        />
+        
+        {/* Duration */}
+        <FormField
+          control={form.control}
+          name="duration"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Duration</FormLabel>
+              <FormControl>
+                <Input placeholder="e.g., 45 minutes" {...field} />
+              </FormControl>
+              <FormDescription>
+                Expected length of the workout
+              </FormDescription>
+            </FormItem>
+          )}
+        />
+        
+        {/* Intensity level */}
+        <FormField
+          control={form.control}
+          name="intensityLevel"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Intensity Level</FormLabel>
+              <Select 
+                onValueChange={field.onChange} 
+                defaultValue={field.value}
               >
-                <Trash2 className="h-4 w-4 mr-2" />
-                Delete
-              </Button>
-            )}
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select intensity level" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {intensityLevels.map((level) => (
+                    <SelectItem key={level} value={level}>
+                      {level}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormDescription>
+                How intense is this workout
+              </FormDescription>
+            </FormItem>
+          )}
+        />
+        
+        {/* Equipment */}
+        <FormField
+          control={form.control}
+          name="equipment"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Equipment</FormLabel>
+              <FormControl>
+                <Input placeholder="Equipment needed (optional)" {...field} />
+              </FormControl>
+              <FormDescription>
+                List any equipment required for this workout
+              </FormDescription>
+            </FormItem>
+          )}
+        />
+        
+        {/* Exercises section */}
+        <div className="space-y-4">
+          <FormLabel>Exercises</FormLabel>
+          <div className="flex gap-2">
+            <Input
+              value={exerciseInput}
+              onChange={(e) => setExerciseInput(e.target.value)}
+              placeholder="Add an exercise"
+              className="flex-1"
+              onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addExercise())}
+            />
+            <Button type="button" onClick={addExercise}>
+              Add
+            </Button>
           </div>
+          
+          {/* List of added exercises */}
+          {exercises.length > 0 && (
+            <div className="mt-2">
+              <ul className="space-y-2">
+                {exercises.map((exercise, index) => (
+                  <li key={index} className="flex justify-between items-center p-2 bg-muted rounded-md">
+                    <span>{exercise}</span>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeExercise(index)}
+                    >
+                      Remove
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <FormDescription>
+            Add specific exercises included in this workout
+          </FormDescription>
+        </div>
+        
+        {/* Additional notes */}
+        <FormField
+          control={form.control}
+          name="notes"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Notes</FormLabel>
+              <FormControl>
+                <Textarea 
+                  placeholder="Additional notes (optional)" 
+                  className="min-h-[80px]"
+                  {...field} 
+                />
+              </FormControl>
+              <FormDescription>
+                Any additional guidance for coaches or athletes
+              </FormDescription>
+            </FormItem>
+          )}
+        />
+        
+        {/* Form actions */}
+        <div className="flex justify-end space-x-2">
           <Button
-            type="submit"
-            className="bg-indigo-600 hover:bg-indigo-700 text-white"
+            type="button"
+            variant="outline"
+            onClick={onCancel}
+            disabled={isLoading}
           >
-            Save Workout
+            Cancel
           </Button>
-        </CardFooter>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Saving..." : initialData.id ? "Update Workout" : "Create Workout"}
+          </Button>
+        </div>
       </form>
-    </Card>
+    </Form>
   );
 }

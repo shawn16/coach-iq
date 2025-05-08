@@ -1,16 +1,27 @@
+// This file contains sample data for training plans
+// Used for development, testing, and demonstrations
+// Provides realistic mock data for the app's training plan features
+
 import type { TrainingPlan } from "@/components/training-plan-card"; // Import the shared interface
 import { parseISO } from "date-fns";
 
 // --- Type Definitions ---
 
-// Basic plan type from the card component
+/**
+ * Re-export the basic TrainingPlan type from the card component
+ */
 export type { TrainingPlan } from "@/components/training-plan-card";
 
-// Detailed plan types for the details page
+/**
+ * Represents workouts for a single week, keyed by workout type ID
+ */
 export interface WeekWorkouts {
   [key: string]: string | undefined;
 }
 
+/**
+ * Represents a single week in a training plan
+ */
 export interface WeekData {
   id: number;
   weekNumber: number;
@@ -19,12 +30,18 @@ export interface WeekData {
   workouts: WeekWorkouts;
 }
 
+/**
+ * Represents a type of workout with display settings
+ */
 export interface WorkoutType {
   id: string;
   name: string;
   color: string;
 }
 
+/**
+ * Possible subtypes of training plans
+ */
 export type PlanSubType =
   | "endurance"
   | "speed"
@@ -33,6 +50,10 @@ export type PlanSubType =
   | "standard"
   | undefined;
 
+/**
+ * Extended training plan type with detailed information
+ * Used for the plan details view
+ */
 export interface TrainingPlanDetail extends Omit<TrainingPlan, 'type' | 'startDate'> {
   startDate: Date; // Use Date object
   endDate: Date; // Use Date object
@@ -44,6 +65,10 @@ export interface TrainingPlanDetail extends Omit<TrainingPlan, 'type' | 'startDa
 
 // --- Sample Data Arrays ---
 
+/**
+ * Sample active training plans
+ * Used for demonstrations and development
+ */
 export const activePlans: TrainingPlan[] = [
     {
         id: "1",
@@ -111,6 +136,10 @@ export const activePlans: TrainingPlan[] = [
     },
 ];
 
+/**
+ * Sample completed training plans
+ * Used for demonstrations and development
+ */
 export const completedPlans: TrainingPlan[] = [
     {
         id: "4",
@@ -166,6 +195,10 @@ export const completedPlans: TrainingPlan[] = [
 
 // --- Sample Data Constants ---
 
+/**
+ * Sample workout types with display colors
+ * Used for demonstrations and UI development
+ */
 export const workoutTypes: WorkoutType[] = [
   {
     id: "green_vol",
@@ -184,7 +217,13 @@ export const workoutTypes: WorkoutType[] = [
 
 // --- Sample Data Generation Functions ---
 
-// Generate plan data (adjust signature if needed)
+/**
+ * Generates sample week-by-week data for a training plan
+ * Creates realistic progressive training patterns with dates and workouts
+ * 
+ * @param startDate - Optional start date for the training plan, defaults to May 24, 2023
+ * @returns Array of week data objects ready for display
+ */
 export const generatePlanData = (startDate?: Date): WeekData[] => {
   const data: WeekData[] = [];
   const weeks = 12; // Example weeks for demo
@@ -276,7 +315,13 @@ export const generatePlanData = (startDate?: Date): WeekData[] => {
   return data;
 };
 
-// For demo purposes, this would normally come from an API call
+/**
+ * Retrieves detailed information for a sample training plan by ID
+ * Simulates an API call to fetch plan details
+ *
+ * @param id - The ID of the training plan to retrieve
+ * @returns Detailed training plan data or null if not found
+ */
 export const getTrainingPlanById = (id: string): TrainingPlanDetail | null => {
   // Find the plan in active or completed plans
   const basicPlan = [...activePlans, ...completedPlans].find(

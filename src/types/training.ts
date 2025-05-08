@@ -1,109 +1,191 @@
-// Training Plan type definitions
+// This file contains type definitions for training plans, workouts, and related concepts
+// Used throughout the application to ensure type consistency
 
-// Basic training plan information
+/**
+ * Types of training plans (focus area)
+ */
+export type PlanType = 'endurance' | 'speed' | 'strength' | 'marathon' | 'custom';
+
+/**
+ * Training plan format options (sport-specific types)
+ */
+export type PlanFormat = 'xc' | 'track' | 'road' | 'trail' | 'general';
+
+/**
+ * Status of a training plan 
+ */
+export type PlanStatus = 'active' | 'completed' | 'draft' | 'archived';
+
+/**
+ * Main training plan interface
+ * Represents the core structure of a training plan
+ */
 export interface TrainingPlan {
   id: string;
   title: string;
   description: string;
-  duration: string; // e.g., "12 weeks"
+  startDate: string | Date;
+  endDate?: string | Date;
+  durationWeeks: number;
   type: PlanType;
-  startDate: string;
-  endDate?: string;
-  progress?: number; // 0-100 percentage
+  planFormat: PlanFormat; // xc, track, etc.
   status: PlanStatus;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: string | Date;
+  updatedAt: string | Date;
+  createdById?: string;
+  phases?: Phase[];
+  athleteCount?: number;
 }
 
-// Training plan types
-export type PlanType =
-  | "endurance"
-  | "speed"
-  | "strength"
-  | "marathon"
-  | "custom";
+/**
+ * Phase within a training plan
+ * A training plan is divided into phases (e.g. base, build, peak)
+ */
+export interface Phase {
+  id: string;
+  name: string;
+  description?: string;
+  order: number;
+  startDate: string | Date;
+  endDate: string | Date;
+  durationWeeks: number;
+  trainingPlanId: string;
+  weeks?: Week[];
+  createdAt: string | Date;
+  updatedAt: string | Date;
+}
 
-// Training plan status
-export type PlanStatus = "active" | "completed" | "draft";
+/**
+ * Week within a phase
+ * Contains information about a specific training week
+ */
+export interface Week {
+  id: string;
+  weekNumber: number;
+  startDate: string | Date;
+  endDate: string | Date;
+  phaseId: string;
+  workouts?: Workout[];
+  createdAt: string | Date;
+  updatedAt: string | Date;
+}
 
-// Workout intensity levels
-export type IntensityLevel = "recovery" | "easy" | "moderate" | "hard" | "race";
+/**
+ * Workout intensity levels
+ */
+export type WorkoutIntensity = 'recovery' | 'easy' | 'moderate' | 'hard' | 'race';
 
-// Daily workout information
+/**
+ * Workout within a training week
+ * Represents a single training session
+ */
 export interface Workout {
   id: string;
-  planId: string;
-  day: number; // Day in the plan (1-based)
   title: string;
   description: string;
+  workoutDate: string | Date;
+  duration: number; // in minutes
+  distance?: number; // in meters/kilometers
+  intensity: WorkoutIntensity;
   type: WorkoutType;
-  intensity: IntensityLevel;
-  duration?: number; // in minutes
-  distance?: number; // in meters
-  sets?: WorkoutSet[];
-  notes?: string;
+  weekId: string;
+  phases?: WorkoutPhase[];
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 
-// Workout type
-export type WorkoutType =
-  | "long_run"
-  | "easy_run"
-  | "tempo_run"
-  | "interval"
-  | "hills"
-  | "fartlek"
-  | "recovery"
-  | "race"
-  | "cross_training"
-  | "rest";
+/**
+ * Types of workouts 
+ */
+export type WorkoutType = 
+  | 'easy_run' 
+  | 'long_run' 
+  | 'tempo_run' 
+  | 'interval' 
+  | 'hill_repeat' 
+  | 'recovery' 
+  | 'fartlek' 
+  | 'race' 
+  | 'cross_training'
+  | 'rest';
 
-// Workout set (for interval workouts)
+/**
+ * Phase within a workout (e.g. warmup, main set, cooldown)
+ */
+export interface WorkoutPhase {
+  id: string;
+  name: string; // e.g., "Warm-up", "Main set", "Cool-down"
+  description?: string;
+  duration: number; // in minutes
+  distance?: number; // in meters/kilometers
+  order: number;
+  workoutId: string;
+  sets?: WorkoutSet[];
+  createdAt: string | Date;
+  updatedAt: string | Date;
+}
+
+/**
+ * Set within a workout phase
+ * Represents a repeated section of a workout
+ */
 export interface WorkoutSet {
   id: string;
-  workoutId: string;
-  reps: number;
+  repetitions: number;
   distance?: number; // in meters
-  duration?: number; // in seconds
-  rest?: number; // in seconds
-  pace?: string; // e.g., "4:30/km"
-  notes?: string;
+  duration?: number; // in minutes
+  intensity?: string;
+  restBetween?: number; // in seconds
+  workoutPhaseId: string;
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 
-// Assignment of athletes to plans
-export interface PlanAssignment {
+/**
+ * Training plan assignment to an athlete
+ * Links athletes to training plans
+ */
+export interface TrainingPlanAssignment {
   id: string;
-  planId: string;
+  trainingPlanId: string;
   athleteId: number;
-  assignedAt: string;
-  completedWorkouts?: number; // Count of completed workouts
+  assignedDate: string | Date;
+  status: 'active' | 'completed' | 'cancelled';
+  progressPercent: number;
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 
-// Input types for creating/updating
-export interface TrainingPlanInput {
-  title: string;
-  description: string;
-  type: PlanType;
-  startDate: string;
-  duration: string;
-}
-
-export interface WorkoutInput {
-  day: number;
-  title: string;
-  description: string;
-  type: WorkoutType;
-  intensity: IntensityLevel;
-  duration?: number;
-  distance?: number;
+/**
+ * Completed workout record
+ * Tracks an athlete's completed workout
+ */
+export interface CompletedWorkout {
+  id: string;
+  workoutId: string;
+  athleteId: number;
+  completedDate: string | Date;
+  actualDuration: number; // in minutes
+  actualDistance?: number; // in meters/kilometers
   notes?: string;
-  sets?: WorkoutSetInput[];
+  rating?: number; // 1-10 self-reported difficulty/feeling
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 
-export interface WorkoutSetInput {
-  reps: number;
-  distance?: number;
-  duration?: number;
-  rest?: number;
-  pace?: string;
+/**
+ * Training metric record
+ * Tracks athlete performance metrics
+ */
+export interface TrainingMetric {
+  id: string;
+  athleteId: number;
+  metricType: string; // e.g., "heartRate", "pace", "power", etc.
+  date: string | Date;
+  value: number;
+  unit: string; // e.g., "bpm", "min/km", "watts", etc.
   notes?: string;
+  workoutId?: string;
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }

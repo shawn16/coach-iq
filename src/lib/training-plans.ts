@@ -1,6 +1,15 @@
+// This file contains all the core functions for managing training plans in the application
+// It handles CRUD operations for training plans and related functionality
+
 import prisma from "@/lib/prisma";
 
-// Get all active and completed plans for a user
+/**
+ * Retrieves all active and completed training plans for a specific user
+ * Formats the data for display in the UI
+ * 
+ * @param userId - The ID of the user whose plans to retrieve
+ * @returns Object containing separate arrays for active and completed plans
+ */
 export async function getTrainingPlans(userId: string) {
   try {
     // Get all plans for the user
@@ -56,7 +65,13 @@ export async function getTrainingPlans(userId: string) {
   }
 }
 
-// Get a specific training plan with all its details
+/**
+ * Retrieves detailed information for a specific training plan
+ * Includes all weeks, workouts, and associated data
+ *
+ * @param id - The ID of the training plan to retrieve
+ * @returns Detailed training plan data or null if not found
+ */
 export async function getTrainingPlanById(id: string) {
   try {
     // Get the plan with its weeks and workouts
@@ -85,7 +100,7 @@ export async function getTrainingPlanById(id: string) {
 
     if (!plan) return null;
 
-    // Format the plan data to match the expected format
+    // Format the plan data to match the expected format in the UI
     const planData = plan.weeks.map(week => {
       // Convert workouts array to workouts object
       const workouts = {};
@@ -123,7 +138,13 @@ export async function getTrainingPlanById(id: string) {
   }
 }
 
-// Create a new training plan
+/**
+ * Creates a new training plan with weeks
+ * Handles all associated data like athlete assignments
+ *
+ * @param params - Object containing all training plan details
+ * @returns The newly created training plan
+ */
 export async function createTrainingPlan({
   title,
   description,
@@ -146,11 +167,11 @@ export async function createTrainingPlan({
   athleteIds?: number[];
 }) {
   try {
-    // Calculate end date
+    // Calculate end date based on duration
     const endDate = new Date(startDate);
     endDate.setDate(endDate.getDate() + durationWeeks * 7);
 
-    // Create the training plan
+    // Create the training plan record
     const trainingPlan = await prisma.trainingPlan.create({
       data: {
         title,
@@ -219,7 +240,15 @@ export async function createTrainingPlan({
   }
 }
 
-// Update a training plan
+/**
+ * Updates an existing training plan
+ * Can handle changes to basic details, dates, duration, and athlete assignments
+ * Maintains workout data when possible during restructuring
+ *
+ * @param id - The ID of the training plan to update
+ * @param data - Object containing the fields to update
+ * @returns The updated training plan
+ */
 export async function updateTrainingPlan(
   id: string,
   data: {
@@ -409,7 +438,14 @@ export async function updateTrainingPlan(
   }
 }
 
-// Update workouts within a specific week of a training plan
+/**
+ * Updates the workouts within a specific week of a training plan
+ * Handles creating, updating, and deleting workouts
+ *
+ * @param weekId - The ID of the week to update
+ * @param workouts - Object mapping workout type IDs to workout details
+ * @returns Success status
+ */
 export async function updateWeekWorkouts(
   weekId: string,
   workouts: Record<string, string | null>
@@ -453,7 +489,13 @@ export async function updateWeekWorkouts(
   }
 }
 
-// Delete a training plan
+/**
+ * Deletes a training plan and all associated data
+ * Cascade deletion is handled by the database schema
+ *
+ * @param id - The ID of the training plan to delete
+ * @returns Success status
+ */
 export async function deleteTrainingPlan(id: string) {
   try {
     await prisma.trainingPlan.delete({
@@ -466,13 +508,24 @@ export async function deleteTrainingPlan(id: string) {
   }
 }
 
-// Helper function to format dates to match the expected format in the UI
+/**
+ * Helper function to format dates to match the expected format in the UI
+ * Converts Date objects to "Month Day, Year" format (e.g., "Jan 15, 2023")
+ *
+ * @param date - The Date object to format
+ * @returns Formatted date string
+ */
 function formatDate(date: Date): string {
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
 }
 
-// Get all workout types
+/**
+ * Retrieves all workout types available in the system
+ * Used to populate workout type selections in the UI
+ *
+ * @returns Array of workout types
+ */
 export async function getWorkoutTypes() {
   try {
     const types = await prisma.workoutType.findMany({

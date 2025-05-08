@@ -1,3 +1,6 @@
+// This file contains the TrainingPlanTable component
+// Displays a table of training plans with filtering and sorting capabilities
+
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -7,10 +10,16 @@ import type { PhaseData } from "@/components/phase-editor-dialog";
 import { PhaseEditorDialog } from "@/components/phase-editor-dialog";
 
 // --- Types ---
+/**
+ * Represents the workouts for a single week, keyed by workout type ID
+ */
 interface WeekWorkouts {
   [key: string]: string | undefined;
 }
 
+/**
+ * Data structure for a single training week
+ */
 interface WeekData {
   id: number;
   weekNumber: number;
@@ -19,6 +28,9 @@ interface WeekData {
   workouts: WeekWorkouts;
 }
 
+/**
+ * Represents a type of workout with display settings
+ */
 interface WorkoutType {
   id: string;
   name: string;
@@ -26,21 +38,36 @@ interface WorkoutType {
 }
 
 // --- Component Props ---
+/**
+ * Props for the TrainingPlanTable component
+ */
 interface TrainingPlanTableProps {
+  /** Array of week data objects to display in the table */
   planData: WeekData[];
+  /** Types of workouts that can be assigned to each day */
   workoutTypes: WorkoutType[];
+  /** Callback to remove a week from the plan */
   removeWeek?: (weekId: number) => void;
+  /** Callback to reorder weeks in the plan */
   onMoveWeek?: (weekId: number, direction: "up" | "down") => void;
+  /** When true, the table will be in read-only mode with no editing capabilities */
   readOnly?: boolean;
+  /** Callback when a workout cell is clicked */
   onCellClick?: (weekId: number, workoutType: string) => void;
+  /** Keyboard event handler for workout cells */
   onKeyDown?: (
     event: React.KeyboardEvent<HTMLDivElement>,
     weekId: number,
     workoutType: string
   ) => void;
+  /** Callback when a phase is changed */
   onPhaseChange?: (weekId: number, phaseData: PhaseData) => void;
 }
 
+/**
+ * TrainingPlanTable component
+ * Displays a table of training plans with weeks and workouts
+ */
 export function TrainingPlanTable({
   planData,
   workoutTypes,
@@ -69,7 +96,11 @@ export function TrainingPlanTable({
     });
   }, []);
 
-  // Get color class for season phase
+  /**
+   * Get color class for season phase
+   * @param phase - The season phase string
+   * @returns CSS class for the phase color
+   */
   const getSeasonPhaseColor = (phase: string): string => {
     if (phase.includes("Transition"))
       return "bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300";
@@ -82,7 +113,11 @@ export function TrainingPlanTable({
     return "bg-gray-50 dark:bg-gray-800/40 text-gray-800 dark:text-gray-300";
   };
 
-  // Handle phase cell double click
+  /**
+   * Handle phase cell double click
+   * @param weekId - The ID of the week
+   * @param phase - The phase string
+   */
   const handlePhaseDoubleClick = (weekId: number, phase: string) => {
     if (readOnly || !onPhaseChange) return;
     
@@ -96,7 +131,11 @@ export function TrainingPlanTable({
     setIsPhaseEditorOpen(true);
   };
 
-  // Convert the phase color class to a simple color value for the editor
+  /**
+   * Convert the phase color class to a simple color value for the editor
+   * @param phase - The phase string
+   * @returns Color value
+   */
   const getPhaseColorValue = (phase: string): string => {
     if (phase.includes("Transition")) return "blue";
     if (phase.includes("Summer")) return "green";
@@ -105,7 +144,10 @@ export function TrainingPlanTable({
     return "gray";
   };
 
-  // Handle phase save
+  /**
+   * Handle phase save
+   * @param phaseData - The new phase data
+   */
   const handlePhaseSave = (phaseData: PhaseData) => {
     if (currentPhase && onPhaseChange) {
       onPhaseChange(currentPhase.weekId, phaseData);

@@ -1,5 +1,8 @@
 "use client";
 
+// This file contains the TrainingPlanCard component that displays a summary of a training plan
+// Used in the training plans list page to show basic plan information and actions
+
 import type React from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,30 +33,37 @@ import {
 // Type Definitions
 type PlanType = "endurance" | "speed" | "strength" | "marathon" | "standard";
 
+// Type definition for a training plan in the UI
 export interface TrainingPlan {
   id: string;
   title: string;
   description: string;
-  duration: string;
-  athletes: number;
+  duration: string; // e.g., "12 weeks"
   startDate: string;
+  athletes: number;
   progress?: number;
-  type?: PlanType;
-  planType?: string;  // Adding planType property
+  type?: PlanType; // e.g., "endurance", "speed", etc.
+  planType?: string; // e.g., "xc" (cross country), "track", etc.
 }
 
+// Props for the TrainingPlanCard component
 interface TrainingPlanCardProps {
   plan: TrainingPlan;
   onViewDetails: (id: string) => void;
-  onEdit?: (id: string) => void;  // Added onEdit prop
-  isActive?: boolean;
-  isCompleted?: boolean;
+  onEdit?: (id: string) => void; // Added onEdit prop
+  isActive?: boolean; // Whether the plan is active or completed
+  isCompleted?: boolean; // Whether the plan has been explicitly marked as completed
 }
 
+/**
+ * Component for displaying a training plan card
+ * Shows key plan information like title, description, progress, and athlete count
+ * Includes actions for viewing details and editing
+ */
 export function TrainingPlanCard({
   plan,
   onViewDetails,
-  onEdit,  // Added onEdit prop
+  onEdit, // Added onEdit prop
   isActive = false,
   isCompleted = false,
 }: TrainingPlanCardProps): React.ReactNode {

@@ -1,9 +1,15 @@
+// This file contains API route handlers for operations on specific training plans
+// Handles GET, PUT, and DELETE operations for individual training plans
+
 import { NextRequest, NextResponse } from 'next/server';
 import { getTrainingPlanById, updateTrainingPlan, deleteTrainingPlan } from '@/lib/training-plans';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth'; // Updated import path
 
-// Get a specific training plan
+/**
+ * GET handler for fetching a specific training plan by ID
+ * Returns detailed plan information including all weeks and workouts
+ */
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
@@ -33,7 +39,10 @@ export async function GET(
   }
 }
 
-// Update a specific training plan
+/**
+ * PUT handler for updating a specific training plan
+ * Can modify plan details, dates, duration, and athlete assignments
+ */
 export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
@@ -81,7 +90,10 @@ export async function PUT(
   }
 }
 
-// Delete a specific training plan
+/**
+ * DELETE handler for removing a specific training plan
+ * Deletes the plan and all associated data (weeks, workouts)
+ */
 export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
