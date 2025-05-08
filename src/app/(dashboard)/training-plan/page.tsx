@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChevronLeft, ChevronRight, Info, Loader2 } from "lucide-react";
 import { CreatePlanDialog } from "@/components/create-plan-dialog";
+import { EditTrainingPlanDialog } from "@/components/edit-training-plan-dialog";
 import { useRouter } from "next/navigation";
 import {
   TrainingPlanCard,
@@ -19,6 +20,8 @@ export default function TrainingPlanPage() {
   const [completedPlans, setCompletedPlans] = useState<TrainingPlan[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [showEditDialog, setShowEditDialog] = useState(false);
 
   const plansPerPage = 5;
 
@@ -72,6 +75,12 @@ export default function TrainingPlanPage() {
   const handleViewDetails = (id: string) => {
     router.push(`/training-plan/${id}`);
   };
+  
+  // Handle edit plan
+  const handleEditPlan = (id: string) => {
+    setSelectedPlan(id);
+    setShowEditDialog(true);
+  };
 
   // Reset pagination when switching tabs
   const handleTabChange = (value: string) => {
@@ -112,6 +121,38 @@ export default function TrainingPlanPage() {
 
   return (
     <div className="container mx-auto p-6">
+      {/* Edit Training Plan Dialog */}
+      {selectedPlan && (() => {
+        // Find the plan once based on which tab is active
+        const planToEdit = activeTab === 'active' 
+          ? activePlans.find(plan => plan.id === selectedPlan)
+          : completedPlans.find(plan => plan.id === selectedPlan);
+        
+        // Only show dialog if we found the plan
+        return planToEdit ? (
+          <EditTrainingPlanDialog
+            planId={selectedPlan}
+            initialData={{
+              title: planToEdit.title || "",
+              description: planToEdit.description || "",
+              startDate: planToEdit.startDate || "",
+              duration: planToEdit.duration || "",
+              planType: planToEdit.planType || "xc",
+            }}
+            open={showEditDialog}
+            onClose={() => {
+              setShowEditDialog(false);
+              setSelectedPlan(null); // Reset the selected plan when dialog closes
+            }}
+            onUpdateSuccess={() => {
+              setShowEditDialog(false);
+              setSelectedPlan(null); // Reset the selected plan after successful update
+              fetchTrainingPlans();
+            }}
+          />
+        ) : null;
+      })()}
+
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50">
           Training Plans
@@ -184,6 +225,7 @@ export default function TrainingPlanPage() {
                       key={plan.id}
                       plan={plan}
                       onViewDetails={handleViewDetails}
+                      onEdit={handleEditPlan}
                       isActive={true}
                     />
                   ))}
@@ -257,6 +299,7 @@ export default function TrainingPlanPage() {
                       key={plan.id}
                       plan={plan}
                       onViewDetails={handleViewDetails}
+                      onEdit={handleEditPlan}
                       isActive={false}
                       isCompleted={true}
                     />

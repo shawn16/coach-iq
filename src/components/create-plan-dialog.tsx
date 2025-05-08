@@ -5,6 +5,13 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Loader2, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -20,6 +27,7 @@ export function CreatePlanDialog() {
     description: "",
     durationWeeks: "12",
     startDate: new Date().toISOString().slice(0, 10), // Default to today in YYYY-MM-DD format
+    planType: "xc", // Default to Cross Country
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +51,8 @@ export function CreatePlanDialog() {
           description: formData.description,
           durationWeeks: parseInt(formData.durationWeeks),
           startDate: formData.startDate,
-          type: 'standard' // Default type
+          type: 'standard', // Default type
+          planType: formData.planType, // Add planType to request
         }),
       });
 
@@ -64,6 +73,7 @@ export function CreatePlanDialog() {
         description: "",
         durationWeeks: "12",
         startDate: new Date().toISOString().slice(0, 10),
+        planType: "xc",
       });
       
       // Close dialog
@@ -173,6 +183,28 @@ export function CreatePlanDialog() {
                 className="col-span-3 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
                 required
               />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label
+                htmlFor="planType"
+                className="text-right text-gray-700 dark:text-gray-300"
+              >
+                Plan Type
+              </Label>
+              <div className="col-span-3">
+                <Select
+                  value={formData.planType}
+                  onValueChange={(value) => setFormData((prev) => ({ ...prev, planType: value }))}
+                >
+                  <SelectTrigger className="border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+                    <SelectValue placeholder="Select plan type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="xc">Cross Country</SelectItem>
+                    <SelectItem value="track">Track</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
 

@@ -48,7 +48,16 @@ export async function PUT(
     
     // Parse request body
     const body = await req.json();
-    const { title, description, progress, isCompleted, athleteIds } = body;
+    const { 
+      title, 
+      description, 
+      progress, 
+      isCompleted,
+      athleteIds,
+      startDate,
+      durationWeeks,
+      planType
+    } = body;
     
     // Update the plan
     const updatedPlan = await updateTrainingPlan(params.id, {
@@ -57,6 +66,9 @@ export async function PUT(
       progress,
       isCompleted,
       athleteIds,
+      startDate: startDate ? new Date(startDate) : undefined,
+      durationWeeks,
+      planType
     });
     
     return NextResponse.json(updatedPlan);

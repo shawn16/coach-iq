@@ -1,7 +1,6 @@
 "use client";
 
-import type React from "react"; // Import React for ReactNode type
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react"; // Import React.use
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -15,6 +14,7 @@ import {
   MonitorIcon as Running,
   Award,
   Info,
+  Loader2,
 } from "lucide-react";
 import { TrainingPlanTable } from "@/components/training-plan-table";
 import {
@@ -23,22 +23,25 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { format, parseISO } from "date-fns";
-import {
-  TrainingPlanDetail,
-  PlanSubType,
-  getTrainingPlanById,
-  workoutTypes,
-} from "@/lib/sample-data/training-plans"; // Import necessary types/functions/data
+import { format } from "date-fns";
+import type { TrainingPlanDetail, PlanSubType } from "@/lib/sample-data/training-plans";
+import { workoutTypes } from "@/lib/sample-data/training-plans";
+import { EditTrainingPlanDialog } from "@/components/edit-training-plan-dialog";
 
 export default function TrainingPlanDetails({
   params,
 }: {
   params: { id: string };
 }) {
+  // Unwrap the params properly with React.use
+  const unwrappedParams = use(params);
+  const planId = unwrappedParams.id;
+
   const router = useRouter();
   const [plan, setPlan] = useState<TrainingPlanDetail | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [showEditDialog, setShowEditDialog] = useState(false);
 
   // Map plan type values to display names
   const planTypeNames: Record<string, string> = {
@@ -63,28 +66,82 @@ export default function TrainingPlanDetails({
     }
   };
 
+  const fetchTrainingPlan = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Use the unwrapped planId directly
+      if (!planId) {
+        setError("Invalid training plan ID");
+        setLoading(false);
+        return;
+      }
+
+      // Fetch from API instead of using static data
+      const response = await fetch(`/api/training-plans/${planId}`, {
+        cache: "no-store",
+        headers: {
+          pragma: "no-cache",
+          "cache-control": "no-cache",
+        },
+      });
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          setError("Training plan not found");
+        } else {
+          setError("Failed to load training plan");
+        }
+        setLoading(false);
+        return;
+      }
+
+      const data = await response.json();
+      setPlan(data);
+    } catch (err) {
+      console.error("Error fetching training plan:", err);
+      setError("An error occurred while fetching the training plan");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Use the unwrapped planId in dependency array
   useEffect(() => {
-    // In a real app, this would be an API call
-    const fetchedPlan = getTrainingPlanById(params.id); // Use imported function
-    setPlan(fetchedPlan);
-    setLoading(false);
-  }, [params.id]);
+    fetchTrainingPlan();
+  }, [planId]);
+
+  // Handle opening the edit dialog
+  const handleEditClick = () => {
+    setShowEditDialog(true);
+  };
+
+  // Handle closing the edit dialog
+  const handleEditDialogClose = () => {
+    setShowEditDialog(false);
+  };
+
+  // Handle successful update
+  const handleUpdateSuccess = () => {
+    // Refetch the training plan to get updated data
+    fetchTrainingPlan();
+  };
 
   if (loading) {
     return (
       <div className="container mx-auto p-6">
-        <div className="flex items-center space-x-4">
-          <div className="h-12 w-12 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
-          <div className="space-y-2">
-            <div className="h-4 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-            <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-          </div>
+        <div className="flex flex-col items-center justify-center py-12">
+          <Loader2 className="h-10 w-10 text-indigo-600 animate-spin mb-4" />
+          <p className="text-gray-600 dark:text-gray-400">
+            Loading training plan...
+          </p>
         </div>
       </div>
     );
   }
 
-  if (!plan) {
+  if (error || !plan) {
     return (
       <div className="container mx-auto p-6">
         <div className="flex flex-col items-center justify-center py-12">
@@ -93,8 +150,8 @@ export default function TrainingPlanDetails({
               Training Plan Not Found
             </h1>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
-              The training plan you are looking for could not be found or may
-              have been deleted.
+              {error ||
+                "The training plan you are looking for could not be found or may have been deleted."}
             </p>
             <Button
               onClick={() => router.push("/training-plan")}
@@ -111,6 +168,21 @@ export default function TrainingPlanDetails({
 
   return (
     <div className="container mx-auto p-6">
+      {/* Edit Dialog */}
+      <EditTrainingPlanDialog
+        planId={plan.id}
+        initialData={{
+          title: plan.title,
+          description: plan.description,
+          startDate: plan.startDate.toString(),
+          duration: plan.duration,
+          planType: plan.planType, // Add planType to the edit dialog
+        }}
+        open={showEditDialog}
+        onClose={handleEditDialogClose}
+        onUpdateSuccess={handleUpdateSuccess}
+      />
+
       {/* Back button and header */}
       <div className="flex flex-col mb-6 space-y-4">
         <Button
@@ -172,7 +244,7 @@ export default function TrainingPlanDetails({
                     Plan Type
                   </h3>
                   <p className="text-gray-900 dark:text-gray-50 mt-1">
-                    {planTypeNames[plan.planType] || plan.type}
+                    {planTypeNames[plan.planType] || "Standard"}
                   </p>
                 </div>
                 <div>
@@ -194,7 +266,7 @@ export default function TrainingPlanDetails({
                   </h3>
                   <p className="text-gray-900 dark:text-gray-50 mt-1">
                     {plan.startDate
-                      ? format(plan.startDate, "MM/dd/yyyy")
+                      ? format(new Date(plan.startDate), "MM/dd/yyyy")
                       : "Not set"}
                   </p>
                 </div>
@@ -204,7 +276,7 @@ export default function TrainingPlanDetails({
                   </h3>
                   <p className="text-gray-900 dark:text-gray-50 mt-1">
                     {plan.endDate
-                      ? format(plan.endDate, "MM/dd/yyyy")
+                      ? format(new Date(plan.endDate), "MM/dd/yyyy")
                       : "Not set"}
                   </p>
                 </div>
@@ -266,7 +338,7 @@ export default function TrainingPlanDetails({
               variant="outline"
               size="sm"
               className="text-gray-700 dark:text-gray-300 h-9 px-4"
-              onClick={() => router.push(`/training-plan-builder/${params.id}`)}
+              onClick={handleEditClick}
             >
               <Pencil className="h-4 w-4 mr-2" />
               Edit

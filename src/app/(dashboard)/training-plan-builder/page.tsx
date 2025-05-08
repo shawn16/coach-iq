@@ -188,6 +188,24 @@ export default function TrainingPlanBuilderPage() {
     });
   };
 
+  const handlePhaseChange = (weekId: number, phaseData: { name: string; color: string }) => {
+    setPlanData((prevPlanData) => {
+      return prevPlanData.map(week => {
+        if (week.id === weekId) {
+          // Update the phase name and color (the color is handled by the TrainingPlanTable component)
+          return {
+            ...week,
+            seasonPhase: phaseData.name
+          };
+        }
+        return week;
+      });
+    });
+    
+    // Debug log
+    console.log("Phase updated:", { weekId, phaseData });
+  };
+
   const formatDateRange = (start: Date, end: Date) => {
     if (!start || !end) return "";
     return `${format(start, "MM/dd/yyyy")} - ${format(end, "MM/dd/yyyy")}`;
@@ -414,6 +432,7 @@ export default function TrainingPlanBuilderPage() {
                   onKeyDown={handleKeyDown}
                   removeWeek={removeWeek}
                   onMoveWeek={moveWeek}
+                  onPhaseChange={handlePhaseChange}
                 />
               </CardContent>
             </Card>

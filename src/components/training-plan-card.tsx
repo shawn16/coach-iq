@@ -39,11 +39,13 @@ export interface TrainingPlan {
   startDate: string;
   progress?: number;
   type?: PlanType;
+  planType?: string;  // Adding planType property
 }
 
 interface TrainingPlanCardProps {
   plan: TrainingPlan;
   onViewDetails: (id: string) => void;
+  onEdit?: (id: string) => void;  // Added onEdit prop
   isActive?: boolean;
   isCompleted?: boolean;
 }
@@ -51,6 +53,7 @@ interface TrainingPlanCardProps {
 export function TrainingPlanCard({
   plan,
   onViewDetails,
+  onEdit,  // Added onEdit prop
   isActive = false,
   isCompleted = false,
 }: TrainingPlanCardProps): React.ReactNode {
@@ -197,6 +200,7 @@ export function TrainingPlanCard({
               variant="outline"
               size="sm"
               className={secondaryButtonClass}
+              onClick={() => onEdit && onEdit(plan.id)}
             >
               <Pencil className={buttonIconClass} />
               Edit

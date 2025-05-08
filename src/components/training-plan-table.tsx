@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
+import type { PhaseData } from "@/components/phase-editor-dialog";
+import { PhaseEditorDialog } from "@/components/phase-editor-dialog";
 
 // --- Types ---
 interface WeekWorkouts {
@@ -36,6 +38,7 @@ interface TrainingPlanTableProps {
     weekId: number,
     workoutType: string
   ) => void;
+  onPhaseChange?: (weekId: number, phaseData: PhaseData) => void;
 }
 
 export function TrainingPlanTable({
@@ -46,7 +49,16 @@ export function TrainingPlanTable({
   readOnly = false,
   onCellClick,
   onKeyDown,
+  onPhaseChange,
 }: TrainingPlanTableProps) {
+  // State for phase editor dialog
+  const [isPhaseEditorOpen, setIsPhaseEditorOpen] = useState(false);
+  const [currentPhase, setCurrentPhase] = useState<{
+    weekId: number;
+    phase: string;
+    color: string;
+  } | null>(null);
+
   useEffect(() => {
     // Add scroll behavior for table containers
     const containers = document.querySelectorAll('.table-scroll-container');
@@ -70,8 +82,49 @@ export function TrainingPlanTable({
     return "bg-gray-50 dark:bg-gray-800/40 text-gray-800 dark:text-gray-300";
   };
 
+  // Handle phase cell double click
+  const handlePhaseDoubleClick = (weekId: number, phase: string) => {
+    if (readOnly || !onPhaseChange) return;
+    
+    console.log("Phase double-clicked:", { weekId, phase }); // Debug log
+    
+    setCurrentPhase({
+      weekId,
+      phase,
+      color: getPhaseColorValue(phase),
+    });
+    setIsPhaseEditorOpen(true);
+  };
+
+  // Convert the phase color class to a simple color value for the editor
+  const getPhaseColorValue = (phase: string): string => {
+    if (phase.includes("Transition")) return "blue";
+    if (phase.includes("Summer")) return "green";
+    if (phase.includes("OFF")) return "red";
+    if (phase.includes("Relays") || phase.includes("Inv")) return "purple";
+    return "gray";
+  };
+
+  // Handle phase save
+  const handlePhaseSave = (phaseData: PhaseData) => {
+    if (currentPhase && onPhaseChange) {
+      onPhaseChange(currentPhase.weekId, phaseData);
+    }
+  };
+
   return (
     <div className="relative">
+      {/* Phase Editor Dialog */}
+      {currentPhase && (
+        <PhaseEditorDialog
+          isOpen={isPhaseEditorOpen}
+          onClose={() => setIsPhaseEditorOpen(false)}
+          onSave={handlePhaseSave}
+          initialPhase={currentPhase.phase}
+          initialColor={currentPhase.color}
+        />
+      )}
+
       {/* Table Structure */}
       <div className="flex border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
         {/* Fixed left columns */}
@@ -102,7 +155,12 @@ export function TrainingPlanTable({
                 <div className="w-28 p-3 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900">
                   {week.dateRange}
                 </div>
-                <div className="w-32 p-3 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900">
+                <div 
+                  className={`w-32 p-3 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 ${!readOnly && onPhaseChange ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50" : ""}`} 
+                  onDoubleClick={() => handlePhaseDoubleClick(week.id, week.seasonPhase)}
+                  onClick={() => !readOnly && onPhaseChange && handlePhaseDoubleClick(week.id, week.seasonPhase)}
+                  title={!readOnly && onPhaseChange ? "Double-click to edit phase" : ""}
+                >
                   <span className={`px-2 py-1 rounded text-xs font-medium ${getSeasonPhaseColor(week.seasonPhase)}`}>
                     {week.seasonPhase}
                   </span>
