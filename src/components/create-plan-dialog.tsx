@@ -28,7 +28,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { format } from "date-fns";
 import { CalendarIcon, Loader2, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner"; // Updated to use sonner instead of shadcn toast
 import { AssignAthletesDialog } from "@/components/assign-athletes-dialog";
 import { PlanType } from "@/types/training";
 
