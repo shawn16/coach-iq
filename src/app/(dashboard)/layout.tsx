@@ -1,8 +1,8 @@
 "use client";
 
 import type React from "react";
-import { useState, useEffect, useRef, useCallback } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useState, useEffect, useCallback } from "react";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 import {
@@ -37,125 +37,44 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
-  const [sidebarWidth, setSidebarWidth] = useState(280); // Increased default sidebar width
-  const [isResizing, setIsResizing] = useState(false);
-  const sidebarRef = useRef<HTMLElement | null>(null);
-  const startWidthRef = useRef<number>(280);
-  const startPosRef = useRef<number>(0);
+  const [isExpanded, setIsExpanded] = useState(true);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
-  // Minimum and maximum sidebar widths
-  const MIN_SIDEBAR_WIDTH = 64; // Width when showing only icons
-  const MAX_SIDEBAR_WIDTH = 360; // Increased maximum sidebar width
-
-  // Toggle sidebar between collapsed and expanded
+  // Toggle sidebar between collapsed and expanded states
   const toggleSidebar = useCallback(() => {
-    const newCollapsed = !collapsed;
-    setCollapsed(newCollapsed);
-
-    // Set appropriate width based on collapsed state
-    if (newCollapsed) {
-      setSidebarWidth(MIN_SIDEBAR_WIDTH);
-    } else {
-      // Expand to previous width or default
-      const savedWidth =
-        typeof window !== "undefined"
-          ? window.localStorage.getItem("sidebarExpandedWidth")
-          : null;
-      setSidebarWidth(savedWidth ? parseInt(savedWidth, 10) : 280);
-    }
-
-    // Save to localStorage
+    setIsExpanded(prev => !prev);
+    
+    // Save preference to localStorage
     if (typeof window !== "undefined") {
-      window.localStorage.setItem("sidebarCollapsed", newCollapsed.toString());
+      window.localStorage.setItem("sidebarExpanded", (!isExpanded).toString());
     }
-  }, [collapsed, MIN_SIDEBAR_WIDTH]);
+  }, [isExpanded]);
 
-  // Check if screen is medium (tablet)
-  const isMediumScreen = useMediaQuery(
-    "(min-width: 768px) and (max-width: 1023px)"
-  );
-
-  // Use useEffect to ensure the component is mounted before rendering and load saved width
+  // Use useEffect to load saved state and set mounted
   useEffect(() => {
     setMounted(true);
 
-    // Try to get saved width from localStorage
+    // Load saved state
     if (typeof window !== "undefined") {
-      const savedWidth = window.localStorage.getItem("sidebarWidth");
-      const savedCollapsed = window.localStorage.getItem("sidebarCollapsed");
-
-      // Auto-collapse sidebar on medium screens
-      if (isMediumScreen) {
-        setCollapsed(true);
-        setSidebarWidth(MIN_SIDEBAR_WIDTH);
+      const savedExpanded = window.localStorage.getItem("sidebarExpanded");
+      
+      if (savedExpanded !== null) {
+        setIsExpanded(savedExpanded === "true");
       } else {
-        // If we have saved values, use them
-        if (savedWidth && !isMediumScreen) {
-          const width = parseInt(savedWidth, 10);
-          setSidebarWidth(width);
-          setCollapsed(
-            width <= MIN_SIDEBAR_WIDTH + 20 || savedCollapsed === "true"
-          );
-        } else {
-          setCollapsed(false);
-          setSidebarWidth(280);
-        }
+        // Default expanded on large screens, collapsed on medium/small
+        setIsExpanded(isDesktop);
       }
     }
-  }, [isMediumScreen, MIN_SIDEBAR_WIDTH]);
-
-  // Use effect to save sidebar width in localStorage when it changes
+  }, [isDesktop]);
+  
+  // Use effect to close mobile sidebar on route changes
   useEffect(() => {
-    if (mounted && !isResizing && typeof window !== "undefined") {
-      // Don't save width during active resizing (wait until released)
-      window.localStorage.setItem("sidebarWidth", sidebarWidth.toString());
-      window.localStorage.setItem("sidebarCollapsed", collapsed.toString());
+    if (!isDesktop) {
+      setOpen(false);
     }
-  }, [sidebarWidth, collapsed, mounted, isResizing]);
-
-  // Add effect to save expanded width separately when not collapsed
-  useEffect(() => {
-    if (
-      mounted &&
-      !collapsed &&
-      !isResizing &&
-      sidebarWidth > MIN_SIDEBAR_WIDTH &&
-      typeof window !== "undefined"
-    ) {
-      window.localStorage.setItem(
-        "sidebarExpandedWidth",
-        sidebarWidth.toString()
-      );
-    }
-  }, [mounted, collapsed, isResizing, sidebarWidth, MIN_SIDEBAR_WIDTH]);
-
-  // Add effect to handle route changes
-  useEffect(() => {
-    // When route changes, ensure we're maintaining sidebar state
-    if (mounted && typeof window !== "undefined") {
-      const savedWidth = window.localStorage.getItem("sidebarWidth");
-      if (savedWidth) {
-        const width = parseInt(savedWidth, 10);
-        // Only update if significantly different to avoid unnecessary rerenders
-        if (Math.abs(width - sidebarWidth) > 10) {
-          setSidebarWidth(width);
-        }
-      }
-    }
-  }, [pathname, mounted, sidebarWidth]);
-
-  // Console log for debugging
-  useEffect(() => {
-    if (mounted && sidebarRef.current) {
-      console.log("Sidebar ref:", sidebarRef.current);
-      console.log("Current width:", sidebarWidth);
-      console.log("Collapsed state:", collapsed);
-    }
-  }, [mounted, sidebarWidth, collapsed]);
+  }, [pathname, isDesktop]);
 
   // Update the routes array to move Athletes to the PLANNING section
   const routes = [
@@ -221,286 +140,192 @@ export default function DashboardLayout({
     },
   ];
 
-  const handleNavigation = (href: string) => {
-    setOpen(false);
-    router.push(href);
-  };
-
-  // If not mounted yet, show a simple loading state
-  if (!mounted) {
-    return (
-      <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 items-center justify-center">
-        Loading...
-      </div>
-    );
-  }
+  // Don't render until component is mounted to prevent hydration issues
+  if (!mounted) return null;
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Desktop sidebar - collapsed or expanded based on screen size */}
+    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-950">
+      {/* Desktop sidebar */}
       <aside
-        ref={sidebarRef}
-        style={{
-          width: `${sidebarWidth}px`,
-          minWidth: collapsed ? `${MIN_SIDEBAR_WIDTH}px` : undefined,
-          transition: isResizing ? "none" : "width 0.2s ease-out",
-          flex: "none", // Prevent flex resizing
-        }}
         className={cn(
-          "hidden md:flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-sm relative",
-          isResizing && "transition-none"
+          "fixed inset-y-0 z-20 hidden border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 transition-all duration-300 md:flex md:flex-col",
+          isExpanded ? "w-[240px]" : "w-[64px]"
         )}
       >
-        <div
-          className={cn(
-            "border-b border-gray-200 dark:border-gray-700 flex items-center",
-            collapsed ? "justify-center p-4" : "px-6 py-3"
-          )}
-        >
-          {collapsed ? (
-            <div className="bg-indigo-600 text-white p-1 rounded-md">
-              <Zap className="h-5 w-5" />
-            </div>
-          ) : (
-            <button
-              onClick={() => router.push("/")}
-              className="flex items-center gap-2 font-bold text-xl text-indigo-600 dark:text-indigo-400"
-            >
-              <div className="bg-indigo-600 text-white p-1 rounded-md">
-                <Zap className="h-5 w-5" />
-              </div>
-              CoachIQ
-            </button>
-          )}
-        </div>
-
-        {/* Collapse/Expand button */}
+        {/* Toggle button */}
         <button
           onClick={toggleSidebar}
-          className="absolute top-20 -right-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full p-1 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 z-10"
-          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          className="absolute -right-3 top-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-l-full p-1 shadow-sm z-50"
+          aria-label={isExpanded ? "Collapse sidebar" : "Expand sidebar"}
         >
-          {collapsed ? (
-            <ChevronRight className="h-4 w-4 text-gray-500" />
-          ) : (
+          {isExpanded ? (
             <ChevronLeft className="h-4 w-4 text-gray-500" />
+          ) : (
+            <ChevronRight className="h-4 w-4 text-gray-500" />
           )}
         </button>
 
-        <ScrollArea className="flex-1">
-          <nav className={cn("grid gap-2 py-4", collapsed ? "px-2" : "px-4")}>
+        {/* Logo and title */}
+        <div className="flex h-16 items-center border-b border-gray-200 dark:border-gray-800 px-4">
+          <div className="flex items-center gap-2">
+            <div className="flex items-center justify-center h-8 w-8 rounded-md bg-purple-700">
+              <Zap className="h-5 w-5 text-white" />
+            </div>
+            {isExpanded && (
+              <span className="font-bold text-lg text-gray-900 dark:text-white">
+                Coach IQ
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <ScrollArea className="flex-1 p-2">
+          <nav className="grid gap-4">
             {routes.map((section, i) => (
-              <div key={i} className="mb-6">
-                {!collapsed && (
-                  <h4 className="mb-2 px-2 text-xs font-semibold text-gray-500 dark:text-gray-400">
+              <div key={i} className="grid gap-1">
+                {isExpanded && (
+                  <h4 className="mb-1 px-2 text-xs font-semibold text-gray-500 dark:text-gray-400">
                     {section.heading}
                   </h4>
                 )}
-                {section.links.map((link, j) => (
-                  <TooltipProvider key={j} delayDuration={300}>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button
-                          onClick={() => handleNavigation(link.href)}
-                          className={cn(
-                            "flex items-center gap-3 rounded-md py-2.5 text-sm font-medium transition-colors w-full",
-                            collapsed ? "justify-center px-2" : "px-3",
-                            pathname === link.href
-                              ? "relative after:absolute after:inset-0 after:rounded-md after:bg-indigo-50 after:z-[-1] dark:after:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300"
-                              : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60"
-                          )}
-                        >
-                          {link.icon}
-                          {sidebarWidth > MIN_SIDEBAR_WIDTH + 20 && (
-                            <span className="truncate">{link.label}</span>
-                          )}
-                        </button>
-                      </TooltipTrigger>
-                      {sidebarWidth <= MIN_SIDEBAR_WIDTH + 20 && (
-                        <TooltipContent side="right">{link.label}</TooltipContent>
+                {section.links.map((link, j) => {
+                  const isActive = pathname === link.href;
+                  return isExpanded ? (
+                    <Button
+                      key={j}
+                      asChild
+                      variant="ghost"
+                      className={cn(
+                        "justify-start gap-2 px-3 py-2 text-gray-700 dark:text-gray-300",
+                        isActive &&
+                          "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white",
                       )}
-                    </Tooltip>
-                  </TooltipProvider>
-                ))}
+                    >
+                      <a href={link.href}>
+                        {link.icon}
+                        <span>{link.label}</span>
+                      </a>
+                    </Button>
+                  ) : (
+                    <TooltipProvider key={j}>
+                      <Tooltip delayDuration={0}>
+                        <TooltipTrigger asChild>
+                          <Button
+                            asChild
+                            variant="ghost"
+                            size="icon"
+                            className={cn(
+                              "h-10 w-10 text-gray-700 dark:text-gray-300",
+                              isActive &&
+                                "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white",
+                            )}
+                          >
+                            <a href={link.href}>{link.icon}</a>
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="right">{link.label}</TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  );
+                })}
               </div>
             ))}
           </nav>
         </ScrollArea>
-        <div
-          className={cn(
-            "border-t border-gray-200 dark:border-gray-700 flex items-center",
-            collapsed ? "justify-center p-3" : "justify-between p-4"
-          )}
-        >
-          <ThemeToggle />
-          {!collapsed && (
-            <span className="text-xs text-gray-500 dark:text-gray-400">
-              v1.0.0
-            </span>
-          )}
-        </div>
-        {/* Simple, reliable resize handle */}
-        <div 
-          className="absolute top-0 right-0 w-4 h-full cursor-ew-resize z-20"
-          onMouseDown={(e) => {
-            e.preventDefault();
-            
-            // Get initial mouse position
-            const initialX = e.clientX;
-            const initialWidth = sidebarWidth;
-            
-            function onMouseMove(moveEvent) {
-              // Calculate how far the mouse has moved
-              const newWidth = initialWidth + (moveEvent.clientX - initialX);
-              
-              // Apply constraints
-              const constrainedWidth = Math.max(
-                MIN_SIDEBAR_WIDTH, 
-                Math.min(MAX_SIDEBAR_WIDTH, newWidth)
-              );
-              
-              // Update width directly
-              setSidebarWidth(constrainedWidth);
-              
-              // Update collapsed state
-              if (constrainedWidth <= MIN_SIDEBAR_WIDTH + 20) {
-                setCollapsed(true);
-              } else {
-                setCollapsed(false);
-              }
-            }
-            
-            function onMouseUp() {
-              // Clean up
-              document.removeEventListener('mousemove', onMouseMove);
-              document.removeEventListener('mouseup', onMouseUp);
-              
-              // Save final width
-              if (typeof window !== 'undefined') {
-                window.localStorage.setItem('sidebarWidth', sidebarWidth.toString());
-                if (sidebarWidth > MIN_SIDEBAR_WIDTH + 20) {
-                  window.localStorage.setItem('sidebarExpandedWidth', sidebarWidth.toString());
-                }
-              }
-            }
-            
-            // Add listeners directly to document
-            document.addEventListener('mousemove', onMouseMove);
-            document.addEventListener('mouseup', onMouseUp);
-          }}
-        >
-          <div className="w-[3px] h-full bg-gray-200 dark:bg-gray-700 hover:bg-indigo-500 dark:hover:bg-indigo-400"></div>
-        </div>
-      </aside>
 
-      {/* Mobile sidebar with sheet */}
-      <Sheet open={open} onOpenChange={setOpen}>
-        <div className="md:hidden flex items-center h-16 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-4">
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="mr-4">
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Toggle sidebar</span>
-            </Button>
-          </SheetTrigger>
-          <button
-            onClick={() => router.push("/")}
-            className="flex items-center gap-2 font-bold text-xl text-indigo-600 dark:text-indigo-400"
-          >
-            <div className="bg-indigo-600 text-white p-1 rounded-md">
-              <Zap className="h-5 w-5" />
-            </div>
-            CoachIQ
-          </button>
-          <div className="ml-auto">
+        {/* User info */}
+        <div className="mt-auto flex items-center justify-between p-4 border-t border-gray-200 dark:border-gray-800">
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700" />
+            {isExpanded && (
+              <div className="flex flex-col">
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <AuthStatus />
+                </span>
+              </div>
+            )}
+          </div>
+          <div className="flex items-center">
             <ThemeToggle />
           </div>
         </div>
-        <SheetContent
-          side="left"
-          className="w-64 p-0 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700"
-        >
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-            <button
-              onClick={() => {
-                setOpen(false);
-                router.push("/");
-              }}
-              className="flex items-center gap-2 font-bold text-xl text-indigo-600 dark:text-indigo-400"
-            >
-              <div className="bg-indigo-600 text-white p-1 rounded-md">
-                <Zap className="h-5 w-5" />
+      </aside>
+
+      {/* Mobile sidebar */}
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden absolute left-4 top-3.5 z-40"
+          >
+            <Menu className="h-5 w-5" />
+            <span className="sr-only">Toggle navigation</span>
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left" className="w-72 p-0">
+          {/* Mobile sidebar content */}
+          <div className="flex h-16 items-center border-b px-6">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center h-8 w-8 rounded-md bg-purple-700">
+                <Zap className="h-5 w-5 text-white" />
               </div>
-              CoachIQ
-            </button>
+              <span className="font-bold text-lg">Coach IQ</span>
+            </div>
           </div>
-          <ScrollArea className="flex-1 h-[calc(100vh-8rem)]">
-            <nav className="grid gap-2 px-4 py-4">
+          <ScrollArea className="h-[calc(100vh-4rem)] pb-10">
+            <nav className="grid gap-2 p-4">
               {routes.map((section, i) => (
-                <div key={i} className="mb-6">
-                  <h4 className="mb-2 px-2 text-xs font-semibold text-gray-500 dark:text-gray-400">
+                <div key={i} className="grid gap-1">
+                  <h4 className="mb-1 px-2 text-xs font-semibold text-gray-500">
                     {section.heading}
                   </h4>
-                  {section.links.map((link, j) => (
-                    <button
-                      key={j}
-                      onClick={() => handleNavigation(link.href)}
-                      className={cn(
-                        "flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors",
-                        pathname === link.href
-                          ? "relative after:absolute after:inset-0 after:rounded-md after:bg-indigo-50 after:z-[-1] dark:after:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300"
-                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60"
-                      )}
-                    >
-                      {link.icon}
-                      <span className="truncate">{link.label}</span>
-                    </button>
-                  ))}
+                  {section.links.map((link, j) => {
+                    const isActive = pathname === link.href;
+                    return (
+                      <Button
+                        key={j}
+                        asChild
+                        variant="ghost"
+                        className={cn(
+                          "justify-start gap-2",
+                          isActive && "bg-gray-100 dark:bg-gray-800",
+                        )}
+                        onClick={() => setOpen(false)}
+                      >
+                        <a href={link.href}>
+                          {link.icon}
+                          <span>{link.label}</span>
+                        </a>
+                      </Button>
+                    );
+                  })}
                 </div>
               ))}
             </nav>
           </ScrollArea>
-          <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-            <span className="text-xs text-gray-500 dark:text-gray-400">
-              v1.0.0
-            </span>
-          </div>
         </SheetContent>
       </Sheet>
 
-      {/* Main content area */}
-      <div className="flex flex-col flex-1">
-        {/* Header bar */}
-        <header className="sticky top-0 z-10 flex h-14 items-center justify-between border-b bg-background px-4 md:px-6 py-3 shadow-sm">
-          {/* Mobile menu trigger */}
-          <div className="md:hidden">
-            <Sheet open={open} onOpenChange={setOpen}>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <Menu className="h-6 w-6" />
-                  <span className="sr-only">Toggle navigation menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="w-64 p-0">
-                {/* Mobile Sidebar Content - Reuse logic? */}
-                {/* TODO: Populate mobile sidebar nav */}
-                <div className="p-4">Mobile Nav Here</div>
-              </SheetContent>
-            </Sheet>
-          </div>
-
-          {/* Spacer or Left Aligned Items */}
-          <div className="flex-1"></div>
-
-          {/* Right Aligned Items (Theme Toggle, Auth Status) */}
-          <div className="flex items-center gap-4">
-            <ThemeToggle />
-            <AuthStatus />
-          </div>
-        </header>
-
-        {/* Page Content */}
-        <main className="flex-1 p-4 md:p-6">{children}</main>
-      </div>
+      {/* Main content */}
+      <main className={cn(
+        "flex-1 overflow-auto", 
+        isDesktop ? (isExpanded ? "md:pl-[240px]" : "md:pl-[64px]") : ""
+      )}>
+        <div className="flex min-h-screen flex-col">
+          {/* Top header for mobile */}
+          <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-white dark:bg-gray-900 px-4 md:px-6 md:h-16">
+            <div className="md:hidden" />
+            <div className="ml-auto flex items-center gap-2">
+              <div className="md:hidden">
+                <ThemeToggle />
+              </div>
+            </div>
+          </header>
+          <div className="flex-1">{children}</div>
+        </div>
+      </main>
     </div>
   );
 }

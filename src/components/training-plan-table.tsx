@@ -89,9 +89,11 @@ export function TrainingPlanTable({
   useEffect(() => {
     // Add scroll behavior for table containers
     const containers = document.querySelectorAll('.table-scroll-container');
-    containers.forEach((container: any) => {
-      if (container && container.style) {
-        container.style.scrollBehavior = "smooth";
+    containers.forEach((container) => {
+      // Cast the Element to HTMLElement to access style property
+      const htmlContainer = container as HTMLElement;
+      if (htmlContainer && htmlContainer.style) {
+        htmlContainer.style.scrollBehavior = "smooth";
       }
     });
   }, []);

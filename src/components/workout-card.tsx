@@ -9,17 +9,52 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Copy, Clock, Repeat, CalendarIcon, Zap } from "lucide-react"; // Import necessary icons
+import { Copy, Gauge, Zap, Activity, Flame, LifeBuoy, Dumbbell } from "lucide-react"; // Import necessary icons
 import type { LucideIcon } from "lucide-react";
 import { Workout } from "@/lib/sample-data/builder-data"; // Import the interface
 
 // Map icon names (strings) to actual Lucide components
 const iconMap: Record<string, LucideIcon> = {
-  Clock: Clock,
-  Repeat: Repeat,
-  CalendarIcon: CalendarIcon,
-  Zap: Zap,
-  // Add other icons used in workoutLibrary if necessary
+  Gauge: Gauge,      // Tempo Run
+  Zap: Zap,         // Interval
+  Activity: Activity, // Long Run
+  Flame: Flame,     // Fartlek
+  LifeBuoy: LifeBuoy, // Recovery
+  Dumbbell: Dumbbell, // Strength
+};
+
+const getBackgroundColor = (category: string) => {
+  switch (category.toLowerCase()) {
+    case "endurance support":
+      return "bg-green-100 dark:bg-green-900/50";
+    case "direct endurance":
+      return "bg-blue-100 dark:bg-blue-900/50";
+    case "specific endurance":
+      return "bg-purple-100 dark:bg-purple-900/50";
+    case "direct speed":
+      return "bg-red-100 dark:bg-red-900/50";
+    case "speed support":
+      return "bg-orange-100 dark:bg-orange-900/50";
+    default:
+      return "bg-gray-100 dark:bg-gray-900/50";
+  }
+};
+
+const getTextColor = (category: string) => {
+  switch (category.toLowerCase()) {
+    case "endurance support":
+      return "text-green-600 dark:text-green-400";
+    case "direct endurance":
+      return "text-blue-600 dark:text-blue-400";
+    case "specific endurance":
+      return "text-purple-600 dark:text-purple-400";
+    case "direct speed":
+      return "text-red-600 dark:text-red-400";
+    case "speed support":
+      return "text-orange-600 dark:text-orange-400";
+    default:
+      return "text-gray-600 dark:text-gray-400";
+  }
 };
 
 interface WorkoutCardProps {
@@ -34,26 +69,10 @@ export function WorkoutCard({ workout }: WorkoutCardProps) {
       <CardHeader className="pb-2">
         <div className="flex items-center gap-2">
           <div
-            className={`p-2 rounded-md ${
-              workout.type === "tempo"
-                ? "bg-indigo-100 dark:bg-indigo-900/50"
-                : workout.type === "interval"
-                ? "bg-blue-100 dark:bg-blue-900/50"
-                : workout.type === "long_run"
-                ? "bg-green-100 dark:bg-green-900/50"
-                : "bg-purple-100 dark:bg-purple-900/50"
-            }`}
+            className={`p-2 rounded-md ${getBackgroundColor(workout.category)}`}
           >
             <IconComponent // Use the mapped component
-              className={`h-5 w-5 ${
-                workout.type === "tempo"
-                  ? "text-indigo-600 dark:text-indigo-400"
-                  : workout.type === "interval"
-                  ? "text-blue-600 dark:text-blue-400"
-                  : workout.type === "long_run"
-                  ? "text-green-600 dark:text-green-400"
-                  : "text-purple-600 dark:text-purple-400"
-              }`}
+              className={`h-5 w-5 ${getTextColor(workout.category)}`}
             />
           </div>
           <div>

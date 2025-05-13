@@ -127,10 +127,11 @@ export function CreatePlanDialog() {
         throw new Error("Failed to create training plan");
       }
       
-      const data = await response.json();
+      // Parse the response but don't assign to unused variable
+      await response.json();
       
-      toast({
-        title: "Training plan created",
+      // Updated to use sonner's API correctly
+      toast.success("Training plan created", {
         description: `Successfully created ${formData.title}`,
       });
       
@@ -150,10 +151,9 @@ export function CreatePlanDialog() {
       
     } catch (error) {
       console.error("Error creating training plan:", error);
-      toast({
-        title: "Error",
+      // Updated to use sonner's API correctly
+      toast.error("Error", {
         description: "Failed to create training plan. Please try again.",
-        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);

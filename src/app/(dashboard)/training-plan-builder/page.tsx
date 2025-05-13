@@ -41,12 +41,35 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { WorkoutCard } from "@/components/workout-card";
 import { ProgressionCard } from "@/components/progression-card";
+import { CreateWorkoutDialog } from "@/components/create-workout-dialog";
+
+// Helper function to map workout types to icons
+const getWorkoutIcon = (type: string): string => {
+  type = type.toLowerCase();
+  switch (type) {
+    case 'tempo':
+      return 'Gauge';
+    case 'interval':
+      return 'Zap';
+    case 'long_run':
+      return 'Activity';
+    case 'fartlek':
+      return 'Flame';
+    case 'recovery':
+      return 'LifeBuoy';
+    case 'strength':
+      return 'Dumbbell';
+    default:
+      return 'Activity'; // Default icon
+  }
+};
 
 // --- Component ---
 
 export default function TrainingPlanBuilderPage() {
   const [planName, setPlanName] = useState<string>("Summer Training Plan");
   const [planType, setPlanType] = useState<PlanType>("xc");
+  const [workouts, setWorkouts] = useState<typeof workoutLibrary>(workoutLibrary);
   const [description, setDescription] = useState<string>(
     "12-week summer training plan for varsity runners"
   );
@@ -84,6 +107,7 @@ export default function TrainingPlanBuilderPage() {
     weekId: number;
     workoutType: string;
   } | null>(null);
+  const [showCreateWorkoutDialog, setShowCreateWorkoutDialog] = useState(false);
 
   const handleTabChange = (value: string) => {
     setSelectedTab(value);
@@ -229,12 +253,11 @@ export default function TrainingPlanBuilderPage() {
           value={selectedTab}
           onValueChange={handleTabChange}
           className="w-full"
-        >
-          <TabsList className="mb-4 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
+        >            <TabsList className="mb-4 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
             <TabsTrigger value="planDetails">Plan Details</TabsTrigger>
-            <TabsTrigger value="workoutBuilder">Workout Builder</TabsTrigger>
+            <TabsTrigger value="workoutBuilder">Workout Library</TabsTrigger>
             <TabsTrigger value="progressionBuilder">
-              Progression Builder
+              Progression Library
             </TabsTrigger>
             <TabsTrigger value="assignAthletes">Assign Athletes</TabsTrigger>
           </TabsList>
@@ -441,11 +464,18 @@ export default function TrainingPlanBuilderPage() {
           <TabsContent value="workoutBuilder">
             <Card>
               <CardHeader>
-                <CardTitle>Workout Builder</CardTitle>
+                <div className="flex justify-between items-center">
+                  <CardTitle>Workout Library</CardTitle>          <Button 
+            onClick={() => setShowCreateWorkoutDialog(true)}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white"
+          >
+            <Plus className="h-4 w-4" /> Create New Workout
+          </Button>
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {workoutLibrary.map((workout) => (
+                  {workouts.map((workout) => (
                     <WorkoutCard key={workout.id} workout={workout} />
                   ))}
                 </div>
@@ -456,7 +486,7 @@ export default function TrainingPlanBuilderPage() {
           <TabsContent value="progressionBuilder">
             <Card>
               <CardHeader>
-                <CardTitle>Workout Progressions</CardTitle>
+                <CardTitle>Progression Library</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -480,6 +510,28 @@ export default function TrainingPlanBuilderPage() {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Create Workout Dialog */}
+      <CreateWorkoutDialog
+        open={showCreateWorkoutDialog}
+        onClose={() => setShowCreateWorkoutDialog(false)}
+        onSave={(workoutData) => {
+          // Create a new workout with the form data
+          const newWorkout: typeof workouts[0] = {
+            id: workouts.length + 1,
+            name: workoutData.name,
+            type: workoutData.type.toLowerCase().replace(' ', '_'),
+            category: workoutData.category,
+            duration: workoutData.duration,
+            description: workoutData.description,
+            icon: getWorkoutIcon(workoutData.type), // Map type to appropriate icon
+          };
+
+          // Add the new workout to the library
+          setWorkouts(prevWorkouts => [...prevWorkouts, newWorkout]);
+          setShowCreateWorkoutDialog(false);
+        }}
+      />
     </TooltipProvider>
   );
 }

@@ -103,9 +103,9 @@ export async function getTrainingPlanById(id: string) {
     // Format the plan data to match the expected format in the UI
     const planData = plan.weeks.map(week => {
       // Convert workouts array to workouts object
-      const workouts = {};
+      const workouts: { [key: string]: string | undefined } = {};
       week.workouts.forEach(workout => {
-        workouts[workout.workoutType.id] = workout.details;
+        workouts[workout.workoutType.id] = workout.details ?? undefined;
       });
 
       return {
@@ -153,7 +153,6 @@ export async function createTrainingPlan({
   type,
   planType,
   userId,
-  workoutTypes = [],
   athleteIds = [],
 }: {
   title: string;
@@ -164,7 +163,7 @@ export async function createTrainingPlan({
   planType?: string;
   userId: string;
   workoutTypes?: { id: string; name: string; color: string }[];
-  athleteIds?: number[];
+  athleteIds?: number[]; // Added athleteIds to the type definition
 }) {
   try {
     // Calculate end date based on duration
@@ -191,7 +190,7 @@ export async function createTrainingPlan({
         // Connect athletes if provided
         athletes: athleteIds?.length
           ? {
-              create: athleteIds.map((athleteId) => ({
+              create: athleteIds.map((athleteId: number) => ({
                 athlete: { connect: { id: athleteId } },
               })),
             }
@@ -280,7 +279,18 @@ export async function updateTrainingPlan(
     }
 
     // Handle basic plan updates
-    const updateData: any = {};
+    const updateData: {
+      title?: string;
+      description?: string;
+      progress?: number;
+      isCompleted?: boolean;
+      planType?: string;
+      duration?: string;
+      durationWeeks?: number;
+      totalWorkouts?: number;
+      startDate?: Date;
+      endDate?: Date;
+    } = {};
     
     if (data.title !== undefined) updateData.title = data.title;
     if (data.description !== undefined) updateData.description = data.description;
@@ -419,7 +429,7 @@ export async function updateTrainingPlan(
       // Then, create new assignments
       if (data.athleteIds.length > 0) {
         await prisma.$transaction(
-          data.athleteIds.map((athleteId) =>
+          data.athleteIds.map((athleteId: number) =>
             prisma.trainingPlanAthlete.create({
               data: {
                 trainingPlanId: id,

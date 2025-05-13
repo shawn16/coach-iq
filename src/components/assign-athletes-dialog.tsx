@@ -17,17 +17,17 @@ import { AthleteDisplay } from "@/types/athlete";
 import { createClient } from "@/utils/supabase/client";
 
 interface AssignAthletesDialogProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onAssign: (athletes: AthleteDisplay[]) => void;
-  currentlyAssigned: AthleteDisplay[];
+  open: boolean; // Changed from isOpen
+  onOpenChange: (open: boolean) => void; // Changed from onClose
+  onSelect: (athleteIds: number[]) => void; // Changed from onAssign
+  initialSelected: number[]; // Changed from currentlyAssigned
 }
 
 export function AssignAthletesDialog({
-  isOpen,
-  onClose,
-  onAssign,
-  currentlyAssigned,
+  open, // Updated prop name
+  onOpenChange, // Updated prop name
+  onSelect, // Updated prop name
+  initialSelected, // Updated prop name
 }: AssignAthletesDialogProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [athletes, setAthletes] = useState<AthleteDisplay[]>([]);
@@ -72,9 +72,13 @@ export function AssignAthletesDialog({
 
         setAthletes(displayAthletes);
 
-        // Set initially selected athletes based on currentlyAssigned
-        if (currentlyAssigned.length > 0) {
-          setSelectedAthletes(currentlyAssigned);
+        // Set initially selected athletes based on initialSelected
+        if (initialSelected.length > 0) {
+          // Map numerical IDs to athlete objects
+          const initialSelectedAthletes = displayAthletes.filter((athlete) =>
+            initialSelected.includes(athlete.id)
+          );
+          setSelectedAthletes(initialSelectedAthletes);
         }
       } catch (error) {
         console.error("Error fetching athletes:", error);
@@ -83,10 +87,10 @@ export function AssignAthletesDialog({
       }
     };
 
-    if (isOpen) {
+    if (open) {
       fetchAthletes();
     }
-  }, [isOpen, currentlyAssigned]);
+  }, [open, initialSelected]);
 
   // Handle checkbox changes
   const handleAthleteSelection = (
@@ -102,12 +106,19 @@ export function AssignAthletesDialog({
 
   // Handle submit
   const handleSubmit = () => {
-    onAssign(selectedAthletes);
-    onClose();
+    // Convert array of athlete objects to array of IDs
+    const selectedIds = selectedAthletes.map((athlete) => athlete.id);
+    onSelect(selectedIds);
+    onOpenChange(false); // Close dialog
+  };
+
+  // Handle close
+  const handleClose = () => {
+    onOpenChange(false);
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-gray-900 dark:text-gray-50">
@@ -184,7 +195,7 @@ export function AssignAthletesDialog({
           <Button
             type="button"
             variant="outline"
-            onClick={onClose}
+            onClick={handleClose}
             className="border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300"
           >
             Cancel
