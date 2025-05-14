@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { updateWeekWorkouts } from '@/lib/training-plans';
+import { updateWeekWorkouts } from '@/lib/training/workout';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth'; // Updated import path
 

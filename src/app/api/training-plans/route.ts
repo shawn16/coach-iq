@@ -2,7 +2,7 @@
 // Handles GET and POST operations for the /api/training-plans endpoint
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getTrainingPlans, createTrainingPlan } from '@/lib/training-plans';
+import { getTrainingPlans, createTrainingPlan } from '@/lib/training/trainingPlan';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth'; // Updated import path
 
@@ -10,7 +10,7 @@ import { authOptions } from '@/lib/auth'; // Updated import path
  * GET handler for fetching all training plans for the current user
  * Returns both active and completed plans
  */
-export async function GET(req: NextRequest) {
+export async function GET() { // Removed _req: NextRequest
   try {
     // Get user from session
     const session = await getServerSession(authOptions);

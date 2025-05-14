@@ -9,9 +9,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Copy, Gauge, Zap, Activity, Flame, LifeBuoy, Dumbbell } from "lucide-react"; // Import necessary icons
+import { Copy, Gauge, Zap, Activity, Flame, LifeBuoy, Dumbbell, Clock } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { Workout } from "@/lib/sample-data/builder-data"; // Import the interface
+import { WorkoutLibrary } from "@/types/training";
 
 // Map icon names (strings) to actual Lucide components
 const iconMap: Record<string, LucideIcon> = {
@@ -21,6 +21,7 @@ const iconMap: Record<string, LucideIcon> = {
   Flame: Flame,     // Fartlek
   LifeBuoy: LifeBuoy, // Recovery
   Dumbbell: Dumbbell, // Strength
+  running: Activity, // Default icon
 };
 
 const getBackgroundColor = (category: string) => {
@@ -58,7 +59,7 @@ const getTextColor = (category: string) => {
 };
 
 interface WorkoutCardProps {
-  workout: Workout;
+  workout: WorkoutLibrary;
 }
 
 export function WorkoutCard({ workout }: WorkoutCardProps) {

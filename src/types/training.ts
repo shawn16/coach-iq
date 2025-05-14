@@ -71,43 +71,57 @@ export interface Week {
 }
 
 /**
+ * Week data structure for training plans
+ */
+export interface WeekData {
+  id: number;
+  weekNumber: number;
+  dateRange: string;
+  seasonPhase: string;
+  workouts: { [key: string]: string | undefined };
+}
+
+/**
  * Workout intensity levels
  */
 export type WorkoutIntensity = 'recovery' | 'easy' | 'moderate' | 'hard' | 'race';
 
 /**
- * Workout within a training week
- * Represents a single training session
+ * Type definition for a workout type
  */
-export interface Workout {
+export interface WorkoutType {
   id: string;
-  title: string;
-  description: string;
-  workoutDate: string | Date;
-  duration: number; // in minutes
-  distance?: number; // in meters/kilometers
-  intensity: WorkoutIntensity;
-  type: WorkoutType;
-  weekId: string;
-  phases?: WorkoutPhase[];
+  name: string;
+  color: string;
   createdAt: string | Date;
   updatedAt: string | Date;
 }
 
 /**
- * Types of workouts 
+ * Type definition for a workout in the library
  */
-export type WorkoutType = 
-  | 'easy_run' 
-  | 'long_run' 
-  | 'tempo_run' 
-  | 'interval' 
-  | 'hill_repeat' 
-  | 'recovery' 
-  | 'fartlek' 
-  | 'race' 
-  | 'cross_training'
-  | 'rest';
+export interface WorkoutLibrary {
+  id: string;
+  name: string;
+  type: string;
+  category: string;
+  duration: string;
+  description: string;
+  icon: string;
+}
+
+/**
+ * Type definition for a workout
+ */
+export interface Workout {
+  id: string;
+  details: string | null;
+  weekId: string;
+  workoutTypeId: string;
+  workoutType: WorkoutType;
+  createdAt: string | Date;
+  updatedAt: string | Date;
+}
 
 /**
  * Phase within a workout (e.g. warmup, main set, cooldown)
@@ -188,4 +202,25 @@ export interface TrainingMetric {
   workoutId?: string;
   createdAt: string | Date;
   updatedAt: string | Date;
+}
+
+/**
+ * A step in a workout progression
+ */
+export interface ProgressionStep {
+  label: string;
+  color: string;
+  workout: WorkoutLibrary;
+}
+
+/**
+ * A workout progression sequence
+ */
+export interface Progression {
+  id: string;
+  name: string;
+  type: string;
+  weeks: number;
+  description: string;
+  steps: ProgressionStep[];
 }

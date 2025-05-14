@@ -20,11 +20,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { WorkoutLibrary } from "@/types/training";
 
 interface CreateWorkoutDialogProps {
   open: boolean;
   onClose: () => void;
-  onSave: (workoutData: WorkoutFormData) => void;
+  onSave: (workoutData: WorkoutLibrary) => void;
 }
 
 interface WorkoutFormData {
@@ -64,17 +67,48 @@ export function CreateWorkoutDialog({
     duration: "",
     description: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(formData);
-    setFormData({
-      name: "",
-      type: "",
-      category: "",
-      duration: "",
-      description: "",
-    });
+    setIsSubmitting(true);
+    try {
+      // Make API call to create workout
+      const response = await fetch('/api/workouts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const errorFromServer = await response.json();
+        console.error("Server error response:", errorFromServer); // Log the full error
+        const message = errorFromServer.details || errorFromServer.error || 'Failed to create workout';
+        throw new Error(message);
+      }
+
+      const workout = await response.json();
+      onSave(workout);
+      
+      // Clear form and show success message
+      setFormData({
+        name: "",
+        type: "",
+        category: "",
+        duration: "",
+        description: "",
+      });
+      toast.success('Workout created successfully');
+
+    } catch (error) {
+      console.error('Error creating workout:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create workout';
+      toast.error(errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -181,8 +215,16 @@ export function CreateWorkoutDialog({
             <Button 
               type="submit"
               className="bg-indigo-600 hover:bg-indigo-700 text-white"
+              disabled={isSubmitting}
             >
-              Create Workout
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Creating...
+                </>
+              ) : (
+                "Create Workout"
+              )}
             </Button>
           </DialogFooter>
         </form>

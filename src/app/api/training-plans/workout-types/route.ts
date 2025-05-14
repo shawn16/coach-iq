@@ -1,8 +1,8 @@
 // This file contains API route handlers for workout types
 // Used for fetching available workout types for training plans
 
-import { NextRequest, NextResponse } from 'next/server';
-import { getWorkoutTypes } from '@/lib/training-plans';
+import { NextResponse } from 'next/server'; // Removed NextRequest
+import { getWorkoutTypes } from '@/lib/training/workoutType';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth'; // Updated import path
 
@@ -10,7 +10,7 @@ import { authOptions } from '@/lib/auth'; // Updated import path
  * GET handler for fetching all workout types available in the system
  * Used to populate dropdown menus and color coding in the training plan UI
  */
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     // Get user from session
     const session = await getServerSession(authOptions);

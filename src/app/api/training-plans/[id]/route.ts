@@ -2,7 +2,7 @@
 // Handles GET, PUT, and DELETE operations for individual training plans
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getTrainingPlanById, updateTrainingPlan, deleteTrainingPlan } from '@/lib/training-plans';
+import { getTrainingPlanById, updateTrainingPlan, deleteTrainingPlan } from '@/lib/training/trainingPlan';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth'; // Updated import path
 

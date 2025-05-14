@@ -16,18 +16,19 @@ datasource db {
 
 // User model (for coaches)
 model User {
-  id            String         @id @default(cuid())
-  name          String?
-  email         String?        @unique // Email can be null initially for some flows
-  emailVerified DateTime? // When email was verified
-  image         String? // Profile image URL
-  passwordHash  String? // For Credentials provider
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  accounts      Account[] // Relation to OAuth accounts
-  sessions      Session[] // Relation to user sessions
-  athletes      Athlete[] // Relation to athletes managed by this coach
-  trainingPlans TrainingPlan[] // Relation to training plans created by this coach
+  id                  String               @id @default(cuid())
+  name                String?
+  email               String?              @unique // Email can be null initially for some flows
+  emailVerified       DateTime? // When email was verified
+  image               String? // Profile image URL
+  passwordHash        String? // For Credentials provider
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  accounts            Account[] // Relation to OAuth accounts
+  sessions            Session[] // Relation to user sessions
+  athletes            Athlete[] // Relation to athletes managed by this coach
+  trainingPlans       TrainingPlan[] // Relation to training plans created by this coach
+  workoutLibraryItems WorkoutLibraryItem[] // Relation to workout library items created by this coach
 }
 
 // NextAuth Models
@@ -185,4 +186,21 @@ model WorkoutResult {
   notes     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// Model for the Workout Library
+model WorkoutLibraryItem {
+  id          String   @id @default(cuid())
+  name        String
+  type        String // e.g., "Tempo Run", "Interval", "Long Run" - user-defined
+  category    String // e.g., "Endurance Support", "Direct Endurance"
+  duration    String // e.g., "20-40 min"
+  description String?  @db.Text
+  icon        String? // Icon identifier
+  userId      String // The coach who created this library item
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
 }

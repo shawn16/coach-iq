@@ -230,6 +230,19 @@ exports.Prisma.WorkoutResultScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.WorkoutLibraryItemScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  category: 'category',
+  duration: 'duration',
+  description: 'description',
+  icon: 'icon',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -267,7 +280,8 @@ exports.Prisma.ModelName = {
   PlanWeek: 'PlanWeek',
   WorkoutType: 'WorkoutType',
   PlanWorkout: 'PlanWorkout',
-  WorkoutResult: 'WorkoutResult'
+  WorkoutResult: 'WorkoutResult',
+  WorkoutLibraryItem: 'WorkoutLibraryItem'
 };
 
 /**
