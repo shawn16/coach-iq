@@ -22,9 +22,11 @@ interface WeekWorkouts {
  */
 interface WeekData {
   id: number;
-  weekNumber: number;
-  dateRange: string;
-  seasonPhase: string;
+  weekNumber: string;
+  phase?: {
+    name: string;
+    color?: string;
+  };
   workouts: WeekWorkouts;
 }
 
@@ -100,17 +102,27 @@ export function TrainingPlanTable({
 
   /**
    * Get color class for season phase
-   * @param phase - The season phase string
+   * @param phase - The phase data or name
    * @returns CSS class for the phase color
    */
-  const getSeasonPhaseColor = (phase: string): string => {
-    if (phase.includes("Transition"))
+  const getSeasonPhaseColor = (phase: WeekData['phase'] | string | undefined): string => {
+    if (!phase) return "bg-gray-50 dark:bg-gray-800/40 text-gray-800 dark:text-gray-300";
+    
+    // If it's the new phase object format
+    if (typeof phase === 'object') {
+      const color = phase.color || 'gray';
+      return `bg-${color}-50 dark:bg-${color}-900/20 text-${color}-800 dark:text-${color}-300`;
+    }
+
+    // Legacy string format support
+    const phaseName = typeof phase === 'string' ? phase : phase.name;
+    if (phaseName.includes("Transition"))
       return "bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300";
-    if (phase.includes("Summer"))
+    if (phaseName.includes("Summer"))
       return "bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-300";
-    if (phase.includes("OFF"))
+    if (phaseName.includes("OFF"))
       return "bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300";
-    if (phase.includes("Relays") || phase.includes("Inv"))
+    if (phaseName.includes("Relays") || phaseName.includes("Inv"))
       return "bg-purple-50 dark:bg-purple-900/20 text-purple-800 dark:text-purple-300";
     return "bg-gray-50 dark:bg-gray-800/40 text-gray-800 dark:text-gray-300";
   };
@@ -138,7 +150,15 @@ export function TrainingPlanTable({
    * @param phase - The phase string
    * @returns Color value
    */
-  const getPhaseColorValue = (phase: string): string => {
+  const getPhaseColorValue = (phase: WeekData['phase'] | string): string => {
+    if (!phase) return "gray";
+    
+    // If it's the new phase object format
+    if (typeof phase === 'object') {
+      return phase.color || "gray";
+    }
+
+    // Legacy string format support
     if (phase.includes("Transition")) return "blue";
     if (phase.includes("Summer")) return "green";
     if (phase.includes("OFF")) return "red";
@@ -193,20 +213,20 @@ export function TrainingPlanTable({
                 key={week.id}
                 className="flex border-b border-gray-200 dark:border-gray-700 last:border-b-0"
               >
-                <div className="w-12 p-3 font-medium text-gray-900 dark:text-gray-100 text-center bg-white dark:bg-gray-900">
+                <div className="w-12 h-[45px] p-3 font-medium text-gray-900 dark:text-gray-100 text-center bg-white dark:bg-gray-900 flex items-center justify-center">
                   {week.weekNumber}
                 </div>
-                <div className="w-28 p-3 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900">
+                <div className="w-28 h-[45px] p-3 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 flex items-center">
                   {week.dateRange}
                 </div>
                 <div 
-                  className={`w-32 p-3 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 ${!readOnly && onPhaseChange ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50" : ""}`} 
-                  onDoubleClick={() => handlePhaseDoubleClick(week.id, week.seasonPhase)}
-                  onClick={() => !readOnly && onPhaseChange && handlePhaseDoubleClick(week.id, week.seasonPhase)}
+                  className={`w-32 h-[45px] p-3 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 flex items-center ${!readOnly && onPhaseChange ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50" : ""}`} 
+                  onDoubleClick={() => handlePhaseDoubleClick(week.id, week.phase?.name || 'Base')}
+                  onClick={() => !readOnly && onPhaseChange && handlePhaseDoubleClick(week.id, week.phase?.name || 'Base')}
                   title={!readOnly && onPhaseChange ? "Double-click to edit phase" : ""}
                 >
-                  <span className={`px-2 py-1 rounded text-xs font-medium ${getSeasonPhaseColor(week.seasonPhase)}`}>
-                    {week.seasonPhase}
+                  <span className={`px-2 py-1 rounded text-xs font-medium ${getSeasonPhaseColor(week.phase)}`}>
+                    {week.phase?.name || 'Base'}
                   </span>
                 </div>
               </div>
@@ -250,7 +270,7 @@ export function TrainingPlanTable({
                   {workoutTypes.map((type) => (
                     <div
                       key={type.id}
-                      className={`w-[160px] min-w-[160px] max-w-[160px] p-3 text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 ${
+                      className={`w-[160px] min-w-[160px] max-w-[160px] h-[45px] p-3 text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 flex items-center ${
                         !readOnly
                           ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50"
                           : ""
@@ -273,7 +293,7 @@ export function TrainingPlanTable({
 
                   {/* Actions */}
                   {!readOnly && (
-                    <div className="w-[100px] min-w-[100px] max-w-[100px] p-2 bg-white dark:bg-gray-900 flex items-center justify-center gap-1">
+                    <div className="w-[100px] min-w-[100px] max-w-[100px] h-[45px] p-2 bg-white dark:bg-gray-900 flex items-center justify-center gap-1">
                       <Button
                         variant="ghost"
                         size="icon"

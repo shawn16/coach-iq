@@ -1,7 +1,9 @@
-import { GeistSans } from "geist/font/sans";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import type React from "react";
 import { cn } from "@/lib/utils";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 import { Providers } from "@/components/providers";
 
 export const metadata = {
@@ -17,7 +19,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn(GeistSans.className, "antialiased")}
+      className={cn(inter.variable, "font-inter antialiased")}
       suppressHydrationWarning
     >
       <body suppressHydrationWarning>

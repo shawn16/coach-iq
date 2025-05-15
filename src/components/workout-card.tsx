@@ -56,7 +56,6 @@ export function WorkoutCard({ workout }: WorkoutCardProps) {
 
   // Handler for saving edits - improved to prevent UI freeze
   const handleEditSave = (updatedWorkout: WorkoutLibrary) => {
-    // First update data
     setWorkoutData(prev => ({
       ...prev,
       ...updatedWorkout
@@ -71,44 +70,52 @@ export function WorkoutCard({ workout }: WorkoutCardProps) {
 
   return (
     <Card
-      className="border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+      className="border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all cursor-pointer aspect-[1.2/1] max-w-[400px] mx-auto w-full group relative"
       onDoubleClick={() => setEditOpen(true)}
     >
-      <CardHeader className="pb-2">
-        <div className="flex items-center gap-2 justify-between">
-          <div className="flex items-center gap-2 w-full">
-            <div className={`p-2 rounded-md ${getBackgroundColor(workoutData.category)}`}>
-              <IconComponent className="h-4 w-4" />
+      {/* Copy Button - Positioned absolutely and visible on hover */}
+      <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="secondary"
+                size="sm"
+                className="h-8 w-8 p-0 bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-800 shadow-sm"
+              >
+                <Copy className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Copy workout to clipboard</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+
+      <CardHeader className="pb-3">
+        <div className="flex flex-col gap-2.5">
+          <div className="flex items-start gap-3">
+            <div className={`p-2.5 rounded-lg ${getBackgroundColor(workoutData.category)} ring-1 ring-black/5 dark:ring-white/5`}>
+              <IconComponent className="h-6 w-6" />
             </div>
-            <h3 className="font-medium text-gray-900 dark:text-gray-100">
-              {workoutData.name}
-            </h3>
+            <div className="space-y-1 min-h-[40px] flex-1">
+              <h3 className="font-semibold text-base text-gray-900 dark:text-gray-100 line-clamp-1">
+                {workoutData.name || 'Untitled Workout'}
+              </h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
+                <span>{workoutData.type}</span>
+                <span className="text-gray-300 dark:text-gray-600">•</span>
+                <span>{workoutData.duration || 'No duration set'}</span>
+              </p>
+            </div>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="pt-0">
-        <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
-          {workoutData.description}
+      <CardContent className="pt-0 flex flex-col justify-between h-[calc(100%-6rem)]">
+        <p className="text-sm text-gray-700 dark:text-gray-300 line-clamp-3 min-h-[3em]">
+          {workoutData.description || 'No description available'}
         </p>
-        <div className="flex justify-end">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-8 w-8 p-0 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                >
-                  <Copy className="h-4 w-4 text-gray-500" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Copy workout to clipboard</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-        {/* Edit Workout Dialog */}
         <EditWorkoutSheet
           open={editOpen}
           onOpenChange={handleDialogClose}
