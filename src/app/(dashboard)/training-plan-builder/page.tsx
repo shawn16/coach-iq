@@ -37,7 +37,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { WorkoutCard } from "@/components/workout-card";
 import { ProgressionCard } from "@/components/progression-card";
-import { CreateWorkoutDialog } from "@/components/create-workout-dialog";
+import { CreateWorkoutSheet } from "@/components/dialogs/create-workout-sheet";
 
 export default function TrainingPlanBuilderPage() {
   const [planName, setPlanName] = useState<string>("Summer Training Plan");
@@ -55,10 +55,14 @@ export default function TrainingPlanBuilderPage() {
 
   // Load workout types on component mount
   useEffect(() => {
+    const abortController = new AbortController();
+
     const loadWorkoutTypes = async () => {
       try {
         // Fetch workout types from the API route
-        const response = await fetch('/api/workout-types');
+        const response = await fetch('/api/workout-types', {
+          signal: abortController.signal
+        });
         if (!response.ok) {
           const errorData = await response.json();
           console.error("API error fetching workout types:", errorData);
@@ -67,22 +71,34 @@ export default function TrainingPlanBuilderPage() {
         const types = await response.json();
         setWorkoutTypes(types);
       } catch (error) {
+        if (error instanceof Error && error.name === 'AbortError') {
+          // Handle abortion
+          return;
+        }
         console.error("Error loading workout types:", error);
         // Optionally, set an error state here to display to the user
       }
     };
 
     loadWorkoutTypes();
+
+    return () => {
+      abortController.abort(); // Cleanup on unmount
+    };
   }, []);
 
   // Load workout library items when the workoutBuilder tab is selected or on initial load if it's the default tab
   useEffect(() => {
+    const abortController = new AbortController();
+
     const loadWorkoutLibrary = async () => {
       // Only fetch if the tab is active and workouts haven't been loaded, 
       // or if it's the initial load and the tab is workoutBuilder by default.
       if (selectedTab === 'workoutBuilder' && workouts.length === 0) { 
         try {
-          const response = await fetch('/api/workout-library');
+          const response = await fetch('/api/workout-library', {
+            signal: abortController.signal
+          });
           if (!response.ok) {
             const errorData = await response.json();
             console.error("API error fetching workout library:", errorData);
@@ -91,12 +107,20 @@ export default function TrainingPlanBuilderPage() {
           const libraryItems = await response.json();
           setWorkouts(libraryItems);
         } catch (error) {
+          if (error instanceof Error && error.name === 'AbortError') {
+            // Handle abortion
+            return;
+          }
           console.error("Error loading workout library:", error);
         }
       }
     };
 
     loadWorkoutLibrary();
+
+    return () => {
+      abortController.abort(); // Cleanup on unmount
+    };
   }, [selectedTab, workouts.length]); // Depend on selectedTab and workouts.length
 
   const calculateWeeks = (start: Date, end: Date) => {
@@ -127,9 +151,9 @@ export default function TrainingPlanBuilderPage() {
     console.log("Key pressed:", e.key, weekId, workoutTypeId);
   };
 
-  const handlePhaseChange = (weekId: number, phase: string) => {
+  const handlePhaseChange = (weekId: number, phaseData: { phase: string; color: string }) => {
     // TODO: Implement phase change handling
-    console.log("Phase changed:", weekId, phase);
+    console.log("Phase changed:", weekId, phaseData);
   };
 
   const [planData, setPlanData] = useState<WeekData[]>(() =>
@@ -438,9 +462,9 @@ export default function TrainingPlanBuilderPage() {
       </div>
 
       {/* Create Workout Dialog */}
-      <CreateWorkoutDialog
+      <CreateWorkoutSheet
         open={showCreateWorkoutDialog}
-        onClose={() => setShowCreateWorkoutDialog(false)}
+        onOpenChange={setShowCreateWorkoutDialog}
         onSave={async (newlyCreatedWorkout: WorkoutLibrary) => {
           try {
             // Add the new workout to the library

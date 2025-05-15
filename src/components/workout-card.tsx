@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -12,6 +12,8 @@ import {
 import { Copy, Gauge, Zap, Activity, Flame, LifeBuoy, Dumbbell, Clock } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { WorkoutLibrary } from "@/types/training";
+import { EditWorkoutSheet } from "@/components/dialogs/workout-sheet";
+import { useState } from "react";
 
 // Map icon names (strings) to actual Lucide components
 const iconMap: Record<string, LucideIcon> = {
@@ -41,22 +43,6 @@ const getBackgroundColor = (category: string) => {
   }
 };
 
-const getTextColor = (category: string) => {
-  switch (category.toLowerCase()) {
-    case "endurance support":
-      return "text-green-600 dark:text-green-400";
-    case "direct endurance":
-      return "text-blue-600 dark:text-blue-400";
-    case "specific endurance":
-      return "text-purple-600 dark:text-purple-400";
-    case "direct speed":
-      return "text-red-600 dark:text-red-400";
-    case "speed support":
-      return "text-orange-600 dark:text-orange-400";
-    default:
-      return "text-gray-600 dark:text-gray-400";
-  }
-};
 
 interface WorkoutCardProps {
   workout: WorkoutLibrary;
@@ -64,31 +50,45 @@ interface WorkoutCardProps {
 
 export function WorkoutCard({ workout }: WorkoutCardProps) {
   const IconComponent = iconMap[workout.icon] || Clock; // Default to Clock if name not found
+  // State for edit dialog
+  const [editOpen, setEditOpen] = useState(false);
+  const [workoutData, setWorkoutData] = useState(workout);
+
+  // Handler for saving edits - improved to prevent UI freeze
+  const handleEditSave = (updatedWorkout: WorkoutLibrary) => {
+    // First update data
+    setWorkoutData(prev => ({
+      ...prev,
+      ...updatedWorkout
+    }));
+    console.log("Updated workout with data:", updatedWorkout);
+  };
+  
+  // Handler for dialog close
+  const handleDialogClose = () => {
+    setEditOpen(false);
+  };
 
   return (
-    <Card className="border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
+    <Card
+      className="border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+      onDoubleClick={() => setEditOpen(true)}
+    >
       <CardHeader className="pb-2">
-        <div className="flex items-center gap-2">
-          <div
-            className={`p-2 rounded-md ${getBackgroundColor(workout.category)}`}
-          >
-            <IconComponent // Use the mapped component
-              className={`h-5 w-5 ${getTextColor(workout.category)}`}
-            />
-          </div>
-          <div>
-            <CardTitle className="text-base text-gray-900 dark:text-gray-50">
-              {workout.name}
-            </CardTitle>
-            <p className="text-xs text-gray-600 dark:text-gray-400 capitalize">
-              {workout.category} • {workout.duration}
-            </p>
+        <div className="flex items-center gap-2 justify-between">
+          <div className="flex items-center gap-2 w-full">
+            <div className={`p-2 rounded-md ${getBackgroundColor(workoutData.category)}`}>
+              <IconComponent className="h-4 w-4" />
+            </div>
+            <h3 className="font-medium text-gray-900 dark:text-gray-100">
+              {workoutData.name}
+            </h3>
           </div>
         </div>
       </CardHeader>
       <CardContent className="pt-0">
         <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
-          {workout.description}
+          {workoutData.description}
         </p>
         <div className="flex justify-end">
           <TooltipProvider>
@@ -108,6 +108,13 @@ export function WorkoutCard({ workout }: WorkoutCardProps) {
             </Tooltip>
           </TooltipProvider>
         </div>
+        {/* Edit Workout Dialog */}
+        <EditWorkoutSheet
+          open={editOpen}
+          onOpenChange={handleDialogClose}
+          onSave={handleEditSave}
+          workout={workoutData}
+        />
       </CardContent>
     </Card>
   );
