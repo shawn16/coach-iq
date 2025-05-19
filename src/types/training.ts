@@ -92,9 +92,9 @@ export type WorkoutIntensity = 'recovery' | 'easy' | 'moderate' | 'hard' | 'race
 export interface WorkoutType {
   id: string;
   name: string;
-  color: string;
-  createdAt: string | Date;
-  updatedAt: string | Date;
+  color: string; // Added color property
+  createdAt?: string | Date; // Optional as it's not used everywhere
+  updatedAt?: string | Date; // Optional as it's not used everywhere
 }
 
 /**

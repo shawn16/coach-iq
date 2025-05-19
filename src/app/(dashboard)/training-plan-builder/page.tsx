@@ -36,7 +36,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import type { PlanFormat, PhaseData, WeekData, WorkoutLibrary } from "@/types/training-plans";
+import type { WorkoutType } from "@/types/training"; // Import WorkoutType from training.ts
 import { format } from "date-fns";
+
+const daysOfWeekWorkoutTypes: WorkoutType[] = [
+  { id: "monday", name: "Monday", color: "bg-gray-100 dark:bg-gray-700" },
+  { id: "tuesday", name: "Tuesday", color: "bg-gray-100 dark:bg-gray-700" },
+  { id: "wednesday", name: "Wednesday", color: "bg-gray-100 dark:bg-gray-700" },
+  { id: "thursday", name: "Thursday", color: "bg-gray-100 dark:bg-gray-700" },
+  { id: "friday", name: "Friday", color: "bg-gray-100 dark:bg-gray-700" },
+  { id: "saturday", name: "Saturday", color: "bg-gray-100 dark:bg-gray-700" },
+  { id: "sunday", name: "Sunday", color: "bg-gray-100 dark:bg-gray-700" },
+];
 
 export default function TrainingPlanBuilderPage() {
   const [planName, setPlanName] = useState<string>("Summer Training Plan");
@@ -48,7 +59,7 @@ export default function TrainingPlanBuilderPage() {
   const [showCreateWorkoutDialog, setShowCreateWorkoutDialog] = useState(false);
 
   // Use custom hooks for data management
-  const { workoutTypes, workouts, setWorkouts } = useWorkoutData(selectedTab);
+  const { workouts, setWorkouts } = useWorkoutData(selectedTab); // Removed workoutTypes from here
   const { 
     startDate, 
     setStartDate,
@@ -76,6 +87,16 @@ export default function TrainingPlanBuilderPage() {
 
   const handlePhaseChange = (weekId: number, phaseData: PhaseData) => {
     console.log("Phase changed:", weekId, phaseData);
+  };
+
+  const handleMoveWeek = (weekId: number, direction: "up" | "down") => {
+    console.log("Move week:", weekId, direction);
+    // TODO: Implement week reordering
+  };
+
+  const handleRemoveWeek = (weekId: number) => {
+    console.log("Remove week:", weekId);
+    // TODO: Implement week removal
   };
 
   return (
@@ -330,10 +351,12 @@ export default function TrainingPlanBuilderPage() {
                 <CardContent>
                   <TrainingPlanTable
                     planData={planData}
-                    workoutTypes={workoutTypes}
+                    workoutTypes={daysOfWeekWorkoutTypes}
                     onCellClick={handleCellClick}
                     onKeyDown={handleKeyDown}
                     onPhaseChange={handlePhaseChange}
+                    onMoveWeek={handleMoveWeek}
+                    removeWeek={handleRemoveWeek}
                   />
                 </CardContent>
               </Card>
@@ -341,7 +364,7 @@ export default function TrainingPlanBuilderPage() {
 
             <TabsContent value="workoutBuilder">
               <WorkoutBuilderTab
-                workouts={workouts}
+                workouts={workouts} // This will still use the original workouts data
                 onCreateWorkout={() => setShowCreateWorkoutDialog(true)}
               />
             </TabsContent>

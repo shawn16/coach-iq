@@ -46,6 +46,7 @@ const workoutTypes = [
   "Fartlek",
   "Recovery",
   "Strength",
+  "Race",
 ];
 
 const categories = [

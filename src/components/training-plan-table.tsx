@@ -8,27 +8,18 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import type { PhaseData } from "@/components/phase-editor-dialog";
 import { PhaseEditorDialog } from "@/components/phase-editor-dialog";
+import type { WeekData as WeekDataType, WorkoutLibrary } from "@/types/training-plans";
 
 // --- Types ---
 /**
  * Represents the workouts for a single week, keyed by workout type ID
  */
-interface WeekWorkouts {
-  [key: string]: string | undefined;
-}
+type WeekWorkouts = WeekDataType['workouts'];
 
 /**
  * Data structure for a single training week
  */
-interface WeekData {
-  id: number;
-  weekNumber: string;
-  phase?: {
-    name: string;
-    color?: string;
-  };
-  workouts: WeekWorkouts;
-}
+type WeekData = WeekDataType;
 
 /**
  * Represents a type of workout with display settings
@@ -105,26 +96,31 @@ export function TrainingPlanTable({
    * @param phase - The phase data or name
    * @returns CSS class for the phase color
    */
-  const getSeasonPhaseColor = (phase: WeekData['phase'] | string | undefined): string => {
-    if (!phase) return "bg-gray-50 dark:bg-gray-800/40 text-gray-800 dark:text-gray-300";
+  const getSeasonPhaseColor = (phaseInput: WeekData['phase'] | string | undefined): string => {
+    if (!phaseInput) return "bg-gray-50 dark:bg-gray-800/40 text-gray-800 dark:text-gray-300";
     
-    // If it's the new phase object format
-    if (typeof phase === 'object') {
-      const color = phase.color || 'gray';
-      return `bg-${color}-50 dark:bg-${color}-900/20 text-${color}-800 dark:text-${color}-300`;
+    let phaseName: string;
+    let color: string | undefined;
+
+    if (typeof phaseInput === 'object' && phaseInput !== null && 'name' in phaseInput) {
+      phaseName = phaseInput.name;
+      color = phaseInput.color;
+    } else if (typeof phaseInput === 'string') {
+      phaseName = phaseInput;
+      // Attempt to derive color if only name is given (legacy or simplified usage)
+      // This part might need adjustment based on how string-only phases are intended to be colored
+      if (phaseName.includes("Transition")) color = "blue";
+      else if (phaseName.includes("Summer")) color = "green";
+      else if (phaseName.includes("OFF")) color = "red";
+      else if (phaseName.includes("Relays") || phaseName.includes("Inv")) color = "purple";
+      else color = "gray";
+    } else {
+      // Should not happen if types are correct, but as a fallback:
+      return "bg-gray-50 dark:bg-gray-800/40 text-gray-800 dark:text-gray-300";
     }
 
-    // Legacy string format support
-    const phaseName = typeof phase === 'string' ? phase : phase.name;
-    if (phaseName.includes("Transition"))
-      return "bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300";
-    if (phaseName.includes("Summer"))
-      return "bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-300";
-    if (phaseName.includes("OFF"))
-      return "bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300";
-    if (phaseName.includes("Relays") || phaseName.includes("Inv"))
-      return "bg-purple-50 dark:bg-purple-900/20 text-purple-800 dark:text-purple-300";
-    return "bg-gray-50 dark:bg-gray-800/40 text-gray-800 dark:text-gray-300";
+    const finalColor = color || 'gray';
+    return `bg-${finalColor}-50 dark:bg-${finalColor}-900/20 text-${finalColor}-800 dark:text-${finalColor}-300`;
   };
 
   /**
@@ -150,19 +146,18 @@ export function TrainingPlanTable({
    * @param phase - The phase string
    * @returns Color value
    */
-  const getPhaseColorValue = (phase: WeekData['phase'] | string): string => {
-    if (!phase) return "gray";
+  const getPhaseColorValue = (phaseInput: WeekData['phase'] | string): string => {
+    if (!phaseInput) return "gray";
     
-    // If it's the new phase object format
-    if (typeof phase === 'object') {
-      return phase.color || "gray";
+    if (typeof phaseInput === 'object' && phaseInput !== null && 'name' in phaseInput) {
+      return phaseInput.color || "gray";
     }
-
-    // Legacy string format support
-    if (phase.includes("Transition")) return "blue";
-    if (phase.includes("Summer")) return "green";
-    if (phase.includes("OFF")) return "red";
-    if (phase.includes("Relays") || phase.includes("Inv")) return "purple";
+    if (typeof phaseInput === 'string'){
+      if (phaseInput.includes("Transition")) return "blue";
+      if (phaseInput.includes("Summer")) return "green";
+      if (phaseInput.includes("OFF")) return "red";
+      if (phaseInput.includes("Relays") || phaseInput.includes("Inv")) return "purple";
+    }
     return "gray";
   };
 
@@ -198,136 +193,120 @@ export function TrainingPlanTable({
             <div className="w-12 p-3 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase text-center">
               Wk
             </div>
-            <div className="w-28 p-3 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase">
+            <div className="w-28 p-3 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase text-center">
               Date Range
             </div>
-            <div className="w-32 p-3 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase">
+            <div className="w-32 p-3 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase text-center">
               Phase
             </div>
           </div>
-
-          {/* Weeks Data */}
-          <div className="flex flex-col flex-1">
-            {planData.map((week, index) => (
-              <div
-                key={week.id}
-                className="flex border-b border-gray-200 dark:border-gray-700 last:border-b-0"
+          {/* Body */}
+          {planData.map((week) => (
+            <div
+              key={week.id}
+              className="flex h-[57px] border-b border-gray-200 dark:border-gray-700 last:border-b-0"
+            >
+              <div className="w-12 p-3 text-sm text-gray-700 dark:text-gray-300 flex items-center justify-center">
+                {week.weekNumber}
+              </div>
+              <div className="w-28 p-3 text-sm text-gray-700 dark:text-gray-300 flex items-center justify-center">
+                {week.dateRange}
+              </div>
+              <div 
+                className={`w-32 p-3 text-sm font-medium cursor-pointer flex items-center justify-center ${getSeasonPhaseColor(week.phase)}`}
+                onDoubleClick={() => handlePhaseDoubleClick(week.id, week.phase?.name || "Base")}
               >
-                <div className="w-12 h-[45px] p-3 font-medium text-gray-900 dark:text-gray-100 text-center bg-white dark:bg-gray-900 flex items-center justify-center">
-                  {week.weekNumber}
-                </div>
-                <div className="w-28 h-[45px] p-3 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 flex items-center">
-                  {week.dateRange}
-                </div>
-                <div 
-                  className={`w-32 h-[45px] p-3 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 flex items-center ${!readOnly && onPhaseChange ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50" : ""}`} 
-                  onDoubleClick={() => handlePhaseDoubleClick(week.id, week.phase?.name || 'Base')}
-                  onClick={() => !readOnly && onPhaseChange && handlePhaseDoubleClick(week.id, week.phase?.name || 'Base')}
-                  title={!readOnly && onPhaseChange ? "Double-click to edit phase" : ""}
-                >
-                  <span className={`px-2 py-1 rounded text-xs font-medium ${getSeasonPhaseColor(week.phase)}`}>
-                    {week.phase?.name || 'Base'}
-                  </span>
-                </div>
+                {week.phase?.name || "Base"}
               </div>
-            ))}
-            {planData.length === 0 && (
-              <div className="p-4 text-center text-gray-500 dark:text-gray-400">
-                No weeks added yet. Click "Add Week" to get started.
-              </div>
-            )}
-          </div>
+            </div>
+          ))}
         </div>
 
         {/* Scrollable right columns */}
-        <div className="overflow-x-auto flex-1 table-scroll-container">
-          <div className="inline-block min-w-full">
+        <div className="flex-grow overflow-x-auto table-scroll-container">
+          <div className="flex flex-col min-w-max">
             {/* Header */}
-            <div className="flex bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
               {workoutTypes.map((type) => (
                 <div
                   key={type.id}
-                  className="w-[160px] min-w-[160px] max-w-[160px] p-3 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase"
+                  className={`w-40 p-3 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase whitespace-nowrap text-center ${type.color}`}
                 >
                   {type.name}
                 </div>
               ))}
               {!readOnly && (
-                <div className="w-[100px] min-w-[100px] max-w-[100px] p-3 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase text-center">
+                <div className="w-20 p-3 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase text-center bg-white dark:bg-gray-800">
                   Actions
                 </div>
               )}
             </div>
-
-            {/* Weeks Data */}
-            <div>
-              {planData.map((week, index) => (
-                <div
-                  key={week.id}
-                  className="flex border-b border-gray-200 dark:border-gray-700 last:border-b-0"
-                >
-                  {/* Workout cells */}
-                  {workoutTypes.map((type) => (
-                    <div
-                      key={type.id}
-                      className={`w-[160px] min-w-[160px] max-w-[160px] h-[45px] p-3 text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 flex items-center ${
-                        !readOnly
-                          ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50"
-                          : ""
-                      }`}
-                      tabIndex={!readOnly ? 0 : undefined}
-                      onClick={() => !readOnly && onCellClick?.(week.id, type.id)}
-                      onKeyDown={(e) => !readOnly && onKeyDown?.(e, week.id, type.id)}
-                    >
-                      {week.workouts[type.id] ? (
-                        <span className={type.color + " px-2 py-1 rounded text-xs"}>
-                          {week.workouts[type.id]}
-                        </span>
-                      ) : (
-                        <span className="text-gray-400 dark:text-gray-500 text-xs">
-                          Click to add workout
-                        </span>
-                      )}
-                    </div>
-                  ))}
-
-                  {/* Actions */}
-                  {!readOnly && (
-                    <div className="w-[100px] min-w-[100px] max-w-[100px] h-[45px] p-2 bg-white dark:bg-gray-900 flex items-center justify-center gap-1">
+            {/* Body */}
+            {planData.map((week, i) => (
+              <div
+                key={week.id}
+                className="flex h-[57px] border-b border-gray-200 dark:border-gray-700 last:border-b-0"
+              >
+                {workoutTypes.map((type) => (
+                  <div
+                    key={type.id}
+                    className={`w-40 p-3 flex items-center justify-center ${
+                      i % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-800/50'
+                    }`}
+                    onClick={() => !readOnly && onCellClick && onCellClick(week.id, type.id)}
+                    onKeyDown={(e) =>
+                      !readOnly && onKeyDown && onKeyDown(e, week.id, type.id)
+                    }
+                    tabIndex={!readOnly ? 0 : -1}
+                    role="gridcell"
+                  >
+                    <span className="text-sm text-gray-400">
+                      {(week.workouts[type.id]?.length ?? 0) > 0 
+                        ? week.workouts[type.id]?.[0]?.name 
+                        : "Click to add workout"}
+                    </span>
+                  </div>
+                ))}
+                {!readOnly && (
+                  <div className={`w-20 p-3 flex items-center justify-center space-x-1 ${
+                    i % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-800/50'
+                  }`}>
+                    {onMoveWeek && (
+                      <>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => onMoveWeek(week.id, "up")}
+                          disabled={week.id === 1}
+                          className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                        >
+                          <ChevronUp className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => onMoveWeek(week.id, "down")}
+                          disabled={week.id === planData.length}
+                          className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                        >
+                          <ChevronDown className="h-4 w-4" />
+                        </Button>
+                      </>
+                    )}
+                    {removeWeek && (
                       <Button
                         variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-                        onClick={() => onMoveWeek?.(week.id, "up")}
-                        disabled={index === 0}
-                      >
-                        <ChevronUp className="h-4 w-4" />
-                        <span className="sr-only">Move up</span>
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-                        onClick={() => onMoveWeek?.(week.id, "down")}
-                        disabled={index === planData.length - 1}
-                      >
-                        <ChevronDown className="h-4 w-4" />
-                        <span className="sr-only">Move down</span>
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-600"
-                        onClick={() => removeWeek?.(week.id)}
+                        size="sm"
+                        onClick={() => removeWeek(week.id)}
+                        className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
                       >
                         <Trash2 className="h-4 w-4" />
-                        <span className="sr-only">Delete</span>
                       </Button>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </div>
