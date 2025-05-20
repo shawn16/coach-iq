@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { getWorkoutLibraryItems } from '@/lib/training/workoutLibrary';
 import { withAuthenticatedSession } from '@/lib/api-utils';

@@ -4,8 +4,8 @@ import type { NextAuthOptions } from "next-auth";
 // Import providers
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-// Import bcrypt for password comparison
-import bcrypt from "bcrypt";
+// Import bcryptjs for password comparison
+import bcrypt from "bcryptjs";
 
 // Basic check for required environment variables
 if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {

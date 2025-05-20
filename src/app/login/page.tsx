@@ -32,15 +32,12 @@ export default function LoginPage() {
         throw signInError;
       }
 
-      // On successful login, Supabase handles the session cookie.
-      // We might need middleware later to redirect automatically if logged in,
-      // but for now, explicitly redirect to dashboard.
-      router.push('/'); // Redirect to dashboard or homepage
-      router.refresh(); // Refresh server components
-
+      // On successful login, redirect to the home page
+      router.push('/');
+      router.refresh();
     } catch (err: any) {
       console.error('Login failed:', err);
-      setError(err.message || 'Invalid email or password.'); // Provide specific Supabase error if available
+      setError(err.message || 'Invalid email or password.');
     } finally {
       setIsLoading(false);
     }
@@ -91,8 +88,7 @@ export default function LoginPage() {
               {isLoading ? 'Logging in...' : 'Login'}
             </Button>
             <p className="text-center text-sm text-muted-foreground">
-              Don't have an account?{'
-'}
+              Don't have an account?{' '}
               <Link href="/signup" className="underline pl-1">
                 Sign up
               </Link>

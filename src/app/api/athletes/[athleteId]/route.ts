@@ -4,7 +4,7 @@ import { Prisma } from "@/generated/prisma/client";
 import { parseTimeToMilliseconds } from "@/lib/utils";
 // Import NextAuth utilities
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../auth/[...nextauth]/route"; // Adjust path
+import { authOptions } from "@/lib/auth"; // Updated import path
 
 // Interface for the expected PUT request body
 interface UpdateAthletePayload {

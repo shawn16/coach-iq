@@ -1,10 +1,12 @@
 // This file contains API route handlers for workout types
 // Used for fetching available workout types for training plans
 
-import { NextResponse } from 'next/server'; // Removed NextRequest
+export const dynamic = 'force-dynamic';
+
+import { NextResponse } from 'next/server';
 import { getWorkoutTypes } from '@/lib/training/workoutType';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth'; // Updated import path
+import { authOptions } from '@/lib/auth';
 
 /**
  * GET handler for fetching all workout types available in the system
