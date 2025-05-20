@@ -43,14 +43,31 @@ export function useWorkoutData(selectedTab: string) {
     const abortController = new AbortController();
 
     const loadWorkoutLibrary = async () => {
-      if (selectedTab === 'workoutBuilder' && workouts.length === 0) { 
+      if (selectedTab === 'workoutBuilder' && workouts.length === 0) {
         try {
           const response = await fetch('/api/workout-library', {
             signal: abortController.signal
           });
+
           if (!response.ok) {
-            const errorData = await response.json();
-            console.error("API error fetching workout library:", errorData);
+            // Define a type that can accommodate expected error shapes or a generic message/details structure
+            let errorPayload: { error?: string; details?: string; message?: string } = {};
+            const contentType = response.headers.get("content-type");
+
+            if (contentType && contentType.includes("application/json")) {
+              try {
+                errorPayload = await response.json();
+              } catch (jsonError) {
+                console.error("Failed to parse JSON error response:", jsonError);
+                // Fallback if JSON parsing fails despite content type header
+                errorPayload = { message: "Failed to parse JSON error", details: await response.text().catch(() => "Could not read error text") };
+              }
+            } else {
+              const textError = await response.text();
+              console.error("Non-JSON API error response:", textError);
+              errorPayload = { message: "Received non-JSON error from server", details: textError };
+            }
+            console.error("API error fetching workout library:", errorPayload);
             throw new Error(`Failed to fetch workout library from API: ${response.statusText}`);
           }
           const libraryItems = await response.json();
@@ -59,7 +76,8 @@ export function useWorkoutData(selectedTab: string) {
           if (error instanceof Error && error.name === 'AbortError') {
             return;
           }
-          console.error("Error loading workout library:", error);
+          // Log the caught error, which might be the one thrown above or a different network error
+          console.error("Error in loadWorkoutLibrary catch block:", error);
         }
       }
     };

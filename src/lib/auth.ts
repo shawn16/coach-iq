@@ -85,10 +85,20 @@ export const authOptions: NextAuthOptions = {
   },
   // Define callbacks if needed
   callbacks: {
-    // Include user ID in the session
+    // Add role to the JWT token
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.role = user.role || 'user'; // Default role is 'user' if not specified
+        token.email = user.email;
+      }
+      return token;
+    },
+    // Include user ID and role in the session
     async session({ session, token }) {
-      if (token?.sub && session.user) {
-        session.user.id = token.sub; // Add id to session.user
+      if (token?.id) {
+        session.user.id = token.id;
+        session.user.role = token.role;
       }
       return session;
     },

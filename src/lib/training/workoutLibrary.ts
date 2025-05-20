@@ -67,7 +67,11 @@ export async function getWorkoutLibraryItems(userId: string) {
     });
     return items;
   } catch (error) {
-    console.error('Error fetching workout library items:', error);
-    throw new Error('Failed to fetch workout library items');
+    console.error('Error fetching workout library items from DB:', error);
+    // Ensure a structured error is thrown or a specific error response is prepared
+    if (error instanceof Error) {
+      throw new Error(`Database error when fetching workout library items: ${error.message}`);
+    }
+    throw new Error('An unknown database error occurred while fetching workout library items');
   }
 }

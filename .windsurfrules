@@ -1,0 +1,13 @@
+Project: CoachIQ, a React/Prisma/PostgreSQL web app for running coaches
+Tech Stack: React, Prisma, PostgreSQL, Tailwind CSS, TypeScript
+Default Scope: src/components/, src/lib/, schema.prisma, package.json
+Styling: Use Tailwind CSS for all components
+Restrictions:
+- Never modify schema.prisma or database migrations unless explicitly instructed
+- Do not edit node_modules/, .env, or config files without approval
+- Avoid generating console.logs in production code
+- Follow React best practices (e.g., hooks, no prop drilling)
+Conventions:
+- File names: camelCase for components (e.g., trainingPlan.tsx)
+- Prisma: Use explicit relations and indexes in schema.prisma
+- Commit changes with descriptive messages (e.g., "Add dialog cancel button")

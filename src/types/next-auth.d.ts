@@ -1,23 +1,35 @@
-import { DefaultSession } from "next-auth"; // Only import used types
+import { DefaultSession, DefaultUser } from "next-auth";
 
 declare module "next-auth" {
   /**
-   * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
+   * Extend the built-in session types
    */
   interface Session {
     user: {
-      /** The user's id. */
       id: string;
-    } & DefaultSession["user"]; // Keep the default fields
+      role?: string;
+    } & DefaultSession["user"];
   }
 
-  // Optional: Augment User type if needed later
-  // interface User extends DefaultUser { ... }
+  /**
+   * Extend the built-in user types
+   */
+  interface User extends DefaultUser {
+    id: string;
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    role?: string;
+  }
 }
 
-// Optional: Augment JWT type if needed later
-// declare module "next-auth/jwt" {
-//   interface JWT {
-//     /** Add custom properties here */
-//   }
-// }
+declare module "next-auth/jwt" {
+  /**
+   * Extend the built-in JWT types
+   */
+  interface JWT {
+    id: string;
+    role?: string;
+    email?: string | null;
+  }
+}
