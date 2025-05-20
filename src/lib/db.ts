@@ -33,10 +33,14 @@ if (!process.env.DATABASE_URL) {
   // For now, we'll let the app potentially crash later if pool is used without init
 } else {
   console.log("🟢 Initializing PostgreSQL connection pool...");
+  // Configure SSL for Supabase connections
+  const sslConfig = {
+    rejectUnauthorized: false, // Supabase uses self-signed certificates
+  };
+
   pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    // Add SSL configuration if needed for production (e.g., connecting to managed databases)
-    // ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+    ssl: process.env.NODE_ENV === 'production' ? sslConfig : false,
   });
 
   pool.on("connect", () => {
