@@ -23,10 +23,10 @@ export function SimpleAppShell({ children }: { children: React.ReactNode }) {
       {/* Header */}
       <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-white px-4 md:px-6 shadow-sm">
         <Link href="/" className="flex items-center gap-2">
-          <div className="flex items-center justify-center h-10 w-10 bg-[#6941C6] rounded-md">
+          <div className="flex items-center justify-center h-10 w-10 bg-primary rounded-md">
             <Zap className="h-6 w-6 text-white" />
           </div>
-          <span className="font-bold text-xl md:inline-block text-[#6941C6]">
+          <span className="font-bold text-xl md:inline-block text-primary">
             Coach IQ
           </span>
         </Link>

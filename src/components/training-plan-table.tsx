@@ -97,7 +97,7 @@ export function TrainingPlanTable({
    * @returns CSS class for the phase color
    */
   const getSeasonPhaseColor = (phaseInput: WeekData['phase'] | string | undefined): string => {
-    if (!phaseInput) return "bg-gray-50 dark:bg-gray-800/40 text-gray-800 dark:text-gray-300";
+    if (!phaseInput) return "bg-muted/50 text-foreground/80";
     
     let phaseName: string;
     let color: string | undefined;
@@ -116,7 +116,7 @@ export function TrainingPlanTable({
       else color = "gray";
     } else {
       // Should not happen if types are correct, but as a fallback:
-      return "bg-gray-50 dark:bg-gray-800/40 text-gray-800 dark:text-gray-300";
+      return "bg-muted/50 text-foreground/80";
     }
 
     const finalColor = color || 'gray';
@@ -185,18 +185,18 @@ export function TrainingPlanTable({
       )}
 
       {/* Table Structure */}
-      <div className="flex border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+      <div className="flex border border-border rounded-lg overflow-hidden">
         {/* Fixed left columns */}
-        <div className="flex flex-col border-r border-gray-200 dark:border-gray-700">
+        <div className="flex flex-col border-r border-border">
           {/* Header */}
-          <div className="flex bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-            <div className="w-12 p-3 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase text-center">
+          <div className="flex bg-muted border-b border-border">
+            <div className="w-12 p-3 text-xs font-medium text-foreground/80 uppercase text-center">
               Wk
             </div>
-            <div className="w-28 p-3 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase text-center">
+            <div className="w-28 p-3 text-xs font-medium text-foreground/80 uppercase text-center">
               Date Range
             </div>
-            <div className="w-32 p-3 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase text-center">
+            <div className="w-32 p-3 text-xs font-medium text-foreground/80 uppercase text-center">
               Phase
             </div>
           </div>
@@ -206,10 +206,10 @@ export function TrainingPlanTable({
               key={week.id}
               className="flex h-[57px] border-b border-gray-200 dark:border-gray-700 last:border-b-0"
             >
-              <div className="w-12 p-3 text-sm text-gray-700 dark:text-gray-300 flex items-center justify-center">
+              <div className="w-12 p-3 text-sm text-foreground/80 flex items-center justify-center">
                 {week.weekNumber}
               </div>
-              <div className="w-28 p-3 text-sm text-gray-700 dark:text-gray-300 flex items-center justify-center">
+              <div className="w-28 p-3 text-sm text-foreground/80 flex items-center justify-center">
                 {week.dateRange}
               </div>
               <div 
@@ -226,17 +226,17 @@ export function TrainingPlanTable({
         <div className="flex-grow overflow-x-auto table-scroll-container">
           <div className="flex flex-col min-w-max">
             {/* Header */}
-            <div className="flex bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
+            <div className="flex bg-muted border-b border-border sticky top-0 z-10">
               {workoutTypes.map((type) => (
                 <div
                   key={type.id}
-                  className={`w-40 p-3 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase whitespace-nowrap text-center ${type.color}`}
+                  className={`w-40 p-3 text-xs font-medium text-foreground/80 uppercase whitespace-nowrap text-center ${type.color}`}
                 >
                   {type.name}
                 </div>
               ))}
               {!readOnly && (
-                <div className="w-20 p-3 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase text-center bg-white dark:bg-gray-800">
+                <div className="w-20 p-3 text-xs font-medium text-foreground/80 uppercase text-center bg-background">
                   Actions
                 </div>
               )}
@@ -245,13 +245,13 @@ export function TrainingPlanTable({
             {planData.map((week, i) => (
               <div
                 key={week.id}
-                className="flex h-[57px] border-b border-gray-200 dark:border-gray-700 last:border-b-0"
+                className="flex h-[57px] border-b border-border last:border-b-0"
               >
                 {workoutTypes.map((type) => (
                   <div
                     key={type.id}
                     className={`w-40 p-3 flex items-center justify-center ${
-                      i % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-800/50'
+                      i % 2 === 0 ? 'bg-background' : 'bg-muted/50'
                     }`}
                     onClick={() => !readOnly && onCellClick && onCellClick(week.id, type.id)}
                     onKeyDown={(e) =>
@@ -260,7 +260,7 @@ export function TrainingPlanTable({
                     tabIndex={!readOnly ? 0 : -1}
                     role="gridcell"
                   >
-                    <span className="text-sm text-gray-400">
+                    <span className="text-sm text-muted-foreground">
                       {(week.workouts[type.id]?.length ?? 0) > 0 
                         ? week.workouts[type.id]?.[0]?.name 
                         : "Click to add workout"}
@@ -269,7 +269,7 @@ export function TrainingPlanTable({
                 ))}
                 {!readOnly && (
                   <div className={`w-20 p-3 flex items-center justify-center space-x-1 ${
-                    i % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-800/50'
+                    i % 2 === 0 ? 'bg-background' : 'bg-muted/50'
                   }`}>
                     {onMoveWeek && (
                       <>
@@ -278,7 +278,7 @@ export function TrainingPlanTable({
                           size="sm"
                           onClick={() => onMoveWeek(week.id, "up")}
                           disabled={week.id === 1}
-                          className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                          className="text-muted-foreground hover:text-foreground"
                         >
                           <ChevronUp className="h-4 w-4" />
                         </Button>
@@ -287,7 +287,7 @@ export function TrainingPlanTable({
                           size="sm"
                           onClick={() => onMoveWeek(week.id, "down")}
                           disabled={week.id === planData.length}
-                          className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                          className="text-muted-foreground hover:text-foreground"
                         >
                           <ChevronDown className="h-4 w-4" />
                         </Button>
@@ -298,7 +298,7 @@ export function TrainingPlanTable({
                         variant="ghost"
                         size="sm"
                         onClick={() => removeWeek(week.id)}
-                        className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                        className="text-destructive hover:text-destructive/80"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>

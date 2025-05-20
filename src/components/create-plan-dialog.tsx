@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
-import { CalendarIcon, Loader2, Plus } from "lucide-react";
+import { CalendarIcon, Loader2, Plus, UserPlus, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner"; // Updated to use sonner instead of shadcn toast
 import { AssignAthletesDialog } from "@/components/assign-athletes-dialog";
@@ -165,157 +165,172 @@ export function CreatePlanDialog() {
       {/* Main trigger button for the dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button>
+          <Button className="bg-primary hover:bg-primary/90">
             <Plus className="mr-2 h-4 w-4" />
             New Plan
           </Button>
         </DialogTrigger>
         
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Create New Training Plan</DialogTitle>
+        <DialogContent className="sm:max-w-[500px] p-6">
+          <DialogHeader className="mb-4">
+            <DialogTitle className="text-xl font-semibold">Create New Training Plan</DialogTitle>
           </DialogHeader>
           
           {/* Form for training plan creation */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="title">Plan Title</Label>
-              <Input
-                id="title"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                placeholder="Summer Training Plan"
-                required
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
-              <Textarea
-                id="description"
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                placeholder="Brief description of the training plan"
-                rows={3}
-              />
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="durationWeeks">Duration (Weeks)</Label>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="space-y-3">
+              <div>
+                <Label htmlFor="title" className="text-sm font-medium">Plan Title</Label>
                 <Input
-                  id="durationWeeks"
-                  name="durationWeeks"
-                  type="number"
-                  min="1"
-                  max="52"
-                  value={formData.durationWeeks}
+                  id="title"
+                  name="title"
+                  value={formData.title}
                   onChange={handleChange}
+                  placeholder="Summer Training Plan"
+                  className="mt-1"
                   required
                 />
               </div>
               
-              <div className="space-y-2">
-                <Label>Start Date</Label>
-                <Popover open={showDatePicker} onOpenChange={setShowDatePicker}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={cn(
-                        "w-full justify-start text-left font-normal",
-                        !formData.startDate && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {formData.startDate ? (
-                        format(formData.startDate, "PPP")
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar
-                      mode="single"
-                      selected={formData.startDate}
-                      onSelect={handleDateSelect}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="type">Training Focus</Label>
-                <Select
-                  value={formData.type}
-                  onValueChange={handleTypeChange}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select training focus" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="endurance">Endurance</SelectItem>
-                    <SelectItem value="speed">Speed</SelectItem>
-                    <SelectItem value="strength">Strength</SelectItem>
-                    <SelectItem value="marathon">Marathon</SelectItem>
-                    <SelectItem value="custom">Custom</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div>
+                <Label htmlFor="description" className="text-sm font-medium">Description</Label>
+                <Textarea
+                  id="description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  placeholder="Brief description of the training plan"
+                  rows={3}
+                  className="mt-1"
+                />
               </div>
               
-              <div className="space-y-2">
-                <Label htmlFor="planType">Plan Type</Label>
-                <Select
-                  value={formData.planType}
-                  onValueChange={handlePlanTypeChange}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select plan type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="xc">Cross Country</SelectItem>
-                    <SelectItem value="track">Track</SelectItem>
-                    <SelectItem value="road">Road Racing</SelectItem>
-                    <SelectItem value="trail">Trail Running</SelectItem>
-                    <SelectItem value="general">General Fitness</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <Label htmlFor="durationWeeks" className="text-sm font-medium">Duration (Weeks)</Label>
+                  <Input
+                    id="durationWeeks"
+                    name="durationWeeks"
+                    type="number"
+                    min="1"
+                    max="52"
+                    value={formData.durationWeeks}
+                    onChange={handleChange}
+                    className="mt-1"
+                    required
+                  />
+                </div>
+                
+                <div className="space-y-1">
+                  <Label className="text-sm font-medium">Start Date</Label>
+                  <Popover open={showDatePicker} onOpenChange={setShowDatePicker}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal h-10 mt-1",
+                          !formData.startDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {formData.startDate ? (
+                          format(formData.startDate, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={formData.startDate}
+                        onSelect={handleDateSelect}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
               </div>
-            </div>
-            
-            {/* Assign athletes section */}
-            <div className="space-y-2">
-              <Label>Athletes</Label>
-              <div className="flex items-center">
-                <p className="text-sm text-gray-600 dark:text-gray-400 mr-2">
-                  {selectedAthletes.length} athletes selected
-                </p>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsAssignDialogOpen(true)}
-                >
-                  Assign Athletes
-                </Button>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <Label className="text-sm font-medium">Training Focus</Label>
+                  <Select
+                    value={formData.type}
+                    onValueChange={handleTypeChange}
+                  >
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Select training focus" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="endurance">Endurance</SelectItem>
+                      <SelectItem value="speed">Speed</SelectItem>
+                      <SelectItem value="strength">Strength</SelectItem>
+                      <SelectItem value="marathon">Marathon</SelectItem>
+                      <SelectItem value="custom">Custom</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="space-y-1">
+                  <Label className="text-sm font-medium">Plan Type</Label>
+                  <Select
+                    value={formData.planType}
+                    onValueChange={handlePlanTypeChange}
+                  >
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Select plan type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="xc">Cross Country</SelectItem>
+                      <SelectItem value="track">Track</SelectItem>
+                      <SelectItem value="road">Road Racing</SelectItem>
+                      <SelectItem value="trail">Trail Running</SelectItem>
+                      <SelectItem value="general">General Fitness</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              
+              {/* Assign athletes section */}
+              <div className="space-y-1 pt-2">
+                <Label className="text-sm font-medium">Athletes</Label>
+                <div className="flex items-center justify-between p-3 border rounded-md bg-muted/20">
+                  <div className="flex items-center">
+                    <Users className="h-4 w-4 mr-2 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">
+                      {selectedAthletes.length} athletes selected
+                    </span>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setIsAssignDialogOpen(true)}
+                    className="text-primary hover:bg-primary/10"
+                  >
+                    <UserPlus className="h-4 w-4 mr-1" />
+                    Assign
+                  </Button>
+                </div>
               </div>
             </div>
             
             {/* Form actions */}
-            <div className="flex justify-end gap-2">
+            <div className="flex justify-end gap-3 pt-2">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => setOpen(false)}
+                className="px-6"
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button 
+                type="submit" 
+                disabled={isSubmitting}
+                className="px-6 bg-primary hover:bg-primary/90"
+              >
                 {isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

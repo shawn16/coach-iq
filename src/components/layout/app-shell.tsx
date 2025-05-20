@@ -30,29 +30,29 @@ const routes = [
         title: "Athletes",
         href: "/athletes",
         icon: Users,
-        iconColor: "text-amber-500",
-        bgColor: "bg-amber-50 dark:bg-amber-900/20",
+        iconColor: "text-primary",
+        bgColor: "bg-primary/10",
       },
       {
         title: "Training Plan",
         href: "/training-plan",
         icon: ClipboardCheck,
-        iconColor: "text-purple-500",
-        bgColor: "bg-purple-50 dark:bg-purple-900/20",
+        iconColor: "text-primary",
+        bgColor: "bg-primary/10",
       },
       {
         title: "Training Plan Builder",
         href: "/training-plan-builder",
         icon: Calendar,
-        iconColor: "text-purple-500",
-        bgColor: "bg-purple-50 dark:bg-purple-900/20",
+        iconColor: "text-primary",
+        bgColor: "bg-primary/10",
       },
       {
         title: "Progression Builder",
         href: "/progression-builder",
         icon: LineChart,
-        iconColor: "text-blue-500",
-        bgColor: "bg-blue-50 dark:bg-blue-900/20",
+        iconColor: "text-primary",
+        bgColor: "bg-primary/10",
       },
     ],
   },
@@ -63,22 +63,22 @@ const routes = [
         title: "Workout Execution",
         href: "/workout-execution",
         icon: Dumbbell,
-        iconColor: "text-green-500",
-        bgColor: "bg-green-50 dark:bg-green-900/20",
+        iconColor: "text-primary",
+        bgColor: "bg-primary/10",
       },
       {
         title: "Workout Results",
         href: "/workout-results",
         icon: BarChart2,
-        iconColor: "text-rose-500",
-        bgColor: "bg-rose-50 dark:bg-rose-900/20",
+        iconColor: "text-primary",
+        bgColor: "bg-primary/10",
       },
       {
         title: "Assistant Coach",
         href: "/assistant-coach",
         icon: Zap,
-        iconColor: "text-blue-500",
-        bgColor: "bg-blue-50 dark:bg-blue-900/20",
+        iconColor: "text-primary",
+        bgColor: "bg-primary/10",
       },
     ],
   },
@@ -89,15 +89,15 @@ const routes = [
         title: "Settings",
         href: "/settings",
         icon: Settings,
-        iconColor: "text-gray-500",
-        bgColor: "bg-gray-50 dark:bg-gray-800/30",
+        iconColor: "text-muted-foreground",
+        bgColor: "bg-muted/50",
       },
       {
         title: "About",
         href: "/about",
         icon: Info,
-        iconColor: "text-gray-500",
-        bgColor: "bg-gray-50 dark:bg-gray-800/30",
+        iconColor: "text-muted-foreground",
+        bgColor: "bg-muted/50",
       },
     ],
   },
@@ -129,20 +129,20 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen w-full flex-col" key="app-shell-wrapper">
-      <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-white dark:bg-gray-950 px-4 md:px-6 shadow-sm">
-        <div className="flex items-center gap-2">
+      <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background px-6 shadow-sm">
+        <div className="flex items-center gap-3">
           <button
-            className="inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors hover:bg-purple-50 hover:text-[#6941C6] dark:hover:bg-purple-950 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-400"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             onClick={toggleSidebar}
           >
             <Menu className="h-5 w-5" />
             <span className="sr-only">Toggle Menu</span>
           </button>
           <Link href="/" className="flex items-center gap-2">
-            <div className="flex items-center justify-center h-10 w-10 bg-[#6941C6] dark:bg-[#6941C6] rounded-md">
-              <Zap className="h-6 w-6 text-white" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
+              <Zap className="h-4 w-4 text-primary-foreground" />
             </div>
-            <span className="font-bold text-xl md:inline-block text-[#6941C6] dark:text-[#6941C6]">
+            <span className="text-lg font-semibold text-foreground">
               Coach IQ
             </span>
           </Link>
@@ -170,69 +170,50 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             !isDesktop && !isSidebarOpen && "-translate-x-full"
           )}
         >
-          {/* Toggle arrow button */}
-          {isDesktop && (
-            <button
-              onClick={() => setIsExpanded((prev) => !prev)}
-              className="absolute right-0 top-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-l-full p-1 shadow-sm z-50"
-              style={{ transform: "translateX(50%)" }}
-              aria-label={isExpanded ? "Collapse sidebar" : "Expand sidebar"}
-            >
-              {isExpanded ? (
-                <ChevronLeft className="h-4 w-4 text-gray-500" />
-              ) : (
-                <ChevronRight className="h-4 w-4 text-gray-500" />
-              )}
-            </button>
-          )}
-
           <ScrollArea className="h-full">
-            <nav className={cn("grid gap-1 py-4", !isExpanded ? "px-2" : "px-4")}>
-              {routes.map((section, i) => (
-                <div key={i} className="mb-6">
-                  {isExpanded && (
-                    <h4 className="mb-2 px-2 text-sm font-medium text-gray-500 dark:text-gray-400 overflow-hidden text-ellipsis whitespace-nowrap">
+            <div className="space-y-4 p-4">
+              {routes.map((section, sectionIndex) => (
+                <div key={sectionIndex} className="space-y-1">
+                  {isExpanded && section.title && (
+                    <h3 className="px-3 py-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
                       {section.title}
-                    </h4>
+                    </h3>
                   )}
-                  <div className="grid gap-1">
-                    {section.items.map((item, j) => {
-                      const Icon = item.icon;
-                      const isActive = pathname === item.href;
+                  <div className="space-y-1">
+                    {section.items.map((item, itemIndex) => {
+                      const isActive = pathname.startsWith(item.href);
                       return (
                         <Link
-                          key={j}
+                          key={itemIndex}
                           href={item.href}
-                          title={item.title}
                           className={cn(
-                            "flex items-center gap-3 text-sm font-medium transition-colors rounded-md",
-                            !isExpanded ? "justify-center px-0 py-2" : "px-3 py-2",
+                            "group flex items-center rounded-md px-3 py-2.5 text-sm font-medium transition-colors",
                             isActive
-                              ? "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white"
-                              : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100"
+                              ? "bg-primary/10 text-primary font-semibold"
+                              : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                           )}
                         >
                           <div
                             className={cn(
-                              "flex flex-shrink-0 items-center justify-center rounded-md",
-                              item.bgColor,
-                              !isExpanded ? "h-10 w-10" : "h-8 w-8"
+                              "mr-3 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md",
+                              isActive ? item.bgColor : "bg-muted/50"
                             )}
                           >
-                            <Icon className={cn("h-5 w-5", item.iconColor)} />
+                            <item.icon
+                              className={cn(
+                                "h-4 w-4",
+                                isActive ? item.iconColor : "text-muted-foreground"
+                              )}
+                            />
                           </div>
-                          {isExpanded && (
-                            <span className="flex-grow overflow-hidden text-ellipsis whitespace-nowrap text-base">
-                              {item.title}
-                            </span>
-                          )}
+                          {isExpanded && <span className="truncate">{item.title}</span>}
                         </Link>
                       );
                     })}
                   </div>
                 </div>
               ))}
-            </nav>
+            </div>
           </ScrollArea>
         </aside>
 
