@@ -125,7 +125,8 @@ exports.Prisma.UserScalarFieldEnum = {
   image: 'image',
   passwordHash: 'passwordHash',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
 };
 
 exports.Prisma.AccountScalarFieldEnum = {
@@ -165,6 +166,7 @@ exports.Prisma.AthleteScalarFieldEnum = {
   time1600m: 'time1600m',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
   coachId: 'coachId'
 };
 
@@ -181,6 +183,7 @@ exports.Prisma.TrainingPlanScalarFieldEnum = {
   planType: 'planType',
   totalWorkouts: 'totalWorkouts',
   isCompleted: 'isCompleted',
+  deletedAt: 'deletedAt',
   userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

@@ -2,7 +2,8 @@ import { Pool } from "pg";
 import { getServerSession, DefaultSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
+import prisma from "./prisma";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -13,8 +14,6 @@ declare module "next-auth" {
   }
 }
 
-const prisma = new PrismaClient();
-
 type SessionWithUser = Awaited<ReturnType<typeof getServerSession>>;
 
 type DeleteUserResult = {
@@ -24,6 +23,7 @@ type DeleteUserResult = {
   status?: number;
   message?: string;
 };
+
 let pool: Pool;
 
 // Check if DATABASE_URL is defined
@@ -72,8 +72,44 @@ export const query = async (
   }
 };
 
-// Optionally export the pool itself if needed elsewhere
+// Optionally export the pool itself if needed
 // export { pool };
+
+/**
+ * Permanently deletes a user (bypasses soft delete)
+ * WARNING: This will permanently remove the user and all their data
+ */
+export async function forceDeleteUser(userId: string) {
+  return prisma.user.delete({
+    where: { id: userId },
+  });
+}
+
+/**
+ * Restores a soft-deleted user
+ */
+export async function restoreUser(userId: string): Promise<UserWithDeleted> {
+  // Use raw SQL to bypass TypeScript type checking for deletedAt
+  const [user] = await prisma.$queryRaw<UserWithDeleted[]>`
+    UPDATE "User" 
+    SET "deletedAt" = NULL 
+    WHERE id = ${userId} 
+    RETURNING *
+  `;
+  return user!;
+}
+
+/**
+ * Finds a user including soft-deleted ones
+ */
+export async function findUserWithDeleted(where: { id: string }): Promise<UserWithDeleted | null> {
+  const [user] = await prisma.$queryRaw<UserWithDeleted[]>`
+    SELECT * FROM "User" 
+    WHERE id = ${where.id} 
+    AND "deletedAt" IS NOT NULL
+  `;
+  return user || null;
+}
 
 /**
  * Safely deletes a user with authentication and error handling
@@ -118,11 +154,13 @@ export const deleteUserWithAuth = async (
         // Add other related models as needed
       ]);
 
-      // Then delete the user
-      return await tx.user.delete({
+      // Soft delete the user
+      const deletedUser = await tx.user.update({
         where: { id: userId },
-        select: { id: true, email: true }, // Only return necessary fields
+        data: { deletedAt: new Date() },
       });
+
+      return deletedUser;
     });
 
     return {

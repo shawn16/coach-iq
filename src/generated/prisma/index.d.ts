@@ -2097,6 +2097,7 @@ export namespace Prisma {
     passwordHash: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -2108,6 +2109,7 @@ export namespace Prisma {
     passwordHash: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -2119,6 +2121,7 @@ export namespace Prisma {
     passwordHash: number
     createdAt: number
     updatedAt: number
+    deletedAt: number
     _all: number
   }
 
@@ -2132,6 +2135,7 @@ export namespace Prisma {
     passwordHash?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -2143,6 +2147,7 @@ export namespace Prisma {
     passwordHash?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -2154,6 +2159,7 @@ export namespace Prisma {
     passwordHash?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
     _all?: true
   }
 
@@ -2238,6 +2244,7 @@ export namespace Prisma {
     passwordHash: string | null
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -2266,6 +2273,7 @@ export namespace Prisma {
     passwordHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     athletes?: boolean | User$athletesArgs<ExtArgs>
@@ -2283,6 +2291,7 @@ export namespace Prisma {
     passwordHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2294,6 +2303,7 @@ export namespace Prisma {
     passwordHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -2305,9 +2315,10 @@ export namespace Prisma {
     passwordHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "passwordHash" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "passwordHash" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
@@ -2337,6 +2348,7 @@ export namespace Prisma {
       passwordHash: string | null
       createdAt: Date
       updatedAt: Date
+      deletedAt: Date | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2773,6 +2785,7 @@ export namespace Prisma {
     readonly passwordHash: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
+    readonly deletedAt: FieldRef<"User", 'DateTime'>
   }
     
 
@@ -6529,6 +6542,7 @@ export namespace Prisma {
     time1600m: number | null
     createdAt: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
     coachId: string | null
   }
 
@@ -6541,6 +6555,7 @@ export namespace Prisma {
     time1600m: number | null
     createdAt: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
     coachId: string | null
   }
 
@@ -6553,6 +6568,7 @@ export namespace Prisma {
     time1600m: number
     createdAt: number
     updatedAt: number
+    deletedAt: number
     coachId: number
     _all: number
   }
@@ -6579,6 +6595,7 @@ export namespace Prisma {
     time1600m?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
     coachId?: true
   }
 
@@ -6591,6 +6608,7 @@ export namespace Prisma {
     time1600m?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
     coachId?: true
   }
 
@@ -6603,6 +6621,7 @@ export namespace Prisma {
     time1600m?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
     coachId?: true
     _all?: true
   }
@@ -6702,6 +6721,7 @@ export namespace Prisma {
     time1600m: number
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
     coachId: string
     _count: AthleteCountAggregateOutputType | null
     _avg: AthleteAvgAggregateOutputType | null
@@ -6733,6 +6753,7 @@ export namespace Prisma {
     time1600m?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
     coachId?: boolean
     coach?: boolean | UserDefaultArgs<ExtArgs>
     workoutResults?: boolean | Athlete$workoutResultsArgs<ExtArgs>
@@ -6749,6 +6770,7 @@ export namespace Prisma {
     time1600m?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
     coachId?: boolean
     coach?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["athlete"]>
@@ -6762,6 +6784,7 @@ export namespace Prisma {
     time1600m?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
     coachId?: boolean
     coach?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["athlete"]>
@@ -6775,10 +6798,11 @@ export namespace Prisma {
     time1600m?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
     coachId?: boolean
   }
 
-  export type AthleteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "lastName" | "birthday" | "grade" | "time1600m" | "createdAt" | "updatedAt" | "coachId", ExtArgs["result"]["athlete"]>
+  export type AthleteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "lastName" | "birthday" | "grade" | "time1600m" | "createdAt" | "updatedAt" | "deletedAt" | "coachId", ExtArgs["result"]["athlete"]>
   export type AthleteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     coach?: boolean | UserDefaultArgs<ExtArgs>
     workoutResults?: boolean | Athlete$workoutResultsArgs<ExtArgs>
@@ -6808,6 +6832,7 @@ export namespace Prisma {
       time1600m: number
       createdAt: Date
       updatedAt: Date
+      deletedAt: Date | null
       coachId: string
     }, ExtArgs["result"]["athlete"]>
     composites: {}
@@ -7243,6 +7268,7 @@ export namespace Prisma {
     readonly time1600m: FieldRef<"Athlete", 'Int'>
     readonly createdAt: FieldRef<"Athlete", 'DateTime'>
     readonly updatedAt: FieldRef<"Athlete", 'DateTime'>
+    readonly deletedAt: FieldRef<"Athlete", 'DateTime'>
     readonly coachId: FieldRef<"Athlete", 'String'>
   }
     
@@ -7743,6 +7769,7 @@ export namespace Prisma {
     planType: string | null
     totalWorkouts: number | null
     isCompleted: boolean | null
+    deletedAt: Date | null
     userId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -7761,6 +7788,7 @@ export namespace Prisma {
     planType: string | null
     totalWorkouts: number | null
     isCompleted: boolean | null
+    deletedAt: Date | null
     userId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -7779,6 +7807,7 @@ export namespace Prisma {
     planType: number
     totalWorkouts: number
     isCompleted: number
+    deletedAt: number
     userId: number
     createdAt: number
     updatedAt: number
@@ -7811,6 +7840,7 @@ export namespace Prisma {
     planType?: true
     totalWorkouts?: true
     isCompleted?: true
+    deletedAt?: true
     userId?: true
     createdAt?: true
     updatedAt?: true
@@ -7829,6 +7859,7 @@ export namespace Prisma {
     planType?: true
     totalWorkouts?: true
     isCompleted?: true
+    deletedAt?: true
     userId?: true
     createdAt?: true
     updatedAt?: true
@@ -7847,6 +7878,7 @@ export namespace Prisma {
     planType?: true
     totalWorkouts?: true
     isCompleted?: true
+    deletedAt?: true
     userId?: true
     createdAt?: true
     updatedAt?: true
@@ -7952,6 +7984,7 @@ export namespace Prisma {
     planType: string | null
     totalWorkouts: number | null
     isCompleted: boolean
+    deletedAt: Date | null
     userId: string
     createdAt: Date
     updatedAt: Date
@@ -7989,6 +8022,7 @@ export namespace Prisma {
     planType?: boolean
     totalWorkouts?: boolean
     isCompleted?: boolean
+    deletedAt?: boolean
     userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -8011,6 +8045,7 @@ export namespace Prisma {
     planType?: boolean
     totalWorkouts?: boolean
     isCompleted?: boolean
+    deletedAt?: boolean
     userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -8030,6 +8065,7 @@ export namespace Prisma {
     planType?: boolean
     totalWorkouts?: boolean
     isCompleted?: boolean
+    deletedAt?: boolean
     userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -8049,12 +8085,13 @@ export namespace Prisma {
     planType?: boolean
     totalWorkouts?: boolean
     isCompleted?: boolean
+    deletedAt?: boolean
     userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type TrainingPlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "duration" | "durationWeeks" | "startDate" | "endDate" | "progress" | "type" | "planType" | "totalWorkouts" | "isCompleted" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["trainingPlan"]>
+  export type TrainingPlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "duration" | "durationWeeks" | "startDate" | "endDate" | "progress" | "type" | "planType" | "totalWorkouts" | "isCompleted" | "deletedAt" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["trainingPlan"]>
   export type TrainingPlanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     weeks?: boolean | TrainingPlan$weeksArgs<ExtArgs>
@@ -8088,6 +8125,7 @@ export namespace Prisma {
       planType: string | null
       totalWorkouts: number | null
       isCompleted: boolean
+      deletedAt: Date | null
       userId: string
       createdAt: Date
       updatedAt: Date
@@ -8529,6 +8567,7 @@ export namespace Prisma {
     readonly planType: FieldRef<"TrainingPlan", 'String'>
     readonly totalWorkouts: FieldRef<"TrainingPlan", 'Int'>
     readonly isCompleted: FieldRef<"TrainingPlan", 'Boolean'>
+    readonly deletedAt: FieldRef<"TrainingPlan", 'DateTime'>
     readonly userId: FieldRef<"TrainingPlan", 'String'>
     readonly createdAt: FieldRef<"TrainingPlan", 'DateTime'>
     readonly updatedAt: FieldRef<"TrainingPlan", 'DateTime'>
@@ -15637,7 +15676,8 @@ export namespace Prisma {
     image: 'image',
     passwordHash: 'passwordHash',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -15689,6 +15729,7 @@ export namespace Prisma {
     time1600m: 'time1600m',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt',
     coachId: 'coachId'
   };
 
@@ -15708,6 +15749,7 @@ export namespace Prisma {
     planType: 'planType',
     totalWorkouts: 'totalWorkouts',
     isCompleted: 'isCompleted',
+    deletedAt: 'deletedAt',
     userId: 'userId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -15928,6 +15970,7 @@ export namespace Prisma {
     passwordHash?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"User"> | Date | string | null
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     athletes?: AthleteListRelationFilter
@@ -15944,6 +15987,7 @@ export namespace Prisma {
     passwordHash?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
     athletes?: AthleteOrderByRelationAggregateInput
@@ -15963,6 +16007,7 @@ export namespace Prisma {
     passwordHash?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"User"> | Date | string | null
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     athletes?: AthleteListRelationFilter
@@ -15979,6 +16024,7 @@ export namespace Prisma {
     passwordHash?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -15996,6 +16042,7 @@ export namespace Prisma {
     passwordHash?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   }
 
   export type AccountWhereInput = {
@@ -16196,6 +16243,7 @@ export namespace Prisma {
     time1600m?: IntFilter<"Athlete"> | number
     createdAt?: DateTimeFilter<"Athlete"> | Date | string
     updatedAt?: DateTimeFilter<"Athlete"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Athlete"> | Date | string | null
     coachId?: StringFilter<"Athlete"> | string
     coach?: XOR<UserScalarRelationFilter, UserWhereInput>
     workoutResults?: WorkoutResultListRelationFilter
@@ -16211,6 +16259,7 @@ export namespace Prisma {
     time1600m?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     coachId?: SortOrder
     coach?: UserOrderByWithRelationInput
     workoutResults?: WorkoutResultOrderByRelationAggregateInput
@@ -16229,6 +16278,7 @@ export namespace Prisma {
     time1600m?: IntFilter<"Athlete"> | number
     createdAt?: DateTimeFilter<"Athlete"> | Date | string
     updatedAt?: DateTimeFilter<"Athlete"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Athlete"> | Date | string | null
     coachId?: StringFilter<"Athlete"> | string
     coach?: XOR<UserScalarRelationFilter, UserWhereInput>
     workoutResults?: WorkoutResultListRelationFilter
@@ -16244,6 +16294,7 @@ export namespace Prisma {
     time1600m?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     coachId?: SortOrder
     _count?: AthleteCountOrderByAggregateInput
     _avg?: AthleteAvgOrderByAggregateInput
@@ -16264,6 +16315,7 @@ export namespace Prisma {
     time1600m?: IntWithAggregatesFilter<"Athlete"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Athlete"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Athlete"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"Athlete"> | Date | string | null
     coachId?: StringWithAggregatesFilter<"Athlete"> | string
   }
 
@@ -16283,6 +16335,7 @@ export namespace Prisma {
     planType?: StringNullableFilter<"TrainingPlan"> | string | null
     totalWorkouts?: IntNullableFilter<"TrainingPlan"> | number | null
     isCompleted?: BoolFilter<"TrainingPlan"> | boolean
+    deletedAt?: DateTimeNullableFilter<"TrainingPlan"> | Date | string | null
     userId?: StringFilter<"TrainingPlan"> | string
     createdAt?: DateTimeFilter<"TrainingPlan"> | Date | string
     updatedAt?: DateTimeFilter<"TrainingPlan"> | Date | string
@@ -16304,6 +16357,7 @@ export namespace Prisma {
     planType?: SortOrderInput | SortOrder
     totalWorkouts?: SortOrderInput | SortOrder
     isCompleted?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -16328,6 +16382,7 @@ export namespace Prisma {
     planType?: StringNullableFilter<"TrainingPlan"> | string | null
     totalWorkouts?: IntNullableFilter<"TrainingPlan"> | number | null
     isCompleted?: BoolFilter<"TrainingPlan"> | boolean
+    deletedAt?: DateTimeNullableFilter<"TrainingPlan"> | Date | string | null
     userId?: StringFilter<"TrainingPlan"> | string
     createdAt?: DateTimeFilter<"TrainingPlan"> | Date | string
     updatedAt?: DateTimeFilter<"TrainingPlan"> | Date | string
@@ -16349,6 +16404,7 @@ export namespace Prisma {
     planType?: SortOrderInput | SortOrder
     totalWorkouts?: SortOrderInput | SortOrder
     isCompleted?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -16375,6 +16431,7 @@ export namespace Prisma {
     planType?: StringNullableWithAggregatesFilter<"TrainingPlan"> | string | null
     totalWorkouts?: IntNullableWithAggregatesFilter<"TrainingPlan"> | number | null
     isCompleted?: BoolWithAggregatesFilter<"TrainingPlan"> | boolean
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"TrainingPlan"> | Date | string | null
     userId?: StringWithAggregatesFilter<"TrainingPlan"> | string
     createdAt?: DateTimeWithAggregatesFilter<"TrainingPlan"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"TrainingPlan"> | Date | string
@@ -16782,6 +16839,7 @@ export namespace Prisma {
     passwordHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     athletes?: AthleteCreateNestedManyWithoutCoachInput
@@ -16798,6 +16856,7 @@ export namespace Prisma {
     passwordHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     athletes?: AthleteUncheckedCreateNestedManyWithoutCoachInput
@@ -16814,6 +16873,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     athletes?: AthleteUpdateManyWithoutCoachNestedInput
@@ -16830,6 +16890,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     athletes?: AthleteUncheckedUpdateManyWithoutCoachNestedInput
@@ -16846,6 +16907,7 @@ export namespace Prisma {
     passwordHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -16857,6 +16919,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -16868,6 +16931,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type AccountCreateInput = {
@@ -17072,6 +17136,7 @@ export namespace Prisma {
     time1600m: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     coach: UserCreateNestedOneWithoutAthletesInput
     workoutResults?: WorkoutResultCreateNestedManyWithoutAthleteInput
     trainingPlanAthletes?: TrainingPlanAthleteCreateNestedManyWithoutAthleteInput
@@ -17086,6 +17151,7 @@ export namespace Prisma {
     time1600m: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     coachId: string
     workoutResults?: WorkoutResultUncheckedCreateNestedManyWithoutAthleteInput
     trainingPlanAthletes?: TrainingPlanAthleteUncheckedCreateNestedManyWithoutAthleteInput
@@ -17099,6 +17165,7 @@ export namespace Prisma {
     time1600m?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     coach?: UserUpdateOneRequiredWithoutAthletesNestedInput
     workoutResults?: WorkoutResultUpdateManyWithoutAthleteNestedInput
     trainingPlanAthletes?: TrainingPlanAthleteUpdateManyWithoutAthleteNestedInput
@@ -17113,6 +17180,7 @@ export namespace Prisma {
     time1600m?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     coachId?: StringFieldUpdateOperationsInput | string
     workoutResults?: WorkoutResultUncheckedUpdateManyWithoutAthleteNestedInput
     trainingPlanAthletes?: TrainingPlanAthleteUncheckedUpdateManyWithoutAthleteNestedInput
@@ -17127,6 +17195,7 @@ export namespace Prisma {
     time1600m: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     coachId: string
   }
 
@@ -17138,6 +17207,7 @@ export namespace Prisma {
     time1600m?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type AthleteUncheckedUpdateManyInput = {
@@ -17149,6 +17219,7 @@ export namespace Prisma {
     time1600m?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     coachId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -17165,6 +17236,7 @@ export namespace Prisma {
     planType?: string | null
     totalWorkouts?: number | null
     isCompleted?: boolean
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutTrainingPlansInput
@@ -17185,6 +17257,7 @@ export namespace Prisma {
     planType?: string | null
     totalWorkouts?: number | null
     isCompleted?: boolean
+    deletedAt?: Date | string | null
     userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17205,6 +17278,7 @@ export namespace Prisma {
     planType?: NullableStringFieldUpdateOperationsInput | string | null
     totalWorkouts?: NullableIntFieldUpdateOperationsInput | number | null
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutTrainingPlansNestedInput
@@ -17225,6 +17299,7 @@ export namespace Prisma {
     planType?: NullableStringFieldUpdateOperationsInput | string | null
     totalWorkouts?: NullableIntFieldUpdateOperationsInput | number | null
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17245,6 +17320,7 @@ export namespace Prisma {
     planType?: string | null
     totalWorkouts?: number | null
     isCompleted?: boolean
+    deletedAt?: Date | string | null
     userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17263,6 +17339,7 @@ export namespace Prisma {
     planType?: NullableStringFieldUpdateOperationsInput | string | null
     totalWorkouts?: NullableIntFieldUpdateOperationsInput | number | null
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17280,6 +17357,7 @@ export namespace Prisma {
     planType?: NullableStringFieldUpdateOperationsInput | string | null
     totalWorkouts?: NullableIntFieldUpdateOperationsInput | number | null
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17801,6 +17879,7 @@ export namespace Prisma {
     passwordHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -17812,6 +17891,7 @@ export namespace Prisma {
     passwordHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -17823,6 +17903,7 @@ export namespace Prisma {
     passwordHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -18063,6 +18144,7 @@ export namespace Prisma {
     time1600m?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
     coachId?: SortOrder
   }
 
@@ -18081,6 +18163,7 @@ export namespace Prisma {
     time1600m?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
     coachId?: SortOrder
   }
 
@@ -18093,6 +18176,7 @@ export namespace Prisma {
     time1600m?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
     coachId?: SortOrder
   }
 
@@ -18146,6 +18230,7 @@ export namespace Prisma {
     planType?: SortOrder
     totalWorkouts?: SortOrder
     isCompleted?: SortOrder
+    deletedAt?: SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -18170,6 +18255,7 @@ export namespace Prisma {
     planType?: SortOrder
     totalWorkouts?: SortOrder
     isCompleted?: SortOrder
+    deletedAt?: SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -18188,6 +18274,7 @@ export namespace Prisma {
     planType?: SortOrder
     totalWorkouts?: SortOrder
     isCompleted?: SortOrder
+    deletedAt?: SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -19438,6 +19525,7 @@ export namespace Prisma {
     time1600m: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     workoutResults?: WorkoutResultCreateNestedManyWithoutAthleteInput
     trainingPlanAthletes?: TrainingPlanAthleteCreateNestedManyWithoutAthleteInput
   }
@@ -19451,6 +19539,7 @@ export namespace Prisma {
     time1600m: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     workoutResults?: WorkoutResultUncheckedCreateNestedManyWithoutAthleteInput
     trainingPlanAthletes?: TrainingPlanAthleteUncheckedCreateNestedManyWithoutAthleteInput
   }
@@ -19478,6 +19567,7 @@ export namespace Prisma {
     planType?: string | null
     totalWorkouts?: number | null
     isCompleted?: boolean
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     weeks?: PlanWeekCreateNestedManyWithoutTrainingPlanInput
@@ -19497,6 +19587,7 @@ export namespace Prisma {
     planType?: string | null
     totalWorkouts?: number | null
     isCompleted?: boolean
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     weeks?: PlanWeekUncheckedCreateNestedManyWithoutTrainingPlanInput
@@ -19635,6 +19726,7 @@ export namespace Prisma {
     time1600m?: IntFilter<"Athlete"> | number
     createdAt?: DateTimeFilter<"Athlete"> | Date | string
     updatedAt?: DateTimeFilter<"Athlete"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Athlete"> | Date | string | null
     coachId?: StringFilter<"Athlete"> | string
   }
 
@@ -19670,6 +19762,7 @@ export namespace Prisma {
     planType?: StringNullableFilter<"TrainingPlan"> | string | null
     totalWorkouts?: IntNullableFilter<"TrainingPlan"> | number | null
     isCompleted?: BoolFilter<"TrainingPlan"> | boolean
+    deletedAt?: DateTimeNullableFilter<"TrainingPlan"> | Date | string | null
     userId?: StringFilter<"TrainingPlan"> | string
     createdAt?: DateTimeFilter<"TrainingPlan"> | Date | string
     updatedAt?: DateTimeFilter<"TrainingPlan"> | Date | string
@@ -19716,6 +19809,7 @@ export namespace Prisma {
     passwordHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     sessions?: SessionCreateNestedManyWithoutUserInput
     athletes?: AthleteCreateNestedManyWithoutCoachInput
     trainingPlans?: TrainingPlanCreateNestedManyWithoutUserInput
@@ -19731,6 +19825,7 @@ export namespace Prisma {
     passwordHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     athletes?: AthleteUncheckedCreateNestedManyWithoutCoachInput
     trainingPlans?: TrainingPlanUncheckedCreateNestedManyWithoutUserInput
@@ -19762,6 +19857,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sessions?: SessionUpdateManyWithoutUserNestedInput
     athletes?: AthleteUpdateManyWithoutCoachNestedInput
     trainingPlans?: TrainingPlanUpdateManyWithoutUserNestedInput
@@ -19777,6 +19873,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     athletes?: AthleteUncheckedUpdateManyWithoutCoachNestedInput
     trainingPlans?: TrainingPlanUncheckedUpdateManyWithoutUserNestedInput
@@ -19792,6 +19889,7 @@ export namespace Prisma {
     passwordHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     athletes?: AthleteCreateNestedManyWithoutCoachInput
     trainingPlans?: TrainingPlanCreateNestedManyWithoutUserInput
@@ -19807,6 +19905,7 @@ export namespace Prisma {
     passwordHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     athletes?: AthleteUncheckedCreateNestedManyWithoutCoachInput
     trainingPlans?: TrainingPlanUncheckedCreateNestedManyWithoutUserInput
@@ -19838,6 +19937,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     athletes?: AthleteUpdateManyWithoutCoachNestedInput
     trainingPlans?: TrainingPlanUpdateManyWithoutUserNestedInput
@@ -19853,6 +19953,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     athletes?: AthleteUncheckedUpdateManyWithoutCoachNestedInput
     trainingPlans?: TrainingPlanUncheckedUpdateManyWithoutUserNestedInput
@@ -19868,6 +19969,7 @@ export namespace Prisma {
     passwordHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     trainingPlans?: TrainingPlanCreateNestedManyWithoutUserInput
@@ -19883,6 +19985,7 @@ export namespace Prisma {
     passwordHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     trainingPlans?: TrainingPlanUncheckedCreateNestedManyWithoutUserInput
@@ -19964,6 +20067,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     trainingPlans?: TrainingPlanUpdateManyWithoutUserNestedInput
@@ -19979,6 +20083,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     trainingPlans?: TrainingPlanUncheckedUpdateManyWithoutUserNestedInput
@@ -20049,6 +20154,7 @@ export namespace Prisma {
     passwordHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     athletes?: AthleteCreateNestedManyWithoutCoachInput
@@ -20064,6 +20170,7 @@ export namespace Prisma {
     passwordHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     athletes?: AthleteUncheckedCreateNestedManyWithoutCoachInput
@@ -20145,6 +20252,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     athletes?: AthleteUpdateManyWithoutCoachNestedInput
@@ -20160,6 +20268,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     athletes?: AthleteUncheckedUpdateManyWithoutCoachNestedInput
@@ -20224,6 +20333,7 @@ export namespace Prisma {
     planType?: string | null
     totalWorkouts?: number | null
     isCompleted?: boolean
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutTrainingPlansInput
@@ -20243,6 +20353,7 @@ export namespace Prisma {
     planType?: string | null
     totalWorkouts?: number | null
     isCompleted?: boolean
+    deletedAt?: Date | string | null
     userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -20262,6 +20373,7 @@ export namespace Prisma {
     time1600m: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     coach: UserCreateNestedOneWithoutAthletesInput
     workoutResults?: WorkoutResultCreateNestedManyWithoutAthleteInput
   }
@@ -20275,6 +20387,7 @@ export namespace Prisma {
     time1600m: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     coachId: string
     workoutResults?: WorkoutResultUncheckedCreateNestedManyWithoutAthleteInput
   }
@@ -20308,6 +20421,7 @@ export namespace Prisma {
     planType?: NullableStringFieldUpdateOperationsInput | string | null
     totalWorkouts?: NullableIntFieldUpdateOperationsInput | number | null
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutTrainingPlansNestedInput
@@ -20327,6 +20441,7 @@ export namespace Prisma {
     planType?: NullableStringFieldUpdateOperationsInput | string | null
     totalWorkouts?: NullableIntFieldUpdateOperationsInput | number | null
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20352,6 +20467,7 @@ export namespace Prisma {
     time1600m?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     coach?: UserUpdateOneRequiredWithoutAthletesNestedInput
     workoutResults?: WorkoutResultUpdateManyWithoutAthleteNestedInput
   }
@@ -20365,6 +20481,7 @@ export namespace Prisma {
     time1600m?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     coachId?: StringFieldUpdateOperationsInput | string
     workoutResults?: WorkoutResultUncheckedUpdateManyWithoutAthleteNestedInput
   }
@@ -20382,6 +20499,7 @@ export namespace Prisma {
     planType?: string | null
     totalWorkouts?: number | null
     isCompleted?: boolean
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutTrainingPlansInput
@@ -20401,6 +20519,7 @@ export namespace Prisma {
     planType?: string | null
     totalWorkouts?: number | null
     isCompleted?: boolean
+    deletedAt?: Date | string | null
     userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -20462,6 +20581,7 @@ export namespace Prisma {
     planType?: NullableStringFieldUpdateOperationsInput | string | null
     totalWorkouts?: NullableIntFieldUpdateOperationsInput | number | null
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutTrainingPlansNestedInput
@@ -20481,6 +20601,7 @@ export namespace Prisma {
     planType?: NullableStringFieldUpdateOperationsInput | string | null
     totalWorkouts?: NullableIntFieldUpdateOperationsInput | number | null
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20669,6 +20790,7 @@ export namespace Prisma {
     time1600m: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     coach: UserCreateNestedOneWithoutAthletesInput
     trainingPlanAthletes?: TrainingPlanAthleteCreateNestedManyWithoutAthleteInput
   }
@@ -20682,6 +20804,7 @@ export namespace Prisma {
     time1600m: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     coachId: string
     trainingPlanAthletes?: TrainingPlanAthleteUncheckedCreateNestedManyWithoutAthleteInput
   }
@@ -20710,6 +20833,7 @@ export namespace Prisma {
     time1600m?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     coach?: UserUpdateOneRequiredWithoutAthletesNestedInput
     trainingPlanAthletes?: TrainingPlanAthleteUpdateManyWithoutAthleteNestedInput
   }
@@ -20723,6 +20847,7 @@ export namespace Prisma {
     time1600m?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     coachId?: StringFieldUpdateOperationsInput | string
     trainingPlanAthletes?: TrainingPlanAthleteUncheckedUpdateManyWithoutAthleteNestedInput
   }
@@ -20736,6 +20861,7 @@ export namespace Prisma {
     passwordHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     athletes?: AthleteCreateNestedManyWithoutCoachInput
@@ -20751,6 +20877,7 @@ export namespace Prisma {
     passwordHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     athletes?: AthleteUncheckedCreateNestedManyWithoutCoachInput
@@ -20782,6 +20909,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     athletes?: AthleteUpdateManyWithoutCoachNestedInput
@@ -20797,6 +20925,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     athletes?: AthleteUncheckedUpdateManyWithoutCoachNestedInput
@@ -20832,6 +20961,7 @@ export namespace Prisma {
     time1600m: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
   }
 
   export type TrainingPlanCreateManyUserInput = {
@@ -20847,6 +20977,7 @@ export namespace Prisma {
     planType?: string | null
     totalWorkouts?: number | null
     isCompleted?: boolean
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20931,6 +21062,7 @@ export namespace Prisma {
     time1600m?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workoutResults?: WorkoutResultUpdateManyWithoutAthleteNestedInput
     trainingPlanAthletes?: TrainingPlanAthleteUpdateManyWithoutAthleteNestedInput
   }
@@ -20944,6 +21076,7 @@ export namespace Prisma {
     time1600m?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workoutResults?: WorkoutResultUncheckedUpdateManyWithoutAthleteNestedInput
     trainingPlanAthletes?: TrainingPlanAthleteUncheckedUpdateManyWithoutAthleteNestedInput
   }
@@ -20957,6 +21090,7 @@ export namespace Prisma {
     time1600m?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type TrainingPlanUpdateWithoutUserInput = {
@@ -20972,6 +21106,7 @@ export namespace Prisma {
     planType?: NullableStringFieldUpdateOperationsInput | string | null
     totalWorkouts?: NullableIntFieldUpdateOperationsInput | number | null
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     weeks?: PlanWeekUpdateManyWithoutTrainingPlanNestedInput
@@ -20991,6 +21126,7 @@ export namespace Prisma {
     planType?: NullableStringFieldUpdateOperationsInput | string | null
     totalWorkouts?: NullableIntFieldUpdateOperationsInput | number | null
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     weeks?: PlanWeekUncheckedUpdateManyWithoutTrainingPlanNestedInput
@@ -21010,6 +21146,7 @@ export namespace Prisma {
     planType?: NullableStringFieldUpdateOperationsInput | string | null
     totalWorkouts?: NullableIntFieldUpdateOperationsInput | number | null
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
