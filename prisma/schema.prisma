@@ -39,55 +39,67 @@ model User {
 // NextAuth Models
 
 model Account {
-  id                String  @id @default(cuid())
-  userId            String
+  id                 String  @id @default(cuid())
+  userId            String  @map("user_id")
   type              String
   provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
+  providerAccountId String  @map("provider_account_id")
+  refreshToken      String? @map("refresh_token") @db.Text
+  accessToken       String? @map("access_token") @db.Text
+  expiresAt         Int?    @map("expires_at")
+  tokenType         String? @map("token_type")
   scope             String?
-  id_token          String? @db.Text
-  session_state     String?
+  idToken           String? @map("id_token") @db.Text
+  sessionState      String? @map("session_state")
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
 
   @@unique([provider, providerAccountId])
+  @@map("accounts")
 }
 
 model Session {
   id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+
+  @@map("sessions")
 }
 
 model VerificationToken {
   identifier String
   token      String   @unique
   expires    DateTime
+  createdAt  DateTime @default(now()) @map("created_at")
+
 
   @@unique([identifier, token])
+  @@map("verification_tokens")
 }
 
 // Athlete model
 model Athlete {
   id                   Int                   @id @default(autoincrement())
-  firstName            String
-  lastName             String
+  firstName            String                @map("first_name")
+  lastName             String                @map("last_name")
   birthday             DateTime              @db.Date
   grade                Int
-  time1600m            Int
-  createdAt            DateTime              @default(now())
-  updatedAt            DateTime              @updatedAt
-  deletedAt            DateTime?             @map("deleted_at") @db.Timestamptz
-  coachId              String // Foreign key to User (Coach)
+  time1600m            Int                   @map("time_1600m")
+  createdAt            DateTime              @default(now()) @map("created_at")
+  updatedAt            DateTime              @updatedAt @map("updated_at")
+  deletedAt            DateTime?             @db.Timestamptz @map("deleted_at")
+  coachId              String                @map("coach_id")
   coach                User                  @relation(fields: [coachId], references: [id], onDelete: Cascade)
-  workoutResults       WorkoutResult[] // Relation to workout results
-  trainingPlanAthletes TrainingPlanAthlete[] // Relation to training plans
+  workoutResults       WorkoutResult[]
+  trainingPlanAthletes TrainingPlanAthlete[]
 
   @@map("athletes")
   @@index([coachId], name: "idx_athlete_coach")
@@ -100,25 +112,22 @@ model TrainingPlan {
   id            String   @id @default(cuid())
   title         String
   description   String?  @db.Text
-  duration      String // e.g. "12 weeks" - display format
-  durationWeeks Int // numeric value for calculations
-  startDate     DateTime
-  endDate       DateTime
-  progress      Int? // percentage completed (0-100)
-  type          String? // "endurance", "speed", "strength", "marathon", "standard"
-  planType      String? // additional classification e.g. "xc" for cross country
-  totalWorkouts Int? // count of all workouts in the plan
-  isCompleted   Boolean  @default(false)
-  deletedAt     DateTime? @map("deleted_at") @db.Timestamptz
-
-  // Relations
-  userId   String // coach who created the plan
-  user     User                  @relation(fields: [userId], references: [id])
-  weeks    PlanWeek[] // weeks of the training plan
-  athletes TrainingPlanAthlete[] // athletes assigned to this plan
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  duration      String
+  durationWeeks Int      @map("duration_weeks")
+  startDate     DateTime @map("start_date")
+  endDate       DateTime @map("end_date")
+  progress      Int?
+  type          String?
+  planType      String?  @map("plan_type")
+  totalWorkouts Int?     @map("total_workouts")
+  isCompleted   Boolean  @default(false) @map("is_completed")
+  deletedAt     DateTime? @db.Timestamptz @map("deleted_at")
+  userId        String   @map("user_id")
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weeks         PlanWeek[]
+  athletes      TrainingPlanAthlete[]
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
   @@map("training_plans")
   @@index([userId])
@@ -128,33 +137,39 @@ model TrainingPlan {
 // Many-to-many relationship between Training Plans and Athletes
 model TrainingPlanAthlete {
   trainingPlan   TrainingPlan @relation(fields: [trainingPlanId], references: [id], onDelete: Cascade)
-  trainingPlanId String
+  trainingPlanId String       @map("training_plan_id")
   athlete        Athlete      @relation(fields: [athleteId], references: [id], onDelete: Cascade)
-  athleteId      Int
-  assignedAt     DateTime     @default(now())
+  athleteId      Int          @map("athlete_id")
+  assignedAt     DateTime     @default(now()) @map("assigned_at")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
 
   @@id([trainingPlanId, athleteId])
   @@index([athleteId])
   @@index([trainingPlanId])
+  @@map("training_plan_athletes")
 }
 
 // Weekly plan data
 model PlanWeek {
   id          String  @id @default(cuid())
-  weekNumber  Int
-  dateRange   String // e.g. "5/24-5/30"
-  seasonPhase String? // e.g. "Summer Week 1"
+  weekNumber  Int     @map("week_number")
+  dateRange   String  @map("date_range")
+  seasonPhase String? @map("season_phase")
+  deletedAt   DateTime? @db.Timestamptz @map("deleted_at")
 
   // Relations
   trainingPlan   TrainingPlan  @relation(fields: [trainingPlanId], references: [id], onDelete: Cascade)
-  trainingPlanId String
+  trainingPlanId String        @map("training_plan_id")
   workouts       PlanWorkout[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@unique([trainingPlanId, weekNumber])
   @@index([trainingPlanId])
+  @@index([deletedAt], name: "idx_plan_week_deleted_at")
+  @@map("plan_weeks")
 }
 
 // Workout types
@@ -163,58 +178,77 @@ model WorkoutType {
   name     String
   color    String // CSS classes for styling
   workouts PlanWorkout[]
+  deletedAt DateTime? @db.Timestamptz @map("deleted_at")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@unique([name])
+  @@index([deletedAt], name: "idx_workout_type_deleted_at")
+  @@map("workout_types")
 }
 
 // Workout for a specific week and type
 model PlanWorkout {
-  id      String  @id @default(cuid())
-  details String? @db.Text // workout description e.g. "10m@80%"
+  id        String   @id @default(cuid())
+  details   String?  @db.Text
+  deletedAt DateTime? @db.Timestamptz @map("deleted_at")
+
 
   // Relations
   week          PlanWeek    @relation(fields: [weekId], references: [id], onDelete: Cascade)
-  weekId        String
+  weekId        String      @map("week_id")
   workoutType   WorkoutType @relation(fields: [workoutTypeId], references: [id])
-  workoutTypeId String
+  workoutTypeId String      @map("workout_type_id")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([weekId, workoutTypeId]) // Each week can only have one workout of a specific type
+  @@unique([weekId, workoutTypeId])
   @@index([weekId])
   @@index([workoutTypeId])
+  @@index([deletedAt], name: "idx_plan_workout_deleted_at")
+  @@map("plan_workouts")
 }
 
 // Workout Result model (Simplified for now)
 model WorkoutResult {
   id        String   @id @default(cuid())
-  athleteId Int
+  athleteId Int      @map("athlete_id")
   athlete   Athlete  @relation(fields: [athleteId], references: [id], onDelete: Cascade)
   date      DateTime
-  type      String // e.g., "Interval", "Tempo", "Long Run"
-  details   Json // Flexible field for workout-specific data (distance, reps, pace, etc.)
+  type      String
+  details   Json
   notes     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  deletedAt DateTime? @db.Timestamptz @map("deleted_at")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("workout_results")
+  @@index([athleteId])
+  @@index([date])
+  @@index([deletedAt], name: "idx_workout_result_deleted_at")
 }
 
 // Model for the Workout Library
 model WorkoutLibraryItem {
   id          String   @id @default(cuid())
   name        String
-  type        String // e.g., "Tempo Run", "Interval", "Long Run" - user-defined
-  category    String // e.g., "Endurance Support", "Direct Endurance"
-  duration    String // e.g., "20-40 min"
+  type        String
+  category    String
+  duration    String
   description String?  @db.Text
-  icon        String? // Icon identifier
-  userId      String // The coach who created this library item
+  icon        String?
+  userId      String   @map("user_id")
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime? @db.Timestamptz @map("deleted_at")
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
+  @@map("workout_library_items")
   @@index([userId])
+  @@index([deletedAt], name: "idx_workout_library_item_deleted_at")
 }

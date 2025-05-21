@@ -3102,11 +3102,11 @@ export namespace Prisma {
   }
 
   export type AccountAvgAggregateOutputType = {
-    expires_at: number | null
+    expiresAt: number | null
   }
 
   export type AccountSumAggregateOutputType = {
-    expires_at: number | null
+    expiresAt: number | null
   }
 
   export type AccountMinAggregateOutputType = {
@@ -3115,13 +3115,15 @@ export namespace Prisma {
     type: string | null
     provider: string | null
     providerAccountId: string | null
-    refresh_token: string | null
-    access_token: string | null
-    expires_at: number | null
-    token_type: string | null
+    refreshToken: string | null
+    accessToken: string | null
+    expiresAt: number | null
+    tokenType: string | null
     scope: string | null
-    id_token: string | null
-    session_state: string | null
+    idToken: string | null
+    sessionState: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type AccountMaxAggregateOutputType = {
@@ -3130,13 +3132,15 @@ export namespace Prisma {
     type: string | null
     provider: string | null
     providerAccountId: string | null
-    refresh_token: string | null
-    access_token: string | null
-    expires_at: number | null
-    token_type: string | null
+    refreshToken: string | null
+    accessToken: string | null
+    expiresAt: number | null
+    tokenType: string | null
     scope: string | null
-    id_token: string | null
-    session_state: string | null
+    idToken: string | null
+    sessionState: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type AccountCountAggregateOutputType = {
@@ -3145,23 +3149,25 @@ export namespace Prisma {
     type: number
     provider: number
     providerAccountId: number
-    refresh_token: number
-    access_token: number
-    expires_at: number
-    token_type: number
+    refreshToken: number
+    accessToken: number
+    expiresAt: number
+    tokenType: number
     scope: number
-    id_token: number
-    session_state: number
+    idToken: number
+    sessionState: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
 
   export type AccountAvgAggregateInputType = {
-    expires_at?: true
+    expiresAt?: true
   }
 
   export type AccountSumAggregateInputType = {
-    expires_at?: true
+    expiresAt?: true
   }
 
   export type AccountMinAggregateInputType = {
@@ -3170,13 +3176,15 @@ export namespace Prisma {
     type?: true
     provider?: true
     providerAccountId?: true
-    refresh_token?: true
-    access_token?: true
-    expires_at?: true
-    token_type?: true
+    refreshToken?: true
+    accessToken?: true
+    expiresAt?: true
+    tokenType?: true
     scope?: true
-    id_token?: true
-    session_state?: true
+    idToken?: true
+    sessionState?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type AccountMaxAggregateInputType = {
@@ -3185,13 +3193,15 @@ export namespace Prisma {
     type?: true
     provider?: true
     providerAccountId?: true
-    refresh_token?: true
-    access_token?: true
-    expires_at?: true
-    token_type?: true
+    refreshToken?: true
+    accessToken?: true
+    expiresAt?: true
+    tokenType?: true
     scope?: true
-    id_token?: true
-    session_state?: true
+    idToken?: true
+    sessionState?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type AccountCountAggregateInputType = {
@@ -3200,13 +3210,15 @@ export namespace Prisma {
     type?: true
     provider?: true
     providerAccountId?: true
-    refresh_token?: true
-    access_token?: true
-    expires_at?: true
-    token_type?: true
+    refreshToken?: true
+    accessToken?: true
+    expiresAt?: true
+    tokenType?: true
     scope?: true
-    id_token?: true
-    session_state?: true
+    idToken?: true
+    sessionState?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -3302,13 +3314,15 @@ export namespace Prisma {
     type: string
     provider: string
     providerAccountId: string
-    refresh_token: string | null
-    access_token: string | null
-    expires_at: number | null
-    token_type: string | null
+    refreshToken: string | null
+    accessToken: string | null
+    expiresAt: number | null
+    tokenType: string | null
     scope: string | null
-    id_token: string | null
-    session_state: string | null
+    idToken: string | null
+    sessionState: string | null
+    createdAt: Date
+    updatedAt: Date
     _count: AccountCountAggregateOutputType | null
     _avg: AccountAvgAggregateOutputType | null
     _sum: AccountSumAggregateOutputType | null
@@ -3336,13 +3350,15 @@ export namespace Prisma {
     type?: boolean
     provider?: boolean
     providerAccountId?: boolean
-    refresh_token?: boolean
-    access_token?: boolean
-    expires_at?: boolean
-    token_type?: boolean
+    refreshToken?: boolean
+    accessToken?: boolean
+    expiresAt?: boolean
+    tokenType?: boolean
     scope?: boolean
-    id_token?: boolean
-    session_state?: boolean
+    idToken?: boolean
+    sessionState?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["account"]>
 
@@ -3352,13 +3368,15 @@ export namespace Prisma {
     type?: boolean
     provider?: boolean
     providerAccountId?: boolean
-    refresh_token?: boolean
-    access_token?: boolean
-    expires_at?: boolean
-    token_type?: boolean
+    refreshToken?: boolean
+    accessToken?: boolean
+    expiresAt?: boolean
+    tokenType?: boolean
     scope?: boolean
-    id_token?: boolean
-    session_state?: boolean
+    idToken?: boolean
+    sessionState?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["account"]>
 
@@ -3368,13 +3386,15 @@ export namespace Prisma {
     type?: boolean
     provider?: boolean
     providerAccountId?: boolean
-    refresh_token?: boolean
-    access_token?: boolean
-    expires_at?: boolean
-    token_type?: boolean
+    refreshToken?: boolean
+    accessToken?: boolean
+    expiresAt?: boolean
+    tokenType?: boolean
     scope?: boolean
-    id_token?: boolean
-    session_state?: boolean
+    idToken?: boolean
+    sessionState?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
   export type AccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3395,13 +3415,15 @@ export namespace Prisma {
       type: string
       provider: string
       providerAccountId: string
-      refresh_token: string | null
-      access_token: string | null
-      expires_at: number | null
-      token_type: string | null
+      refreshToken: string | null
+      accessToken: string | null
+      expiresAt: number | null
+      tokenType: string | null
       scope: string | null
-      id_token: string | null
-      session_state: string | null
+      idToken: string | null
+      sessionState: string | null
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["account"]>
     composites: {}
   }
@@ -3801,13 +3823,15 @@ export namespace Prisma {
     readonly type: FieldRef<"Account", 'String'>
     readonly provider: FieldRef<"Account", 'String'>
     readonly providerAccountId: FieldRef<"Account", 'String'>
-    readonly refresh_token: FieldRef<"Account", 'String'>
-    readonly access_token: FieldRef<"Account", 'String'>
-    readonly expires_at: FieldRef<"Account", 'Int'>
-    readonly token_type: FieldRef<"Account", 'String'>
+    readonly refreshToken: FieldRef<"Account", 'String'>
+    readonly accessToken: FieldRef<"Account", 'String'>
+    readonly expiresAt: FieldRef<"Account", 'Int'>
+    readonly tokenType: FieldRef<"Account", 'String'>
     readonly scope: FieldRef<"Account", 'String'>
-    readonly id_token: FieldRef<"Account", 'String'>
-    readonly session_state: FieldRef<"Account", 'String'>
+    readonly idToken: FieldRef<"Account", 'String'>
+    readonly sessionState: FieldRef<"Account", 'String'>
+    readonly createdAt: FieldRef<"Account", 'DateTime'>
+    readonly updatedAt: FieldRef<"Account", 'DateTime'>
   }
     
 
@@ -4155,6 +4179,8 @@ export namespace Prisma {
     sessionToken: string | null
     userId: string | null
     expires: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type SessionMaxAggregateOutputType = {
@@ -4162,6 +4188,8 @@ export namespace Prisma {
     sessionToken: string | null
     userId: string | null
     expires: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type SessionCountAggregateOutputType = {
@@ -4169,6 +4197,8 @@ export namespace Prisma {
     sessionToken: number
     userId: number
     expires: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -4178,6 +4208,8 @@ export namespace Prisma {
     sessionToken?: true
     userId?: true
     expires?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type SessionMaxAggregateInputType = {
@@ -4185,6 +4217,8 @@ export namespace Prisma {
     sessionToken?: true
     userId?: true
     expires?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type SessionCountAggregateInputType = {
@@ -4192,6 +4226,8 @@ export namespace Prisma {
     sessionToken?: true
     userId?: true
     expires?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -4272,6 +4308,8 @@ export namespace Prisma {
     sessionToken: string
     userId: string
     expires: Date
+    createdAt: Date
+    updatedAt: Date
     _count: SessionCountAggregateOutputType | null
     _min: SessionMinAggregateOutputType | null
     _max: SessionMaxAggregateOutputType | null
@@ -4296,6 +4334,8 @@ export namespace Prisma {
     sessionToken?: boolean
     userId?: boolean
     expires?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["session"]>
 
@@ -4304,6 +4344,8 @@ export namespace Prisma {
     sessionToken?: boolean
     userId?: boolean
     expires?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["session"]>
 
@@ -4312,6 +4354,8 @@ export namespace Prisma {
     sessionToken?: boolean
     userId?: boolean
     expires?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
   export type SessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4331,6 +4375,8 @@ export namespace Prisma {
       sessionToken: string
       userId: string
       expires: Date
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["session"]>
     composites: {}
   }
@@ -4729,6 +4775,8 @@ export namespace Prisma {
     readonly sessionToken: FieldRef<"Session", 'String'>
     readonly userId: FieldRef<"Session", 'String'>
     readonly expires: FieldRef<"Session", 'DateTime'>
+    readonly createdAt: FieldRef<"Session", 'DateTime'>
+    readonly updatedAt: FieldRef<"Session", 'DateTime'>
   }
     
 
@@ -5075,18 +5123,21 @@ export namespace Prisma {
     identifier: string | null
     token: string | null
     expires: Date | null
+    createdAt: Date | null
   }
 
   export type VerificationTokenMaxAggregateOutputType = {
     identifier: string | null
     token: string | null
     expires: Date | null
+    createdAt: Date | null
   }
 
   export type VerificationTokenCountAggregateOutputType = {
     identifier: number
     token: number
     expires: number
+    createdAt: number
     _all: number
   }
 
@@ -5095,18 +5146,21 @@ export namespace Prisma {
     identifier?: true
     token?: true
     expires?: true
+    createdAt?: true
   }
 
   export type VerificationTokenMaxAggregateInputType = {
     identifier?: true
     token?: true
     expires?: true
+    createdAt?: true
   }
 
   export type VerificationTokenCountAggregateInputType = {
     identifier?: true
     token?: true
     expires?: true
+    createdAt?: true
     _all?: true
   }
 
@@ -5186,6 +5240,7 @@ export namespace Prisma {
     identifier: string
     token: string
     expires: Date
+    createdAt: Date
     _count: VerificationTokenCountAggregateOutputType | null
     _min: VerificationTokenMinAggregateOutputType | null
     _max: VerificationTokenMaxAggregateOutputType | null
@@ -5209,18 +5264,21 @@ export namespace Prisma {
     identifier?: boolean
     token?: boolean
     expires?: boolean
+    createdAt?: boolean
   }, ExtArgs["result"]["verificationToken"]>
 
   export type VerificationTokenSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     identifier?: boolean
     token?: boolean
     expires?: boolean
+    createdAt?: boolean
   }, ExtArgs["result"]["verificationToken"]>
 
   export type VerificationTokenSelectScalar = {
     identifier?: boolean
     token?: boolean
     expires?: boolean
+    createdAt?: boolean
   }
 
 
@@ -5231,6 +5289,7 @@ export namespace Prisma {
       identifier: string
       token: string
       expires: Date
+      createdAt: Date
     }, ExtArgs["result"]["verificationToken"]>
     composites: {}
   }
@@ -5627,6 +5686,7 @@ export namespace Prisma {
     readonly identifier: FieldRef<"VerificationToken", 'String'>
     readonly token: FieldRef<"VerificationToken", 'String'>
     readonly expires: FieldRef<"VerificationToken", 'DateTime'>
+    readonly createdAt: FieldRef<"VerificationToken", 'DateTime'>
   }
     
 
@@ -8181,18 +8241,24 @@ export namespace Prisma {
     trainingPlanId: string | null
     athleteId: number | null
     assignedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type TrainingPlanAthleteMaxAggregateOutputType = {
     trainingPlanId: string | null
     athleteId: number | null
     assignedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type TrainingPlanAthleteCountAggregateOutputType = {
     trainingPlanId: number
     athleteId: number
     assignedAt: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -8209,18 +8275,24 @@ export namespace Prisma {
     trainingPlanId?: true
     athleteId?: true
     assignedAt?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type TrainingPlanAthleteMaxAggregateInputType = {
     trainingPlanId?: true
     athleteId?: true
     assignedAt?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type TrainingPlanAthleteCountAggregateInputType = {
     trainingPlanId?: true
     athleteId?: true
     assignedAt?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -8314,6 +8386,8 @@ export namespace Prisma {
     trainingPlanId: string
     athleteId: number
     assignedAt: Date
+    createdAt: Date
+    updatedAt: Date
     _count: TrainingPlanAthleteCountAggregateOutputType | null
     _avg: TrainingPlanAthleteAvgAggregateOutputType | null
     _sum: TrainingPlanAthleteSumAggregateOutputType | null
@@ -8339,6 +8413,8 @@ export namespace Prisma {
     trainingPlanId?: boolean
     athleteId?: boolean
     assignedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     trainingPlan?: boolean | TrainingPlanDefaultArgs<ExtArgs>
     athlete?: boolean | AthleteDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["trainingPlanAthlete"]>
@@ -8347,6 +8423,8 @@ export namespace Prisma {
     trainingPlanId?: boolean
     athleteId?: boolean
     assignedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     trainingPlan?: boolean | TrainingPlanDefaultArgs<ExtArgs>
     athlete?: boolean | AthleteDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["trainingPlanAthlete"]>
@@ -8355,6 +8433,8 @@ export namespace Prisma {
     trainingPlanId?: boolean
     athleteId?: boolean
     assignedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
   export type TrainingPlanAthleteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8376,6 +8456,8 @@ export namespace Prisma {
       trainingPlanId: string
       athleteId: number
       assignedAt: Date
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["trainingPlanAthlete"]>
     composites: {}
   }
@@ -8774,6 +8856,8 @@ export namespace Prisma {
     readonly trainingPlanId: FieldRef<"TrainingPlanAthlete", 'String'>
     readonly athleteId: FieldRef<"TrainingPlanAthlete", 'Int'>
     readonly assignedAt: FieldRef<"TrainingPlanAthlete", 'DateTime'>
+    readonly createdAt: FieldRef<"TrainingPlanAthlete", 'DateTime'>
+    readonly updatedAt: FieldRef<"TrainingPlanAthlete", 'DateTime'>
   }
     
 
@@ -9131,6 +9215,7 @@ export namespace Prisma {
     weekNumber: number | null
     dateRange: string | null
     seasonPhase: string | null
+    deletedAt: Date | null
     trainingPlanId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -9141,6 +9226,7 @@ export namespace Prisma {
     weekNumber: number | null
     dateRange: string | null
     seasonPhase: string | null
+    deletedAt: Date | null
     trainingPlanId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -9151,6 +9237,7 @@ export namespace Prisma {
     weekNumber: number
     dateRange: number
     seasonPhase: number
+    deletedAt: number
     trainingPlanId: number
     createdAt: number
     updatedAt: number
@@ -9171,6 +9258,7 @@ export namespace Prisma {
     weekNumber?: true
     dateRange?: true
     seasonPhase?: true
+    deletedAt?: true
     trainingPlanId?: true
     createdAt?: true
     updatedAt?: true
@@ -9181,6 +9269,7 @@ export namespace Prisma {
     weekNumber?: true
     dateRange?: true
     seasonPhase?: true
+    deletedAt?: true
     trainingPlanId?: true
     createdAt?: true
     updatedAt?: true
@@ -9191,6 +9280,7 @@ export namespace Prisma {
     weekNumber?: true
     dateRange?: true
     seasonPhase?: true
+    deletedAt?: true
     trainingPlanId?: true
     createdAt?: true
     updatedAt?: true
@@ -9288,6 +9378,7 @@ export namespace Prisma {
     weekNumber: number
     dateRange: string
     seasonPhase: string | null
+    deletedAt: Date | null
     trainingPlanId: string
     createdAt: Date
     updatedAt: Date
@@ -9317,6 +9408,7 @@ export namespace Prisma {
     weekNumber?: boolean
     dateRange?: boolean
     seasonPhase?: boolean
+    deletedAt?: boolean
     trainingPlanId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -9330,6 +9422,7 @@ export namespace Prisma {
     weekNumber?: boolean
     dateRange?: boolean
     seasonPhase?: boolean
+    deletedAt?: boolean
     trainingPlanId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -9341,6 +9434,7 @@ export namespace Prisma {
     weekNumber?: boolean
     dateRange?: boolean
     seasonPhase?: boolean
+    deletedAt?: boolean
     trainingPlanId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -9366,6 +9460,7 @@ export namespace Prisma {
       weekNumber: number
       dateRange: string
       seasonPhase: string | null
+      deletedAt: Date | null
       trainingPlanId: string
       createdAt: Date
       updatedAt: Date
@@ -9768,6 +9863,7 @@ export namespace Prisma {
     readonly weekNumber: FieldRef<"PlanWeek", 'Int'>
     readonly dateRange: FieldRef<"PlanWeek", 'String'>
     readonly seasonPhase: FieldRef<"PlanWeek", 'String'>
+    readonly deletedAt: FieldRef<"PlanWeek", 'DateTime'>
     readonly trainingPlanId: FieldRef<"PlanWeek", 'String'>
     readonly createdAt: FieldRef<"PlanWeek", 'DateTime'>
     readonly updatedAt: FieldRef<"PlanWeek", 'DateTime'>
@@ -10137,6 +10233,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     color: string | null
+    deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -10145,6 +10242,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     color: string | null
+    deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -10153,6 +10251,7 @@ export namespace Prisma {
     id: number
     name: number
     color: number
+    deletedAt: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -10163,6 +10262,7 @@ export namespace Prisma {
     id?: true
     name?: true
     color?: true
+    deletedAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -10171,6 +10271,7 @@ export namespace Prisma {
     id?: true
     name?: true
     color?: true
+    deletedAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -10179,6 +10280,7 @@ export namespace Prisma {
     id?: true
     name?: true
     color?: true
+    deletedAt?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -10260,6 +10362,7 @@ export namespace Prisma {
     id: string
     name: string
     color: string
+    deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
     _count: WorkoutTypeCountAggregateOutputType | null
@@ -10285,6 +10388,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     color?: boolean
+    deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     workouts?: boolean | WorkoutType$workoutsArgs<ExtArgs>
@@ -10295,6 +10399,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     color?: boolean
+    deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["workoutType"]>
@@ -10303,6 +10408,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     color?: boolean
+    deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -10322,6 +10428,7 @@ export namespace Prisma {
       id: string
       name: string
       color: string
+      deletedAt: Date | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["workoutType"]>
@@ -10721,6 +10828,7 @@ export namespace Prisma {
     readonly id: FieldRef<"WorkoutType", 'String'>
     readonly name: FieldRef<"WorkoutType", 'String'>
     readonly color: FieldRef<"WorkoutType", 'String'>
+    readonly deletedAt: FieldRef<"WorkoutType", 'DateTime'>
     readonly createdAt: FieldRef<"WorkoutType", 'DateTime'>
     readonly updatedAt: FieldRef<"WorkoutType", 'DateTime'>
   }
@@ -11084,6 +11192,7 @@ export namespace Prisma {
   export type PlanWorkoutMinAggregateOutputType = {
     id: string | null
     details: string | null
+    deletedAt: Date | null
     weekId: string | null
     workoutTypeId: string | null
     createdAt: Date | null
@@ -11093,6 +11202,7 @@ export namespace Prisma {
   export type PlanWorkoutMaxAggregateOutputType = {
     id: string | null
     details: string | null
+    deletedAt: Date | null
     weekId: string | null
     workoutTypeId: string | null
     createdAt: Date | null
@@ -11102,6 +11212,7 @@ export namespace Prisma {
   export type PlanWorkoutCountAggregateOutputType = {
     id: number
     details: number
+    deletedAt: number
     weekId: number
     workoutTypeId: number
     createdAt: number
@@ -11113,6 +11224,7 @@ export namespace Prisma {
   export type PlanWorkoutMinAggregateInputType = {
     id?: true
     details?: true
+    deletedAt?: true
     weekId?: true
     workoutTypeId?: true
     createdAt?: true
@@ -11122,6 +11234,7 @@ export namespace Prisma {
   export type PlanWorkoutMaxAggregateInputType = {
     id?: true
     details?: true
+    deletedAt?: true
     weekId?: true
     workoutTypeId?: true
     createdAt?: true
@@ -11131,6 +11244,7 @@ export namespace Prisma {
   export type PlanWorkoutCountAggregateInputType = {
     id?: true
     details?: true
+    deletedAt?: true
     weekId?: true
     workoutTypeId?: true
     createdAt?: true
@@ -11213,6 +11327,7 @@ export namespace Prisma {
   export type PlanWorkoutGroupByOutputType = {
     id: string
     details: string | null
+    deletedAt: Date | null
     weekId: string
     workoutTypeId: string
     createdAt: Date
@@ -11239,6 +11354,7 @@ export namespace Prisma {
   export type PlanWorkoutSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     details?: boolean
+    deletedAt?: boolean
     weekId?: boolean
     workoutTypeId?: boolean
     createdAt?: boolean
@@ -11250,6 +11366,7 @@ export namespace Prisma {
   export type PlanWorkoutSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     details?: boolean
+    deletedAt?: boolean
     weekId?: boolean
     workoutTypeId?: boolean
     createdAt?: boolean
@@ -11261,6 +11378,7 @@ export namespace Prisma {
   export type PlanWorkoutSelectScalar = {
     id?: boolean
     details?: boolean
+    deletedAt?: boolean
     weekId?: boolean
     workoutTypeId?: boolean
     createdAt?: boolean
@@ -11285,6 +11403,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       details: string | null
+      deletedAt: Date | null
       weekId: string
       workoutTypeId: string
       createdAt: Date
@@ -11686,6 +11805,7 @@ export namespace Prisma {
   interface PlanWorkoutFieldRefs {
     readonly id: FieldRef<"PlanWorkout", 'String'>
     readonly details: FieldRef<"PlanWorkout", 'String'>
+    readonly deletedAt: FieldRef<"PlanWorkout", 'DateTime'>
     readonly weekId: FieldRef<"PlanWorkout", 'String'>
     readonly workoutTypeId: FieldRef<"PlanWorkout", 'String'>
     readonly createdAt: FieldRef<"PlanWorkout", 'DateTime'>
@@ -12048,6 +12168,7 @@ export namespace Prisma {
     date: Date | null
     type: string | null
     notes: string | null
+    deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -12058,6 +12179,7 @@ export namespace Prisma {
     date: Date | null
     type: string | null
     notes: string | null
+    deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -12069,6 +12191,7 @@ export namespace Prisma {
     type: number
     details: number
     notes: number
+    deletedAt: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -12089,6 +12212,7 @@ export namespace Prisma {
     date?: true
     type?: true
     notes?: true
+    deletedAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -12099,6 +12223,7 @@ export namespace Prisma {
     date?: true
     type?: true
     notes?: true
+    deletedAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -12110,6 +12235,7 @@ export namespace Prisma {
     type?: true
     details?: true
     notes?: true
+    deletedAt?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -12208,6 +12334,7 @@ export namespace Prisma {
     type: string
     details: JsonValue
     notes: string | null
+    deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
     _count: WorkoutResultCountAggregateOutputType | null
@@ -12238,6 +12365,7 @@ export namespace Prisma {
     type?: boolean
     details?: boolean
     notes?: boolean
+    deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     athlete?: boolean | AthleteDefaultArgs<ExtArgs>
@@ -12250,6 +12378,7 @@ export namespace Prisma {
     type?: boolean
     details?: boolean
     notes?: boolean
+    deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     athlete?: boolean | AthleteDefaultArgs<ExtArgs>
@@ -12262,6 +12391,7 @@ export namespace Prisma {
     type?: boolean
     details?: boolean
     notes?: boolean
+    deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -12285,6 +12415,7 @@ export namespace Prisma {
       type: string
       details: Prisma.JsonValue
       notes: string | null
+      deletedAt: Date | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["workoutResult"]>
@@ -12687,6 +12818,7 @@ export namespace Prisma {
     readonly type: FieldRef<"WorkoutResult", 'String'>
     readonly details: FieldRef<"WorkoutResult", 'Json'>
     readonly notes: FieldRef<"WorkoutResult", 'String'>
+    readonly deletedAt: FieldRef<"WorkoutResult", 'DateTime'>
     readonly createdAt: FieldRef<"WorkoutResult", 'DateTime'>
     readonly updatedAt: FieldRef<"WorkoutResult", 'DateTime'>
   }
@@ -13040,6 +13172,7 @@ export namespace Prisma {
     description: string | null
     icon: string | null
     userId: string | null
+    deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -13053,6 +13186,7 @@ export namespace Prisma {
     description: string | null
     icon: string | null
     userId: string | null
+    deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -13066,6 +13200,7 @@ export namespace Prisma {
     description: number
     icon: number
     userId: number
+    deletedAt: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -13081,6 +13216,7 @@ export namespace Prisma {
     description?: true
     icon?: true
     userId?: true
+    deletedAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13094,6 +13230,7 @@ export namespace Prisma {
     description?: true
     icon?: true
     userId?: true
+    deletedAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13107,6 +13244,7 @@ export namespace Prisma {
     description?: true
     icon?: true
     userId?: true
+    deletedAt?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -13193,6 +13331,7 @@ export namespace Prisma {
     description: string | null
     icon: string | null
     userId: string
+    deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
     _count: WorkoutLibraryItemCountAggregateOutputType | null
@@ -13223,6 +13362,7 @@ export namespace Prisma {
     description?: boolean
     icon?: boolean
     userId?: boolean
+    deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -13237,6 +13377,7 @@ export namespace Prisma {
     description?: boolean
     icon?: boolean
     userId?: boolean
+    deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -13251,6 +13392,7 @@ export namespace Prisma {
     description?: boolean
     icon?: boolean
     userId?: boolean
+    deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -13276,6 +13418,7 @@ export namespace Prisma {
       description: string | null
       icon: string | null
       userId: string
+      deletedAt: Date | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["workoutLibraryItem"]>
@@ -13680,6 +13823,7 @@ export namespace Prisma {
     readonly description: FieldRef<"WorkoutLibraryItem", 'String'>
     readonly icon: FieldRef<"WorkoutLibraryItem", 'String'>
     readonly userId: FieldRef<"WorkoutLibraryItem", 'String'>
+    readonly deletedAt: FieldRef<"WorkoutLibraryItem", 'DateTime'>
     readonly createdAt: FieldRef<"WorkoutLibraryItem", 'DateTime'>
     readonly updatedAt: FieldRef<"WorkoutLibraryItem", 'DateTime'>
   }
@@ -14049,13 +14193,15 @@ export namespace Prisma {
     type: 'type',
     provider: 'provider',
     providerAccountId: 'providerAccountId',
-    refresh_token: 'refresh_token',
-    access_token: 'access_token',
-    expires_at: 'expires_at',
-    token_type: 'token_type',
+    refreshToken: 'refreshToken',
+    accessToken: 'accessToken',
+    expiresAt: 'expiresAt',
+    tokenType: 'tokenType',
     scope: 'scope',
-    id_token: 'id_token',
-    session_state: 'session_state'
+    idToken: 'idToken',
+    sessionState: 'sessionState',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
@@ -14065,7 +14211,9 @@ export namespace Prisma {
     id: 'id',
     sessionToken: 'sessionToken',
     userId: 'userId',
-    expires: 'expires'
+    expires: 'expires',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
@@ -14074,7 +14222,8 @@ export namespace Prisma {
   export const VerificationTokenScalarFieldEnum: {
     identifier: 'identifier',
     token: 'token',
-    expires: 'expires'
+    expires: 'expires',
+    createdAt: 'createdAt'
   };
 
   export type VerificationTokenScalarFieldEnum = (typeof VerificationTokenScalarFieldEnum)[keyof typeof VerificationTokenScalarFieldEnum]
@@ -14121,7 +14270,9 @@ export namespace Prisma {
   export const TrainingPlanAthleteScalarFieldEnum: {
     trainingPlanId: 'trainingPlanId',
     athleteId: 'athleteId',
-    assignedAt: 'assignedAt'
+    assignedAt: 'assignedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type TrainingPlanAthleteScalarFieldEnum = (typeof TrainingPlanAthleteScalarFieldEnum)[keyof typeof TrainingPlanAthleteScalarFieldEnum]
@@ -14132,6 +14283,7 @@ export namespace Prisma {
     weekNumber: 'weekNumber',
     dateRange: 'dateRange',
     seasonPhase: 'seasonPhase',
+    deletedAt: 'deletedAt',
     trainingPlanId: 'trainingPlanId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -14144,6 +14296,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     color: 'color',
+    deletedAt: 'deletedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -14154,6 +14307,7 @@ export namespace Prisma {
   export const PlanWorkoutScalarFieldEnum: {
     id: 'id',
     details: 'details',
+    deletedAt: 'deletedAt',
     weekId: 'weekId',
     workoutTypeId: 'workoutTypeId',
     createdAt: 'createdAt',
@@ -14170,6 +14324,7 @@ export namespace Prisma {
     type: 'type',
     details: 'details',
     notes: 'notes',
+    deletedAt: 'deletedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -14186,6 +14341,7 @@ export namespace Prisma {
     description: 'description',
     icon: 'icon',
     userId: 'userId',
+    deletedAt: 'deletedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -14407,13 +14563,15 @@ export namespace Prisma {
     type?: StringFilter<"Account"> | string
     provider?: StringFilter<"Account"> | string
     providerAccountId?: StringFilter<"Account"> | string
-    refresh_token?: StringNullableFilter<"Account"> | string | null
-    access_token?: StringNullableFilter<"Account"> | string | null
-    expires_at?: IntNullableFilter<"Account"> | number | null
-    token_type?: StringNullableFilter<"Account"> | string | null
+    refreshToken?: StringNullableFilter<"Account"> | string | null
+    accessToken?: StringNullableFilter<"Account"> | string | null
+    expiresAt?: IntNullableFilter<"Account"> | number | null
+    tokenType?: StringNullableFilter<"Account"> | string | null
     scope?: StringNullableFilter<"Account"> | string | null
-    id_token?: StringNullableFilter<"Account"> | string | null
-    session_state?: StringNullableFilter<"Account"> | string | null
+    idToken?: StringNullableFilter<"Account"> | string | null
+    sessionState?: StringNullableFilter<"Account"> | string | null
+    createdAt?: DateTimeFilter<"Account"> | Date | string
+    updatedAt?: DateTimeFilter<"Account"> | Date | string
     user?: XOR<UserRelationFilter, UserWhereInput>
   }
 
@@ -14423,13 +14581,15 @@ export namespace Prisma {
     type?: SortOrder
     provider?: SortOrder
     providerAccountId?: SortOrder
-    refresh_token?: SortOrderInput | SortOrder
-    access_token?: SortOrderInput | SortOrder
-    expires_at?: SortOrderInput | SortOrder
-    token_type?: SortOrderInput | SortOrder
+    refreshToken?: SortOrderInput | SortOrder
+    accessToken?: SortOrderInput | SortOrder
+    expiresAt?: SortOrderInput | SortOrder
+    tokenType?: SortOrderInput | SortOrder
     scope?: SortOrderInput | SortOrder
-    id_token?: SortOrderInput | SortOrder
-    session_state?: SortOrderInput | SortOrder
+    idToken?: SortOrderInput | SortOrder
+    sessionState?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
   }
 
@@ -14443,13 +14603,15 @@ export namespace Prisma {
     type?: StringFilter<"Account"> | string
     provider?: StringFilter<"Account"> | string
     providerAccountId?: StringFilter<"Account"> | string
-    refresh_token?: StringNullableFilter<"Account"> | string | null
-    access_token?: StringNullableFilter<"Account"> | string | null
-    expires_at?: IntNullableFilter<"Account"> | number | null
-    token_type?: StringNullableFilter<"Account"> | string | null
+    refreshToken?: StringNullableFilter<"Account"> | string | null
+    accessToken?: StringNullableFilter<"Account"> | string | null
+    expiresAt?: IntNullableFilter<"Account"> | number | null
+    tokenType?: StringNullableFilter<"Account"> | string | null
     scope?: StringNullableFilter<"Account"> | string | null
-    id_token?: StringNullableFilter<"Account"> | string | null
-    session_state?: StringNullableFilter<"Account"> | string | null
+    idToken?: StringNullableFilter<"Account"> | string | null
+    sessionState?: StringNullableFilter<"Account"> | string | null
+    createdAt?: DateTimeFilter<"Account"> | Date | string
+    updatedAt?: DateTimeFilter<"Account"> | Date | string
     user?: XOR<UserRelationFilter, UserWhereInput>
   }, "id" | "provider_providerAccountId">
 
@@ -14459,13 +14621,15 @@ export namespace Prisma {
     type?: SortOrder
     provider?: SortOrder
     providerAccountId?: SortOrder
-    refresh_token?: SortOrderInput | SortOrder
-    access_token?: SortOrderInput | SortOrder
-    expires_at?: SortOrderInput | SortOrder
-    token_type?: SortOrderInput | SortOrder
+    refreshToken?: SortOrderInput | SortOrder
+    accessToken?: SortOrderInput | SortOrder
+    expiresAt?: SortOrderInput | SortOrder
+    tokenType?: SortOrderInput | SortOrder
     scope?: SortOrderInput | SortOrder
-    id_token?: SortOrderInput | SortOrder
-    session_state?: SortOrderInput | SortOrder
+    idToken?: SortOrderInput | SortOrder
+    sessionState?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: AccountCountOrderByAggregateInput
     _avg?: AccountAvgOrderByAggregateInput
     _max?: AccountMaxOrderByAggregateInput
@@ -14482,13 +14646,15 @@ export namespace Prisma {
     type?: StringWithAggregatesFilter<"Account"> | string
     provider?: StringWithAggregatesFilter<"Account"> | string
     providerAccountId?: StringWithAggregatesFilter<"Account"> | string
-    refresh_token?: StringNullableWithAggregatesFilter<"Account"> | string | null
-    access_token?: StringNullableWithAggregatesFilter<"Account"> | string | null
-    expires_at?: IntNullableWithAggregatesFilter<"Account"> | number | null
-    token_type?: StringNullableWithAggregatesFilter<"Account"> | string | null
+    refreshToken?: StringNullableWithAggregatesFilter<"Account"> | string | null
+    accessToken?: StringNullableWithAggregatesFilter<"Account"> | string | null
+    expiresAt?: IntNullableWithAggregatesFilter<"Account"> | number | null
+    tokenType?: StringNullableWithAggregatesFilter<"Account"> | string | null
     scope?: StringNullableWithAggregatesFilter<"Account"> | string | null
-    id_token?: StringNullableWithAggregatesFilter<"Account"> | string | null
-    session_state?: StringNullableWithAggregatesFilter<"Account"> | string | null
+    idToken?: StringNullableWithAggregatesFilter<"Account"> | string | null
+    sessionState?: StringNullableWithAggregatesFilter<"Account"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Account"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Account"> | Date | string
   }
 
   export type SessionWhereInput = {
@@ -14499,6 +14665,8 @@ export namespace Prisma {
     sessionToken?: StringFilter<"Session"> | string
     userId?: StringFilter<"Session"> | string
     expires?: DateTimeFilter<"Session"> | Date | string
+    createdAt?: DateTimeFilter<"Session"> | Date | string
+    updatedAt?: DateTimeFilter<"Session"> | Date | string
     user?: XOR<UserRelationFilter, UserWhereInput>
   }
 
@@ -14507,6 +14675,8 @@ export namespace Prisma {
     sessionToken?: SortOrder
     userId?: SortOrder
     expires?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
   }
 
@@ -14518,6 +14688,8 @@ export namespace Prisma {
     NOT?: SessionWhereInput | SessionWhereInput[]
     userId?: StringFilter<"Session"> | string
     expires?: DateTimeFilter<"Session"> | Date | string
+    createdAt?: DateTimeFilter<"Session"> | Date | string
+    updatedAt?: DateTimeFilter<"Session"> | Date | string
     user?: XOR<UserRelationFilter, UserWhereInput>
   }, "id" | "sessionToken">
 
@@ -14526,6 +14698,8 @@ export namespace Prisma {
     sessionToken?: SortOrder
     userId?: SortOrder
     expires?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: SessionCountOrderByAggregateInput
     _max?: SessionMaxOrderByAggregateInput
     _min?: SessionMinOrderByAggregateInput
@@ -14539,6 +14713,8 @@ export namespace Prisma {
     sessionToken?: StringWithAggregatesFilter<"Session"> | string
     userId?: StringWithAggregatesFilter<"Session"> | string
     expires?: DateTimeWithAggregatesFilter<"Session"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"Session"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Session"> | Date | string
   }
 
   export type VerificationTokenWhereInput = {
@@ -14548,12 +14724,14 @@ export namespace Prisma {
     identifier?: StringFilter<"VerificationToken"> | string
     token?: StringFilter<"VerificationToken"> | string
     expires?: DateTimeFilter<"VerificationToken"> | Date | string
+    createdAt?: DateTimeFilter<"VerificationToken"> | Date | string
   }
 
   export type VerificationTokenOrderByWithRelationInput = {
     identifier?: SortOrder
     token?: SortOrder
     expires?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type VerificationTokenWhereUniqueInput = Prisma.AtLeast<{
@@ -14564,12 +14742,14 @@ export namespace Prisma {
     NOT?: VerificationTokenWhereInput | VerificationTokenWhereInput[]
     identifier?: StringFilter<"VerificationToken"> | string
     expires?: DateTimeFilter<"VerificationToken"> | Date | string
+    createdAt?: DateTimeFilter<"VerificationToken"> | Date | string
   }, "token" | "identifier_token">
 
   export type VerificationTokenOrderByWithAggregationInput = {
     identifier?: SortOrder
     token?: SortOrder
     expires?: SortOrder
+    createdAt?: SortOrder
     _count?: VerificationTokenCountOrderByAggregateInput
     _max?: VerificationTokenMaxOrderByAggregateInput
     _min?: VerificationTokenMinOrderByAggregateInput
@@ -14582,6 +14762,7 @@ export namespace Prisma {
     identifier?: StringWithAggregatesFilter<"VerificationToken"> | string
     token?: StringWithAggregatesFilter<"VerificationToken"> | string
     expires?: DateTimeWithAggregatesFilter<"VerificationToken"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"VerificationToken"> | Date | string
   }
 
   export type AthleteWhereInput = {
@@ -14797,6 +14978,8 @@ export namespace Prisma {
     trainingPlanId?: StringFilter<"TrainingPlanAthlete"> | string
     athleteId?: IntFilter<"TrainingPlanAthlete"> | number
     assignedAt?: DateTimeFilter<"TrainingPlanAthlete"> | Date | string
+    createdAt?: DateTimeFilter<"TrainingPlanAthlete"> | Date | string
+    updatedAt?: DateTimeFilter<"TrainingPlanAthlete"> | Date | string
     trainingPlan?: XOR<TrainingPlanRelationFilter, TrainingPlanWhereInput>
     athlete?: XOR<AthleteRelationFilter, AthleteWhereInput>
   }
@@ -14805,6 +14988,8 @@ export namespace Prisma {
     trainingPlanId?: SortOrder
     athleteId?: SortOrder
     assignedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     trainingPlan?: TrainingPlanOrderByWithRelationInput
     athlete?: AthleteOrderByWithRelationInput
   }
@@ -14817,6 +15002,8 @@ export namespace Prisma {
     trainingPlanId?: StringFilter<"TrainingPlanAthlete"> | string
     athleteId?: IntFilter<"TrainingPlanAthlete"> | number
     assignedAt?: DateTimeFilter<"TrainingPlanAthlete"> | Date | string
+    createdAt?: DateTimeFilter<"TrainingPlanAthlete"> | Date | string
+    updatedAt?: DateTimeFilter<"TrainingPlanAthlete"> | Date | string
     trainingPlan?: XOR<TrainingPlanRelationFilter, TrainingPlanWhereInput>
     athlete?: XOR<AthleteRelationFilter, AthleteWhereInput>
   }, "trainingPlanId_athleteId">
@@ -14825,6 +15012,8 @@ export namespace Prisma {
     trainingPlanId?: SortOrder
     athleteId?: SortOrder
     assignedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: TrainingPlanAthleteCountOrderByAggregateInput
     _avg?: TrainingPlanAthleteAvgOrderByAggregateInput
     _max?: TrainingPlanAthleteMaxOrderByAggregateInput
@@ -14839,6 +15028,8 @@ export namespace Prisma {
     trainingPlanId?: StringWithAggregatesFilter<"TrainingPlanAthlete"> | string
     athleteId?: IntWithAggregatesFilter<"TrainingPlanAthlete"> | number
     assignedAt?: DateTimeWithAggregatesFilter<"TrainingPlanAthlete"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"TrainingPlanAthlete"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"TrainingPlanAthlete"> | Date | string
   }
 
   export type PlanWeekWhereInput = {
@@ -14849,6 +15040,7 @@ export namespace Prisma {
     weekNumber?: IntFilter<"PlanWeek"> | number
     dateRange?: StringFilter<"PlanWeek"> | string
     seasonPhase?: StringNullableFilter<"PlanWeek"> | string | null
+    deletedAt?: DateTimeNullableFilter<"PlanWeek"> | Date | string | null
     trainingPlanId?: StringFilter<"PlanWeek"> | string
     createdAt?: DateTimeFilter<"PlanWeek"> | Date | string
     updatedAt?: DateTimeFilter<"PlanWeek"> | Date | string
@@ -14861,6 +15053,7 @@ export namespace Prisma {
     weekNumber?: SortOrder
     dateRange?: SortOrder
     seasonPhase?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     trainingPlanId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14877,6 +15070,7 @@ export namespace Prisma {
     weekNumber?: IntFilter<"PlanWeek"> | number
     dateRange?: StringFilter<"PlanWeek"> | string
     seasonPhase?: StringNullableFilter<"PlanWeek"> | string | null
+    deletedAt?: DateTimeNullableFilter<"PlanWeek"> | Date | string | null
     trainingPlanId?: StringFilter<"PlanWeek"> | string
     createdAt?: DateTimeFilter<"PlanWeek"> | Date | string
     updatedAt?: DateTimeFilter<"PlanWeek"> | Date | string
@@ -14889,6 +15083,7 @@ export namespace Prisma {
     weekNumber?: SortOrder
     dateRange?: SortOrder
     seasonPhase?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     trainingPlanId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14907,6 +15102,7 @@ export namespace Prisma {
     weekNumber?: IntWithAggregatesFilter<"PlanWeek"> | number
     dateRange?: StringWithAggregatesFilter<"PlanWeek"> | string
     seasonPhase?: StringNullableWithAggregatesFilter<"PlanWeek"> | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"PlanWeek"> | Date | string | null
     trainingPlanId?: StringWithAggregatesFilter<"PlanWeek"> | string
     createdAt?: DateTimeWithAggregatesFilter<"PlanWeek"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"PlanWeek"> | Date | string
@@ -14919,6 +15115,7 @@ export namespace Prisma {
     id?: StringFilter<"WorkoutType"> | string
     name?: StringFilter<"WorkoutType"> | string
     color?: StringFilter<"WorkoutType"> | string
+    deletedAt?: DateTimeNullableFilter<"WorkoutType"> | Date | string | null
     createdAt?: DateTimeFilter<"WorkoutType"> | Date | string
     updatedAt?: DateTimeFilter<"WorkoutType"> | Date | string
     workouts?: PlanWorkoutListRelationFilter
@@ -14928,6 +15125,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     color?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     workouts?: PlanWorkoutOrderByRelationAggregateInput
@@ -14940,6 +15138,7 @@ export namespace Prisma {
     OR?: WorkoutTypeWhereInput[]
     NOT?: WorkoutTypeWhereInput | WorkoutTypeWhereInput[]
     color?: StringFilter<"WorkoutType"> | string
+    deletedAt?: DateTimeNullableFilter<"WorkoutType"> | Date | string | null
     createdAt?: DateTimeFilter<"WorkoutType"> | Date | string
     updatedAt?: DateTimeFilter<"WorkoutType"> | Date | string
     workouts?: PlanWorkoutListRelationFilter
@@ -14949,6 +15148,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     color?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: WorkoutTypeCountOrderByAggregateInput
@@ -14963,6 +15163,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"WorkoutType"> | string
     name?: StringWithAggregatesFilter<"WorkoutType"> | string
     color?: StringWithAggregatesFilter<"WorkoutType"> | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"WorkoutType"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"WorkoutType"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"WorkoutType"> | Date | string
   }
@@ -14973,6 +15174,7 @@ export namespace Prisma {
     NOT?: PlanWorkoutWhereInput | PlanWorkoutWhereInput[]
     id?: StringFilter<"PlanWorkout"> | string
     details?: StringNullableFilter<"PlanWorkout"> | string | null
+    deletedAt?: DateTimeNullableFilter<"PlanWorkout"> | Date | string | null
     weekId?: StringFilter<"PlanWorkout"> | string
     workoutTypeId?: StringFilter<"PlanWorkout"> | string
     createdAt?: DateTimeFilter<"PlanWorkout"> | Date | string
@@ -14984,6 +15186,7 @@ export namespace Prisma {
   export type PlanWorkoutOrderByWithRelationInput = {
     id?: SortOrder
     details?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     weekId?: SortOrder
     workoutTypeId?: SortOrder
     createdAt?: SortOrder
@@ -14999,6 +15202,7 @@ export namespace Prisma {
     OR?: PlanWorkoutWhereInput[]
     NOT?: PlanWorkoutWhereInput | PlanWorkoutWhereInput[]
     details?: StringNullableFilter<"PlanWorkout"> | string | null
+    deletedAt?: DateTimeNullableFilter<"PlanWorkout"> | Date | string | null
     weekId?: StringFilter<"PlanWorkout"> | string
     workoutTypeId?: StringFilter<"PlanWorkout"> | string
     createdAt?: DateTimeFilter<"PlanWorkout"> | Date | string
@@ -15010,6 +15214,7 @@ export namespace Prisma {
   export type PlanWorkoutOrderByWithAggregationInput = {
     id?: SortOrder
     details?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     weekId?: SortOrder
     workoutTypeId?: SortOrder
     createdAt?: SortOrder
@@ -15025,6 +15230,7 @@ export namespace Prisma {
     NOT?: PlanWorkoutScalarWhereWithAggregatesInput | PlanWorkoutScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"PlanWorkout"> | string
     details?: StringNullableWithAggregatesFilter<"PlanWorkout"> | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"PlanWorkout"> | Date | string | null
     weekId?: StringWithAggregatesFilter<"PlanWorkout"> | string
     workoutTypeId?: StringWithAggregatesFilter<"PlanWorkout"> | string
     createdAt?: DateTimeWithAggregatesFilter<"PlanWorkout"> | Date | string
@@ -15041,6 +15247,7 @@ export namespace Prisma {
     type?: StringFilter<"WorkoutResult"> | string
     details?: JsonFilter<"WorkoutResult">
     notes?: StringNullableFilter<"WorkoutResult"> | string | null
+    deletedAt?: DateTimeNullableFilter<"WorkoutResult"> | Date | string | null
     createdAt?: DateTimeFilter<"WorkoutResult"> | Date | string
     updatedAt?: DateTimeFilter<"WorkoutResult"> | Date | string
     athlete?: XOR<AthleteRelationFilter, AthleteWhereInput>
@@ -15053,6 +15260,7 @@ export namespace Prisma {
     type?: SortOrder
     details?: SortOrder
     notes?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     athlete?: AthleteOrderByWithRelationInput
@@ -15068,6 +15276,7 @@ export namespace Prisma {
     type?: StringFilter<"WorkoutResult"> | string
     details?: JsonFilter<"WorkoutResult">
     notes?: StringNullableFilter<"WorkoutResult"> | string | null
+    deletedAt?: DateTimeNullableFilter<"WorkoutResult"> | Date | string | null
     createdAt?: DateTimeFilter<"WorkoutResult"> | Date | string
     updatedAt?: DateTimeFilter<"WorkoutResult"> | Date | string
     athlete?: XOR<AthleteRelationFilter, AthleteWhereInput>
@@ -15080,6 +15289,7 @@ export namespace Prisma {
     type?: SortOrder
     details?: SortOrder
     notes?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: WorkoutResultCountOrderByAggregateInput
@@ -15099,6 +15309,7 @@ export namespace Prisma {
     type?: StringWithAggregatesFilter<"WorkoutResult"> | string
     details?: JsonWithAggregatesFilter<"WorkoutResult">
     notes?: StringNullableWithAggregatesFilter<"WorkoutResult"> | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"WorkoutResult"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"WorkoutResult"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"WorkoutResult"> | Date | string
   }
@@ -15115,6 +15326,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"WorkoutLibraryItem"> | string | null
     icon?: StringNullableFilter<"WorkoutLibraryItem"> | string | null
     userId?: StringFilter<"WorkoutLibraryItem"> | string
+    deletedAt?: DateTimeNullableFilter<"WorkoutLibraryItem"> | Date | string | null
     createdAt?: DateTimeFilter<"WorkoutLibraryItem"> | Date | string
     updatedAt?: DateTimeFilter<"WorkoutLibraryItem"> | Date | string
     user?: XOR<UserRelationFilter, UserWhereInput>
@@ -15129,6 +15341,7 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     icon?: SortOrderInput | SortOrder
     userId?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -15146,6 +15359,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"WorkoutLibraryItem"> | string | null
     icon?: StringNullableFilter<"WorkoutLibraryItem"> | string | null
     userId?: StringFilter<"WorkoutLibraryItem"> | string
+    deletedAt?: DateTimeNullableFilter<"WorkoutLibraryItem"> | Date | string | null
     createdAt?: DateTimeFilter<"WorkoutLibraryItem"> | Date | string
     updatedAt?: DateTimeFilter<"WorkoutLibraryItem"> | Date | string
     user?: XOR<UserRelationFilter, UserWhereInput>
@@ -15160,6 +15374,7 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     icon?: SortOrderInput | SortOrder
     userId?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: WorkoutLibraryItemCountOrderByAggregateInput
@@ -15179,6 +15394,7 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"WorkoutLibraryItem"> | string | null
     icon?: StringNullableWithAggregatesFilter<"WorkoutLibraryItem"> | string | null
     userId?: StringWithAggregatesFilter<"WorkoutLibraryItem"> | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"WorkoutLibraryItem"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"WorkoutLibraryItem"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"WorkoutLibraryItem"> | Date | string
   }
@@ -15292,13 +15508,15 @@ export namespace Prisma {
     type: string
     provider: string
     providerAccountId: string
-    refresh_token?: string | null
-    access_token?: string | null
-    expires_at?: number | null
-    token_type?: string | null
+    refreshToken?: string | null
+    accessToken?: string | null
+    expiresAt?: number | null
+    tokenType?: string | null
     scope?: string | null
-    id_token?: string | null
-    session_state?: string | null
+    idToken?: string | null
+    sessionState?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     user: UserCreateNestedOneWithoutAccountsInput
   }
 
@@ -15308,13 +15526,15 @@ export namespace Prisma {
     type: string
     provider: string
     providerAccountId: string
-    refresh_token?: string | null
-    access_token?: string | null
-    expires_at?: number | null
-    token_type?: string | null
+    refreshToken?: string | null
+    accessToken?: string | null
+    expiresAt?: number | null
+    tokenType?: string | null
     scope?: string | null
-    id_token?: string | null
-    session_state?: string | null
+    idToken?: string | null
+    sessionState?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type AccountUpdateInput = {
@@ -15322,13 +15542,15 @@ export namespace Prisma {
     type?: StringFieldUpdateOperationsInput | string
     provider?: StringFieldUpdateOperationsInput | string
     providerAccountId?: StringFieldUpdateOperationsInput | string
-    refresh_token?: NullableStringFieldUpdateOperationsInput | string | null
-    access_token?: NullableStringFieldUpdateOperationsInput | string | null
-    expires_at?: NullableIntFieldUpdateOperationsInput | number | null
-    token_type?: NullableStringFieldUpdateOperationsInput | string | null
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableIntFieldUpdateOperationsInput | number | null
+    tokenType?: NullableStringFieldUpdateOperationsInput | string | null
     scope?: NullableStringFieldUpdateOperationsInput | string | null
-    id_token?: NullableStringFieldUpdateOperationsInput | string | null
-    session_state?: NullableStringFieldUpdateOperationsInput | string | null
+    idToken?: NullableStringFieldUpdateOperationsInput | string | null
+    sessionState?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutAccountsNestedInput
   }
 
@@ -15338,13 +15560,15 @@ export namespace Prisma {
     type?: StringFieldUpdateOperationsInput | string
     provider?: StringFieldUpdateOperationsInput | string
     providerAccountId?: StringFieldUpdateOperationsInput | string
-    refresh_token?: NullableStringFieldUpdateOperationsInput | string | null
-    access_token?: NullableStringFieldUpdateOperationsInput | string | null
-    expires_at?: NullableIntFieldUpdateOperationsInput | number | null
-    token_type?: NullableStringFieldUpdateOperationsInput | string | null
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableIntFieldUpdateOperationsInput | number | null
+    tokenType?: NullableStringFieldUpdateOperationsInput | string | null
     scope?: NullableStringFieldUpdateOperationsInput | string | null
-    id_token?: NullableStringFieldUpdateOperationsInput | string | null
-    session_state?: NullableStringFieldUpdateOperationsInput | string | null
+    idToken?: NullableStringFieldUpdateOperationsInput | string | null
+    sessionState?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AccountCreateManyInput = {
@@ -15353,13 +15577,15 @@ export namespace Prisma {
     type: string
     provider: string
     providerAccountId: string
-    refresh_token?: string | null
-    access_token?: string | null
-    expires_at?: number | null
-    token_type?: string | null
+    refreshToken?: string | null
+    accessToken?: string | null
+    expiresAt?: number | null
+    tokenType?: string | null
     scope?: string | null
-    id_token?: string | null
-    session_state?: string | null
+    idToken?: string | null
+    sessionState?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type AccountUpdateManyMutationInput = {
@@ -15367,13 +15593,15 @@ export namespace Prisma {
     type?: StringFieldUpdateOperationsInput | string
     provider?: StringFieldUpdateOperationsInput | string
     providerAccountId?: StringFieldUpdateOperationsInput | string
-    refresh_token?: NullableStringFieldUpdateOperationsInput | string | null
-    access_token?: NullableStringFieldUpdateOperationsInput | string | null
-    expires_at?: NullableIntFieldUpdateOperationsInput | number | null
-    token_type?: NullableStringFieldUpdateOperationsInput | string | null
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableIntFieldUpdateOperationsInput | number | null
+    tokenType?: NullableStringFieldUpdateOperationsInput | string | null
     scope?: NullableStringFieldUpdateOperationsInput | string | null
-    id_token?: NullableStringFieldUpdateOperationsInput | string | null
-    session_state?: NullableStringFieldUpdateOperationsInput | string | null
+    idToken?: NullableStringFieldUpdateOperationsInput | string | null
+    sessionState?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AccountUncheckedUpdateManyInput = {
@@ -15382,19 +15610,23 @@ export namespace Prisma {
     type?: StringFieldUpdateOperationsInput | string
     provider?: StringFieldUpdateOperationsInput | string
     providerAccountId?: StringFieldUpdateOperationsInput | string
-    refresh_token?: NullableStringFieldUpdateOperationsInput | string | null
-    access_token?: NullableStringFieldUpdateOperationsInput | string | null
-    expires_at?: NullableIntFieldUpdateOperationsInput | number | null
-    token_type?: NullableStringFieldUpdateOperationsInput | string | null
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableIntFieldUpdateOperationsInput | number | null
+    tokenType?: NullableStringFieldUpdateOperationsInput | string | null
     scope?: NullableStringFieldUpdateOperationsInput | string | null
-    id_token?: NullableStringFieldUpdateOperationsInput | string | null
-    session_state?: NullableStringFieldUpdateOperationsInput | string | null
+    idToken?: NullableStringFieldUpdateOperationsInput | string | null
+    sessionState?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SessionCreateInput = {
     id?: string
     sessionToken: string
     expires: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     user: UserCreateNestedOneWithoutSessionsInput
   }
 
@@ -15403,12 +15635,16 @@ export namespace Prisma {
     sessionToken: string
     userId: string
     expires: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type SessionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     sessionToken?: StringFieldUpdateOperationsInput | string
     expires?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutSessionsNestedInput
   }
 
@@ -15417,6 +15653,8 @@ export namespace Prisma {
     sessionToken?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     expires?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SessionCreateManyInput = {
@@ -15424,12 +15662,16 @@ export namespace Prisma {
     sessionToken: string
     userId: string
     expires: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type SessionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     sessionToken?: StringFieldUpdateOperationsInput | string
     expires?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SessionUncheckedUpdateManyInput = {
@@ -15437,48 +15679,57 @@ export namespace Prisma {
     sessionToken?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     expires?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type VerificationTokenCreateInput = {
     identifier: string
     token: string
     expires: Date | string
+    createdAt?: Date | string
   }
 
   export type VerificationTokenUncheckedCreateInput = {
     identifier: string
     token: string
     expires: Date | string
+    createdAt?: Date | string
   }
 
   export type VerificationTokenUpdateInput = {
     identifier?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     expires?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type VerificationTokenUncheckedUpdateInput = {
     identifier?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     expires?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type VerificationTokenCreateManyInput = {
     identifier: string
     token: string
     expires: Date | string
+    createdAt?: Date | string
   }
 
   export type VerificationTokenUpdateManyMutationInput = {
     identifier?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     expires?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type VerificationTokenUncheckedUpdateManyInput = {
     identifier?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     expires?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AthleteCreateInput = {
@@ -15718,6 +15969,8 @@ export namespace Prisma {
 
   export type TrainingPlanAthleteCreateInput = {
     assignedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     trainingPlan: TrainingPlanCreateNestedOneWithoutAthletesInput
     athlete: AthleteCreateNestedOneWithoutTrainingPlanAthletesInput
   }
@@ -15726,10 +15979,14 @@ export namespace Prisma {
     trainingPlanId: string
     athleteId: number
     assignedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type TrainingPlanAthleteUpdateInput = {
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingPlan?: TrainingPlanUpdateOneRequiredWithoutAthletesNestedInput
     athlete?: AthleteUpdateOneRequiredWithoutTrainingPlanAthletesNestedInput
   }
@@ -15738,22 +15995,30 @@ export namespace Prisma {
     trainingPlanId?: StringFieldUpdateOperationsInput | string
     athleteId?: IntFieldUpdateOperationsInput | number
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TrainingPlanAthleteCreateManyInput = {
     trainingPlanId: string
     athleteId: number
     assignedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type TrainingPlanAthleteUpdateManyMutationInput = {
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TrainingPlanAthleteUncheckedUpdateManyInput = {
     trainingPlanId?: StringFieldUpdateOperationsInput | string
     athleteId?: IntFieldUpdateOperationsInput | number
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PlanWeekCreateInput = {
@@ -15761,6 +16026,7 @@ export namespace Prisma {
     weekNumber: number
     dateRange: string
     seasonPhase?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     trainingPlan: TrainingPlanCreateNestedOneWithoutWeeksInput
@@ -15772,6 +16038,7 @@ export namespace Prisma {
     weekNumber: number
     dateRange: string
     seasonPhase?: string | null
+    deletedAt?: Date | string | null
     trainingPlanId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15783,6 +16050,7 @@ export namespace Prisma {
     weekNumber?: IntFieldUpdateOperationsInput | number
     dateRange?: StringFieldUpdateOperationsInput | string
     seasonPhase?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingPlan?: TrainingPlanUpdateOneRequiredWithoutWeeksNestedInput
@@ -15794,6 +16062,7 @@ export namespace Prisma {
     weekNumber?: IntFieldUpdateOperationsInput | number
     dateRange?: StringFieldUpdateOperationsInput | string
     seasonPhase?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     trainingPlanId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15805,6 +16074,7 @@ export namespace Prisma {
     weekNumber: number
     dateRange: string
     seasonPhase?: string | null
+    deletedAt?: Date | string | null
     trainingPlanId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15815,6 +16085,7 @@ export namespace Prisma {
     weekNumber?: IntFieldUpdateOperationsInput | number
     dateRange?: StringFieldUpdateOperationsInput | string
     seasonPhase?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15824,6 +16095,7 @@ export namespace Prisma {
     weekNumber?: IntFieldUpdateOperationsInput | number
     dateRange?: StringFieldUpdateOperationsInput | string
     seasonPhase?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     trainingPlanId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15833,6 +16105,7 @@ export namespace Prisma {
     id?: string
     name: string
     color: string
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     workouts?: PlanWorkoutCreateNestedManyWithoutWorkoutTypeInput
@@ -15842,6 +16115,7 @@ export namespace Prisma {
     id?: string
     name: string
     color: string
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     workouts?: PlanWorkoutUncheckedCreateNestedManyWithoutWorkoutTypeInput
@@ -15851,6 +16125,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workouts?: PlanWorkoutUpdateManyWithoutWorkoutTypeNestedInput
@@ -15860,6 +16135,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workouts?: PlanWorkoutUncheckedUpdateManyWithoutWorkoutTypeNestedInput
@@ -15869,6 +16145,7 @@ export namespace Prisma {
     id?: string
     name: string
     color: string
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15877,6 +16154,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15885,6 +16163,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15892,6 +16171,7 @@ export namespace Prisma {
   export type PlanWorkoutCreateInput = {
     id?: string
     details?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     week: PlanWeekCreateNestedOneWithoutWorkoutsInput
@@ -15901,6 +16181,7 @@ export namespace Prisma {
   export type PlanWorkoutUncheckedCreateInput = {
     id?: string
     details?: string | null
+    deletedAt?: Date | string | null
     weekId: string
     workoutTypeId: string
     createdAt?: Date | string
@@ -15910,6 +16191,7 @@ export namespace Prisma {
   export type PlanWorkoutUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     details?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     week?: PlanWeekUpdateOneRequiredWithoutWorkoutsNestedInput
@@ -15919,6 +16201,7 @@ export namespace Prisma {
   export type PlanWorkoutUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     details?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     weekId?: StringFieldUpdateOperationsInput | string
     workoutTypeId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15928,6 +16211,7 @@ export namespace Prisma {
   export type PlanWorkoutCreateManyInput = {
     id?: string
     details?: string | null
+    deletedAt?: Date | string | null
     weekId: string
     workoutTypeId: string
     createdAt?: Date | string
@@ -15937,6 +16221,7 @@ export namespace Prisma {
   export type PlanWorkoutUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     details?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15944,6 +16229,7 @@ export namespace Prisma {
   export type PlanWorkoutUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     details?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     weekId?: StringFieldUpdateOperationsInput | string
     workoutTypeId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15956,6 +16242,7 @@ export namespace Prisma {
     type: string
     details: JsonNullValueInput | InputJsonValue
     notes?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     athlete: AthleteCreateNestedOneWithoutWorkoutResultsInput
@@ -15968,6 +16255,7 @@ export namespace Prisma {
     type: string
     details: JsonNullValueInput | InputJsonValue
     notes?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15978,6 +16266,7 @@ export namespace Prisma {
     type?: StringFieldUpdateOperationsInput | string
     details?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     athlete?: AthleteUpdateOneRequiredWithoutWorkoutResultsNestedInput
@@ -15990,6 +16279,7 @@ export namespace Prisma {
     type?: StringFieldUpdateOperationsInput | string
     details?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16001,6 +16291,7 @@ export namespace Prisma {
     type: string
     details: JsonNullValueInput | InputJsonValue
     notes?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16011,6 +16302,7 @@ export namespace Prisma {
     type?: StringFieldUpdateOperationsInput | string
     details?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16022,6 +16314,7 @@ export namespace Prisma {
     type?: StringFieldUpdateOperationsInput | string
     details?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16034,6 +16327,7 @@ export namespace Prisma {
     duration: string
     description?: string | null
     icon?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutWorkoutLibraryItemsInput
@@ -16048,6 +16342,7 @@ export namespace Prisma {
     description?: string | null
     icon?: string | null
     userId: string
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16060,6 +16355,7 @@ export namespace Prisma {
     duration?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutWorkoutLibraryItemsNestedInput
@@ -16074,6 +16370,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     icon?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16087,6 +16384,7 @@ export namespace Prisma {
     description?: string | null
     icon?: string | null
     userId: string
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16099,6 +16397,7 @@ export namespace Prisma {
     duration?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16112,6 +16411,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     icon?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16350,17 +16650,19 @@ export namespace Prisma {
     type?: SortOrder
     provider?: SortOrder
     providerAccountId?: SortOrder
-    refresh_token?: SortOrder
-    access_token?: SortOrder
-    expires_at?: SortOrder
-    token_type?: SortOrder
+    refreshToken?: SortOrder
+    accessToken?: SortOrder
+    expiresAt?: SortOrder
+    tokenType?: SortOrder
     scope?: SortOrder
-    id_token?: SortOrder
-    session_state?: SortOrder
+    idToken?: SortOrder
+    sessionState?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type AccountAvgOrderByAggregateInput = {
-    expires_at?: SortOrder
+    expiresAt?: SortOrder
   }
 
   export type AccountMaxOrderByAggregateInput = {
@@ -16369,13 +16671,15 @@ export namespace Prisma {
     type?: SortOrder
     provider?: SortOrder
     providerAccountId?: SortOrder
-    refresh_token?: SortOrder
-    access_token?: SortOrder
-    expires_at?: SortOrder
-    token_type?: SortOrder
+    refreshToken?: SortOrder
+    accessToken?: SortOrder
+    expiresAt?: SortOrder
+    tokenType?: SortOrder
     scope?: SortOrder
-    id_token?: SortOrder
-    session_state?: SortOrder
+    idToken?: SortOrder
+    sessionState?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type AccountMinOrderByAggregateInput = {
@@ -16384,17 +16688,19 @@ export namespace Prisma {
     type?: SortOrder
     provider?: SortOrder
     providerAccountId?: SortOrder
-    refresh_token?: SortOrder
-    access_token?: SortOrder
-    expires_at?: SortOrder
-    token_type?: SortOrder
+    refreshToken?: SortOrder
+    accessToken?: SortOrder
+    expiresAt?: SortOrder
+    tokenType?: SortOrder
     scope?: SortOrder
-    id_token?: SortOrder
-    session_state?: SortOrder
+    idToken?: SortOrder
+    sessionState?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type AccountSumOrderByAggregateInput = {
-    expires_at?: SortOrder
+    expiresAt?: SortOrder
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -16418,6 +16724,8 @@ export namespace Prisma {
     sessionToken?: SortOrder
     userId?: SortOrder
     expires?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type SessionMaxOrderByAggregateInput = {
@@ -16425,6 +16733,8 @@ export namespace Prisma {
     sessionToken?: SortOrder
     userId?: SortOrder
     expires?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type SessionMinOrderByAggregateInput = {
@@ -16432,6 +16742,8 @@ export namespace Prisma {
     sessionToken?: SortOrder
     userId?: SortOrder
     expires?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type VerificationTokenIdentifierTokenCompoundUniqueInput = {
@@ -16443,18 +16755,21 @@ export namespace Prisma {
     identifier?: SortOrder
     token?: SortOrder
     expires?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type VerificationTokenMaxOrderByAggregateInput = {
     identifier?: SortOrder
     token?: SortOrder
     expires?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type VerificationTokenMinOrderByAggregateInput = {
     identifier?: SortOrder
     token?: SortOrder
     expires?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -16666,6 +16981,8 @@ export namespace Prisma {
     trainingPlanId?: SortOrder
     athleteId?: SortOrder
     assignedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type TrainingPlanAthleteAvgOrderByAggregateInput = {
@@ -16676,12 +16993,16 @@ export namespace Prisma {
     trainingPlanId?: SortOrder
     athleteId?: SortOrder
     assignedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type TrainingPlanAthleteMinOrderByAggregateInput = {
     trainingPlanId?: SortOrder
     athleteId?: SortOrder
     assignedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type TrainingPlanAthleteSumOrderByAggregateInput = {
@@ -16708,6 +17029,7 @@ export namespace Prisma {
     weekNumber?: SortOrder
     dateRange?: SortOrder
     seasonPhase?: SortOrder
+    deletedAt?: SortOrder
     trainingPlanId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -16722,6 +17044,7 @@ export namespace Prisma {
     weekNumber?: SortOrder
     dateRange?: SortOrder
     seasonPhase?: SortOrder
+    deletedAt?: SortOrder
     trainingPlanId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -16732,6 +17055,7 @@ export namespace Prisma {
     weekNumber?: SortOrder
     dateRange?: SortOrder
     seasonPhase?: SortOrder
+    deletedAt?: SortOrder
     trainingPlanId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -16745,6 +17069,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     color?: SortOrder
+    deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16753,6 +17078,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     color?: SortOrder
+    deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16761,6 +17087,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     color?: SortOrder
+    deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16783,6 +17110,7 @@ export namespace Prisma {
   export type PlanWorkoutCountOrderByAggregateInput = {
     id?: SortOrder
     details?: SortOrder
+    deletedAt?: SortOrder
     weekId?: SortOrder
     workoutTypeId?: SortOrder
     createdAt?: SortOrder
@@ -16792,6 +17120,7 @@ export namespace Prisma {
   export type PlanWorkoutMaxOrderByAggregateInput = {
     id?: SortOrder
     details?: SortOrder
+    deletedAt?: SortOrder
     weekId?: SortOrder
     workoutTypeId?: SortOrder
     createdAt?: SortOrder
@@ -16801,6 +17130,7 @@ export namespace Prisma {
   export type PlanWorkoutMinOrderByAggregateInput = {
     id?: SortOrder
     details?: SortOrder
+    deletedAt?: SortOrder
     weekId?: SortOrder
     workoutTypeId?: SortOrder
     createdAt?: SortOrder
@@ -16836,6 +17166,7 @@ export namespace Prisma {
     type?: SortOrder
     details?: SortOrder
     notes?: SortOrder
+    deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16850,6 +17181,7 @@ export namespace Prisma {
     date?: SortOrder
     type?: SortOrder
     notes?: SortOrder
+    deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16860,6 +17192,7 @@ export namespace Prisma {
     date?: SortOrder
     type?: SortOrder
     notes?: SortOrder
+    deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16902,6 +17235,7 @@ export namespace Prisma {
     description?: SortOrder
     icon?: SortOrder
     userId?: SortOrder
+    deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16915,6 +17249,7 @@ export namespace Prisma {
     description?: SortOrder
     icon?: SortOrder
     userId?: SortOrder
+    deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16928,6 +17263,7 @@ export namespace Prisma {
     description?: SortOrder
     icon?: SortOrder
     userId?: SortOrder
+    deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17812,13 +18148,15 @@ export namespace Prisma {
     type: string
     provider: string
     providerAccountId: string
-    refresh_token?: string | null
-    access_token?: string | null
-    expires_at?: number | null
-    token_type?: string | null
+    refreshToken?: string | null
+    accessToken?: string | null
+    expiresAt?: number | null
+    tokenType?: string | null
     scope?: string | null
-    id_token?: string | null
-    session_state?: string | null
+    idToken?: string | null
+    sessionState?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type AccountUncheckedCreateWithoutUserInput = {
@@ -17826,13 +18164,15 @@ export namespace Prisma {
     type: string
     provider: string
     providerAccountId: string
-    refresh_token?: string | null
-    access_token?: string | null
-    expires_at?: number | null
-    token_type?: string | null
+    refreshToken?: string | null
+    accessToken?: string | null
+    expiresAt?: number | null
+    tokenType?: string | null
     scope?: string | null
-    id_token?: string | null
-    session_state?: string | null
+    idToken?: string | null
+    sessionState?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type AccountCreateOrConnectWithoutUserInput = {
@@ -17849,12 +18189,16 @@ export namespace Prisma {
     id?: string
     sessionToken: string
     expires: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type SessionUncheckedCreateWithoutUserInput = {
     id?: string
     sessionToken: string
     expires: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type SessionCreateOrConnectWithoutUserInput = {
@@ -17962,6 +18306,7 @@ export namespace Prisma {
     duration: string
     description?: string | null
     icon?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17974,6 +18319,7 @@ export namespace Prisma {
     duration: string
     description?: string | null
     icon?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18013,13 +18359,15 @@ export namespace Prisma {
     type?: StringFilter<"Account"> | string
     provider?: StringFilter<"Account"> | string
     providerAccountId?: StringFilter<"Account"> | string
-    refresh_token?: StringNullableFilter<"Account"> | string | null
-    access_token?: StringNullableFilter<"Account"> | string | null
-    expires_at?: IntNullableFilter<"Account"> | number | null
-    token_type?: StringNullableFilter<"Account"> | string | null
+    refreshToken?: StringNullableFilter<"Account"> | string | null
+    accessToken?: StringNullableFilter<"Account"> | string | null
+    expiresAt?: IntNullableFilter<"Account"> | number | null
+    tokenType?: StringNullableFilter<"Account"> | string | null
     scope?: StringNullableFilter<"Account"> | string | null
-    id_token?: StringNullableFilter<"Account"> | string | null
-    session_state?: StringNullableFilter<"Account"> | string | null
+    idToken?: StringNullableFilter<"Account"> | string | null
+    sessionState?: StringNullableFilter<"Account"> | string | null
+    createdAt?: DateTimeFilter<"Account"> | Date | string
+    updatedAt?: DateTimeFilter<"Account"> | Date | string
   }
 
   export type SessionUpsertWithWhereUniqueWithoutUserInput = {
@@ -18046,6 +18394,8 @@ export namespace Prisma {
     sessionToken?: StringFilter<"Session"> | string
     userId?: StringFilter<"Session"> | string
     expires?: DateTimeFilter<"Session"> | Date | string
+    createdAt?: DateTimeFilter<"Session"> | Date | string
+    updatedAt?: DateTimeFilter<"Session"> | Date | string
   }
 
   export type AthleteUpsertWithWhereUniqueWithoutCoachInput = {
@@ -18146,6 +18496,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"WorkoutLibraryItem"> | string | null
     icon?: StringNullableFilter<"WorkoutLibraryItem"> | string | null
     userId?: StringFilter<"WorkoutLibraryItem"> | string
+    deletedAt?: DateTimeNullableFilter<"WorkoutLibraryItem"> | Date | string | null
     createdAt?: DateTimeFilter<"WorkoutLibraryItem"> | Date | string
     updatedAt?: DateTimeFilter<"WorkoutLibraryItem"> | Date | string
   }
@@ -18353,6 +18704,7 @@ export namespace Prisma {
     type: string
     details: JsonNullValueInput | InputJsonValue
     notes?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18363,6 +18715,7 @@ export namespace Prisma {
     type: string
     details: JsonNullValueInput | InputJsonValue
     notes?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18379,12 +18732,16 @@ export namespace Prisma {
 
   export type TrainingPlanAthleteCreateWithoutAthleteInput = {
     assignedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     trainingPlan: TrainingPlanCreateNestedOneWithoutAthletesInput
   }
 
   export type TrainingPlanAthleteUncheckedCreateWithoutAthleteInput = {
     trainingPlanId: string
     assignedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type TrainingPlanAthleteCreateOrConnectWithoutAthleteInput = {
@@ -18466,6 +18823,7 @@ export namespace Prisma {
     type?: StringFilter<"WorkoutResult"> | string
     details?: JsonFilter<"WorkoutResult">
     notes?: StringNullableFilter<"WorkoutResult"> | string | null
+    deletedAt?: DateTimeNullableFilter<"WorkoutResult"> | Date | string | null
     createdAt?: DateTimeFilter<"WorkoutResult"> | Date | string
     updatedAt?: DateTimeFilter<"WorkoutResult"> | Date | string
   }
@@ -18493,6 +18851,8 @@ export namespace Prisma {
     trainingPlanId?: StringFilter<"TrainingPlanAthlete"> | string
     athleteId?: IntFilter<"TrainingPlanAthlete"> | number
     assignedAt?: DateTimeFilter<"TrainingPlanAthlete"> | Date | string
+    createdAt?: DateTimeFilter<"TrainingPlanAthlete"> | Date | string
+    updatedAt?: DateTimeFilter<"TrainingPlanAthlete"> | Date | string
   }
 
   export type UserCreateWithoutTrainingPlansInput = {
@@ -18537,6 +18897,7 @@ export namespace Prisma {
     weekNumber: number
     dateRange: string
     seasonPhase?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     workouts?: PlanWorkoutCreateNestedManyWithoutWeekInput
@@ -18547,6 +18908,7 @@ export namespace Prisma {
     weekNumber: number
     dateRange: string
     seasonPhase?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     workouts?: PlanWorkoutUncheckedCreateNestedManyWithoutWeekInput
@@ -18564,12 +18926,16 @@ export namespace Prisma {
 
   export type TrainingPlanAthleteCreateWithoutTrainingPlanInput = {
     assignedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     athlete: AthleteCreateNestedOneWithoutTrainingPlanAthletesInput
   }
 
   export type TrainingPlanAthleteUncheckedCreateWithoutTrainingPlanInput = {
     athleteId: number
     assignedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type TrainingPlanAthleteCreateOrConnectWithoutTrainingPlanInput = {
@@ -18649,6 +19015,7 @@ export namespace Prisma {
     weekNumber?: IntFilter<"PlanWeek"> | number
     dateRange?: StringFilter<"PlanWeek"> | string
     seasonPhase?: StringNullableFilter<"PlanWeek"> | string | null
+    deletedAt?: DateTimeNullableFilter<"PlanWeek"> | Date | string | null
     trainingPlanId?: StringFilter<"PlanWeek"> | string
     createdAt?: DateTimeFilter<"PlanWeek"> | Date | string
     updatedAt?: DateTimeFilter<"PlanWeek"> | Date | string
@@ -18884,6 +19251,7 @@ export namespace Prisma {
   export type PlanWorkoutCreateWithoutWeekInput = {
     id?: string
     details?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     workoutType: WorkoutTypeCreateNestedOneWithoutWorkoutsInput
@@ -18892,6 +19260,7 @@ export namespace Prisma {
   export type PlanWorkoutUncheckedCreateWithoutWeekInput = {
     id?: string
     details?: string | null
+    deletedAt?: Date | string | null
     workoutTypeId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18980,6 +19349,7 @@ export namespace Prisma {
     NOT?: PlanWorkoutScalarWhereInput | PlanWorkoutScalarWhereInput[]
     id?: StringFilter<"PlanWorkout"> | string
     details?: StringNullableFilter<"PlanWorkout"> | string | null
+    deletedAt?: DateTimeNullableFilter<"PlanWorkout"> | Date | string | null
     weekId?: StringFilter<"PlanWorkout"> | string
     workoutTypeId?: StringFilter<"PlanWorkout"> | string
     createdAt?: DateTimeFilter<"PlanWorkout"> | Date | string
@@ -18989,6 +19359,7 @@ export namespace Prisma {
   export type PlanWorkoutCreateWithoutWorkoutTypeInput = {
     id?: string
     details?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     week: PlanWeekCreateNestedOneWithoutWorkoutsInput
@@ -18997,6 +19368,7 @@ export namespace Prisma {
   export type PlanWorkoutUncheckedCreateWithoutWorkoutTypeInput = {
     id?: string
     details?: string | null
+    deletedAt?: Date | string | null
     weekId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19033,6 +19405,7 @@ export namespace Prisma {
     weekNumber: number
     dateRange: string
     seasonPhase?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     trainingPlan: TrainingPlanCreateNestedOneWithoutWeeksInput
@@ -19043,6 +19416,7 @@ export namespace Prisma {
     weekNumber: number
     dateRange: string
     seasonPhase?: string | null
+    deletedAt?: Date | string | null
     trainingPlanId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19057,6 +19431,7 @@ export namespace Prisma {
     id?: string
     name: string
     color: string
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -19065,6 +19440,7 @@ export namespace Prisma {
     id?: string
     name: string
     color: string
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -19090,6 +19466,7 @@ export namespace Prisma {
     weekNumber?: IntFieldUpdateOperationsInput | number
     dateRange?: StringFieldUpdateOperationsInput | string
     seasonPhase?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingPlan?: TrainingPlanUpdateOneRequiredWithoutWeeksNestedInput
@@ -19100,6 +19477,7 @@ export namespace Prisma {
     weekNumber?: IntFieldUpdateOperationsInput | number
     dateRange?: StringFieldUpdateOperationsInput | string
     seasonPhase?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     trainingPlanId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19120,6 +19498,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19128,6 +19507,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19287,19 +19667,23 @@ export namespace Prisma {
     type: string
     provider: string
     providerAccountId: string
-    refresh_token?: string | null
-    access_token?: string | null
-    expires_at?: number | null
-    token_type?: string | null
+    refreshToken?: string | null
+    accessToken?: string | null
+    expiresAt?: number | null
+    tokenType?: string | null
     scope?: string | null
-    id_token?: string | null
-    session_state?: string | null
+    idToken?: string | null
+    sessionState?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type SessionCreateManyUserInput = {
     id?: string
     sessionToken: string
     expires: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type AthleteCreateManyCoachInput = {
@@ -19340,6 +19724,7 @@ export namespace Prisma {
     duration: string
     description?: string | null
     icon?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -19349,13 +19734,15 @@ export namespace Prisma {
     type?: StringFieldUpdateOperationsInput | string
     provider?: StringFieldUpdateOperationsInput | string
     providerAccountId?: StringFieldUpdateOperationsInput | string
-    refresh_token?: NullableStringFieldUpdateOperationsInput | string | null
-    access_token?: NullableStringFieldUpdateOperationsInput | string | null
-    expires_at?: NullableIntFieldUpdateOperationsInput | number | null
-    token_type?: NullableStringFieldUpdateOperationsInput | string | null
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableIntFieldUpdateOperationsInput | number | null
+    tokenType?: NullableStringFieldUpdateOperationsInput | string | null
     scope?: NullableStringFieldUpdateOperationsInput | string | null
-    id_token?: NullableStringFieldUpdateOperationsInput | string | null
-    session_state?: NullableStringFieldUpdateOperationsInput | string | null
+    idToken?: NullableStringFieldUpdateOperationsInput | string | null
+    sessionState?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AccountUncheckedUpdateWithoutUserInput = {
@@ -19363,13 +19750,15 @@ export namespace Prisma {
     type?: StringFieldUpdateOperationsInput | string
     provider?: StringFieldUpdateOperationsInput | string
     providerAccountId?: StringFieldUpdateOperationsInput | string
-    refresh_token?: NullableStringFieldUpdateOperationsInput | string | null
-    access_token?: NullableStringFieldUpdateOperationsInput | string | null
-    expires_at?: NullableIntFieldUpdateOperationsInput | number | null
-    token_type?: NullableStringFieldUpdateOperationsInput | string | null
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableIntFieldUpdateOperationsInput | number | null
+    tokenType?: NullableStringFieldUpdateOperationsInput | string | null
     scope?: NullableStringFieldUpdateOperationsInput | string | null
-    id_token?: NullableStringFieldUpdateOperationsInput | string | null
-    session_state?: NullableStringFieldUpdateOperationsInput | string | null
+    idToken?: NullableStringFieldUpdateOperationsInput | string | null
+    sessionState?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AccountUncheckedUpdateManyWithoutUserInput = {
@@ -19377,31 +19766,39 @@ export namespace Prisma {
     type?: StringFieldUpdateOperationsInput | string
     provider?: StringFieldUpdateOperationsInput | string
     providerAccountId?: StringFieldUpdateOperationsInput | string
-    refresh_token?: NullableStringFieldUpdateOperationsInput | string | null
-    access_token?: NullableStringFieldUpdateOperationsInput | string | null
-    expires_at?: NullableIntFieldUpdateOperationsInput | number | null
-    token_type?: NullableStringFieldUpdateOperationsInput | string | null
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableIntFieldUpdateOperationsInput | number | null
+    tokenType?: NullableStringFieldUpdateOperationsInput | string | null
     scope?: NullableStringFieldUpdateOperationsInput | string | null
-    id_token?: NullableStringFieldUpdateOperationsInput | string | null
-    session_state?: NullableStringFieldUpdateOperationsInput | string | null
+    idToken?: NullableStringFieldUpdateOperationsInput | string | null
+    sessionState?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SessionUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     sessionToken?: StringFieldUpdateOperationsInput | string
     expires?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SessionUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     sessionToken?: StringFieldUpdateOperationsInput | string
     expires?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SessionUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     sessionToken?: StringFieldUpdateOperationsInput | string
     expires?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AthleteUpdateWithoutCoachInput = {
@@ -19509,6 +19906,7 @@ export namespace Prisma {
     duration?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19521,6 +19919,7 @@ export namespace Prisma {
     duration?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19533,6 +19932,7 @@ export namespace Prisma {
     duration?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19543,6 +19943,7 @@ export namespace Prisma {
     type: string
     details: JsonNullValueInput | InputJsonValue
     notes?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -19550,6 +19951,8 @@ export namespace Prisma {
   export type TrainingPlanAthleteCreateManyAthleteInput = {
     trainingPlanId: string
     assignedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type WorkoutResultUpdateWithoutAthleteInput = {
@@ -19558,6 +19961,7 @@ export namespace Prisma {
     type?: StringFieldUpdateOperationsInput | string
     details?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19568,6 +19972,7 @@ export namespace Prisma {
     type?: StringFieldUpdateOperationsInput | string
     details?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19578,23 +19983,30 @@ export namespace Prisma {
     type?: StringFieldUpdateOperationsInput | string
     details?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TrainingPlanAthleteUpdateWithoutAthleteInput = {
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingPlan?: TrainingPlanUpdateOneRequiredWithoutAthletesNestedInput
   }
 
   export type TrainingPlanAthleteUncheckedUpdateWithoutAthleteInput = {
     trainingPlanId?: StringFieldUpdateOperationsInput | string
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TrainingPlanAthleteUncheckedUpdateManyWithoutAthleteInput = {
     trainingPlanId?: StringFieldUpdateOperationsInput | string
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PlanWeekCreateManyTrainingPlanInput = {
@@ -19602,6 +20014,7 @@ export namespace Prisma {
     weekNumber: number
     dateRange: string
     seasonPhase?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -19609,6 +20022,8 @@ export namespace Prisma {
   export type TrainingPlanAthleteCreateManyTrainingPlanInput = {
     athleteId: number
     assignedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type PlanWeekUpdateWithoutTrainingPlanInput = {
@@ -19616,6 +20031,7 @@ export namespace Prisma {
     weekNumber?: IntFieldUpdateOperationsInput | number
     dateRange?: StringFieldUpdateOperationsInput | string
     seasonPhase?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workouts?: PlanWorkoutUpdateManyWithoutWeekNestedInput
@@ -19626,6 +20042,7 @@ export namespace Prisma {
     weekNumber?: IntFieldUpdateOperationsInput | number
     dateRange?: StringFieldUpdateOperationsInput | string
     seasonPhase?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workouts?: PlanWorkoutUncheckedUpdateManyWithoutWeekNestedInput
@@ -19636,28 +20053,36 @@ export namespace Prisma {
     weekNumber?: IntFieldUpdateOperationsInput | number
     dateRange?: StringFieldUpdateOperationsInput | string
     seasonPhase?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TrainingPlanAthleteUpdateWithoutTrainingPlanInput = {
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     athlete?: AthleteUpdateOneRequiredWithoutTrainingPlanAthletesNestedInput
   }
 
   export type TrainingPlanAthleteUncheckedUpdateWithoutTrainingPlanInput = {
     athleteId?: IntFieldUpdateOperationsInput | number
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TrainingPlanAthleteUncheckedUpdateManyWithoutTrainingPlanInput = {
     athleteId?: IntFieldUpdateOperationsInput | number
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PlanWorkoutCreateManyWeekInput = {
     id?: string
     details?: string | null
+    deletedAt?: Date | string | null
     workoutTypeId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19666,6 +20091,7 @@ export namespace Prisma {
   export type PlanWorkoutUpdateWithoutWeekInput = {
     id?: StringFieldUpdateOperationsInput | string
     details?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workoutType?: WorkoutTypeUpdateOneRequiredWithoutWorkoutsNestedInput
@@ -19674,6 +20100,7 @@ export namespace Prisma {
   export type PlanWorkoutUncheckedUpdateWithoutWeekInput = {
     id?: StringFieldUpdateOperationsInput | string
     details?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workoutTypeId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19682,6 +20109,7 @@ export namespace Prisma {
   export type PlanWorkoutUncheckedUpdateManyWithoutWeekInput = {
     id?: StringFieldUpdateOperationsInput | string
     details?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workoutTypeId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19690,6 +20118,7 @@ export namespace Prisma {
   export type PlanWorkoutCreateManyWorkoutTypeInput = {
     id?: string
     details?: string | null
+    deletedAt?: Date | string | null
     weekId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19698,6 +20127,7 @@ export namespace Prisma {
   export type PlanWorkoutUpdateWithoutWorkoutTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
     details?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     week?: PlanWeekUpdateOneRequiredWithoutWorkoutsNestedInput
@@ -19706,6 +20136,7 @@ export namespace Prisma {
   export type PlanWorkoutUncheckedUpdateWithoutWorkoutTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
     details?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     weekId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19714,6 +20145,7 @@ export namespace Prisma {
   export type PlanWorkoutUncheckedUpdateManyWithoutWorkoutTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
     details?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     weekId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

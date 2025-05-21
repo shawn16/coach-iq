@@ -140,26 +140,31 @@ exports.Prisma.AccountScalarFieldEnum = {
   type: 'type',
   provider: 'provider',
   providerAccountId: 'providerAccountId',
-  refresh_token: 'refresh_token',
-  access_token: 'access_token',
-  expires_at: 'expires_at',
-  token_type: 'token_type',
+  refreshToken: 'refreshToken',
+  accessToken: 'accessToken',
+  expiresAt: 'expiresAt',
+  tokenType: 'tokenType',
   scope: 'scope',
-  id_token: 'id_token',
-  session_state: 'session_state'
+  idToken: 'idToken',
+  sessionState: 'sessionState',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SessionScalarFieldEnum = {
   id: 'id',
   sessionToken: 'sessionToken',
   userId: 'userId',
-  expires: 'expires'
+  expires: 'expires',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.VerificationTokenScalarFieldEnum = {
   identifier: 'identifier',
   token: 'token',
-  expires: 'expires'
+  expires: 'expires',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.AthleteScalarFieldEnum = {
@@ -197,7 +202,9 @@ exports.Prisma.TrainingPlanScalarFieldEnum = {
 exports.Prisma.TrainingPlanAthleteScalarFieldEnum = {
   trainingPlanId: 'trainingPlanId',
   athleteId: 'athleteId',
-  assignedAt: 'assignedAt'
+  assignedAt: 'assignedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.PlanWeekScalarFieldEnum = {
@@ -205,6 +212,7 @@ exports.Prisma.PlanWeekScalarFieldEnum = {
   weekNumber: 'weekNumber',
   dateRange: 'dateRange',
   seasonPhase: 'seasonPhase',
+  deletedAt: 'deletedAt',
   trainingPlanId: 'trainingPlanId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -214,6 +222,7 @@ exports.Prisma.WorkoutTypeScalarFieldEnum = {
   id: 'id',
   name: 'name',
   color: 'color',
+  deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -221,6 +230,7 @@ exports.Prisma.WorkoutTypeScalarFieldEnum = {
 exports.Prisma.PlanWorkoutScalarFieldEnum = {
   id: 'id',
   details: 'details',
+  deletedAt: 'deletedAt',
   weekId: 'weekId',
   workoutTypeId: 'workoutTypeId',
   createdAt: 'createdAt',
@@ -234,6 +244,7 @@ exports.Prisma.WorkoutResultScalarFieldEnum = {
   type: 'type',
   details: 'details',
   notes: 'notes',
+  deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -247,6 +258,7 @@ exports.Prisma.WorkoutLibraryItemScalarFieldEnum = {
   description: 'description',
   icon: 'icon',
   userId: 'userId',
+  deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

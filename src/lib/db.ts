@@ -76,27 +76,41 @@ export const query = async (
 // export { pool };
 
 /**
+ * Soft deletes a user by setting the deletedAt timestamp
+ */
+export async function deleteUser(userId: string) {
+  return prisma.$softDelete('User', { id: userId });
+}
+
+/**
  * Permanently deletes a user (bypasses soft delete)
  * WARNING: This will permanently remove the user and all their data
  */
 export async function forceDeleteUser(userId: string) {
-  return prisma.user.delete({
+  return prisma.$forceDelete('User', { id: userId });
+}
+
+/**
+ * Restores a soft-deleted user by setting deletedAt to null
+ */
+export async function restoreUser(userId: string): Promise<UserWithDeleted> {
+  return prisma.user.update({
     where: { id: userId },
+    data: { deletedAt: null },
   });
 }
 
 /**
- * Restores a soft-deleted user
+ * Finds a user including soft-deleted ones
  */
-export async function restoreUser(userId: string): Promise<UserWithDeleted> {
-  // Use raw SQL to bypass TypeScript type checking for deletedAt
-  const [user] = await prisma.$queryRaw<UserWithDeleted[]>`
-    UPDATE "User" 
-    SET "deletedAt" = NULL 
-    WHERE id = ${userId} 
-    RETURNING *
-  `;
-  return user!;
+export async function findUserIncludingDeleted(
+  userId: string
+): Promise<UserWithDeleted | null> {
+  const users = await prisma.$findIncludingDeleted<UserWithDeleted[]>('User', {
+    where: { id: userId },
+    take: 1,
+  });
+  return users[0] || null;
 }
 
 /**
