@@ -75,6 +75,25 @@ export type WorkoutResult = $Result.DefaultSelection<Prisma.$WorkoutResultPayloa
 export type WorkoutLibraryItem = $Result.DefaultSelection<Prisma.$WorkoutLibraryItemPayload>
 
 /**
+ * Enums
+ */
+export namespace $Enums {
+  export const WorkoutTypeEnum: {
+  RUN: 'RUN',
+  WORKOUT: 'WORKOUT',
+  RACE: 'RACE',
+  OTHER: 'OTHER'
+};
+
+export type WorkoutTypeEnum = (typeof WorkoutTypeEnum)[keyof typeof WorkoutTypeEnum]
+
+}
+
+export type WorkoutTypeEnum = $Enums.WorkoutTypeEnum
+
+export const WorkoutTypeEnum: typeof $Enums.WorkoutTypeEnum
+
+/**
  * ##  Prisma Client ʲˢ
  * 
  * Type-safe database client for TypeScript & Node.js
@@ -11326,7 +11345,7 @@ export namespace Prisma {
 
   export type PlanWorkoutGroupByOutputType = {
     id: string
-    details: string | null
+    details: string
     deletedAt: Date | null
     weekId: string
     workoutTypeId: string
@@ -11402,7 +11421,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      details: string | null
+      details: string
       deletedAt: Date | null
       weekId: string
       workoutTypeId: string
@@ -12166,7 +12185,7 @@ export namespace Prisma {
     id: string | null
     athleteId: number | null
     date: Date | null
-    type: string | null
+    type: $Enums.WorkoutTypeEnum | null
     notes: string | null
     deletedAt: Date | null
     createdAt: Date | null
@@ -12177,7 +12196,7 @@ export namespace Prisma {
     id: string | null
     athleteId: number | null
     date: Date | null
-    type: string | null
+    type: $Enums.WorkoutTypeEnum | null
     notes: string | null
     deletedAt: Date | null
     createdAt: Date | null
@@ -12331,7 +12350,7 @@ export namespace Prisma {
     id: string
     athleteId: number
     date: Date
-    type: string
+    type: $Enums.WorkoutTypeEnum
     details: JsonValue
     notes: string | null
     deletedAt: Date | null
@@ -12412,7 +12431,7 @@ export namespace Prisma {
       id: string
       athleteId: number
       date: Date
-      type: string
+      type: $Enums.WorkoutTypeEnum
       details: Prisma.JsonValue
       notes: string | null
       deletedAt: Date | null
@@ -12815,7 +12834,7 @@ export namespace Prisma {
     readonly id: FieldRef<"WorkoutResult", 'String'>
     readonly athleteId: FieldRef<"WorkoutResult", 'Int'>
     readonly date: FieldRef<"WorkoutResult", 'DateTime'>
-    readonly type: FieldRef<"WorkoutResult", 'String'>
+    readonly type: FieldRef<"WorkoutResult", 'WorkoutTypeEnum'>
     readonly details: FieldRef<"WorkoutResult", 'Json'>
     readonly notes: FieldRef<"WorkoutResult", 'String'>
     readonly deletedAt: FieldRef<"WorkoutResult", 'DateTime'>
@@ -14444,6 +14463,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'WorkoutTypeEnum'
+   */
+  export type EnumWorkoutTypeEnumFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WorkoutTypeEnum'>
+    
+
+
+  /**
+   * Reference to a field of type 'WorkoutTypeEnum[]'
+   */
+  export type ListEnumWorkoutTypeEnumFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WorkoutTypeEnum[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Json'
    */
   export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -15173,7 +15206,7 @@ export namespace Prisma {
     OR?: PlanWorkoutWhereInput[]
     NOT?: PlanWorkoutWhereInput | PlanWorkoutWhereInput[]
     id?: StringFilter<"PlanWorkout"> | string
-    details?: StringNullableFilter<"PlanWorkout"> | string | null
+    details?: StringFilter<"PlanWorkout"> | string
     deletedAt?: DateTimeNullableFilter<"PlanWorkout"> | Date | string | null
     weekId?: StringFilter<"PlanWorkout"> | string
     workoutTypeId?: StringFilter<"PlanWorkout"> | string
@@ -15185,7 +15218,7 @@ export namespace Prisma {
 
   export type PlanWorkoutOrderByWithRelationInput = {
     id?: SortOrder
-    details?: SortOrderInput | SortOrder
+    details?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
     weekId?: SortOrder
     workoutTypeId?: SortOrder
@@ -15201,7 +15234,7 @@ export namespace Prisma {
     AND?: PlanWorkoutWhereInput | PlanWorkoutWhereInput[]
     OR?: PlanWorkoutWhereInput[]
     NOT?: PlanWorkoutWhereInput | PlanWorkoutWhereInput[]
-    details?: StringNullableFilter<"PlanWorkout"> | string | null
+    details?: StringFilter<"PlanWorkout"> | string
     deletedAt?: DateTimeNullableFilter<"PlanWorkout"> | Date | string | null
     weekId?: StringFilter<"PlanWorkout"> | string
     workoutTypeId?: StringFilter<"PlanWorkout"> | string
@@ -15213,7 +15246,7 @@ export namespace Prisma {
 
   export type PlanWorkoutOrderByWithAggregationInput = {
     id?: SortOrder
-    details?: SortOrderInput | SortOrder
+    details?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
     weekId?: SortOrder
     workoutTypeId?: SortOrder
@@ -15229,7 +15262,7 @@ export namespace Prisma {
     OR?: PlanWorkoutScalarWhereWithAggregatesInput[]
     NOT?: PlanWorkoutScalarWhereWithAggregatesInput | PlanWorkoutScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"PlanWorkout"> | string
-    details?: StringNullableWithAggregatesFilter<"PlanWorkout"> | string | null
+    details?: StringWithAggregatesFilter<"PlanWorkout"> | string
     deletedAt?: DateTimeNullableWithAggregatesFilter<"PlanWorkout"> | Date | string | null
     weekId?: StringWithAggregatesFilter<"PlanWorkout"> | string
     workoutTypeId?: StringWithAggregatesFilter<"PlanWorkout"> | string
@@ -15244,7 +15277,7 @@ export namespace Prisma {
     id?: StringFilter<"WorkoutResult"> | string
     athleteId?: IntFilter<"WorkoutResult"> | number
     date?: DateTimeFilter<"WorkoutResult"> | Date | string
-    type?: StringFilter<"WorkoutResult"> | string
+    type?: EnumWorkoutTypeEnumFilter<"WorkoutResult"> | $Enums.WorkoutTypeEnum
     details?: JsonFilter<"WorkoutResult">
     notes?: StringNullableFilter<"WorkoutResult"> | string | null
     deletedAt?: DateTimeNullableFilter<"WorkoutResult"> | Date | string | null
@@ -15273,7 +15306,7 @@ export namespace Prisma {
     NOT?: WorkoutResultWhereInput | WorkoutResultWhereInput[]
     athleteId?: IntFilter<"WorkoutResult"> | number
     date?: DateTimeFilter<"WorkoutResult"> | Date | string
-    type?: StringFilter<"WorkoutResult"> | string
+    type?: EnumWorkoutTypeEnumFilter<"WorkoutResult"> | $Enums.WorkoutTypeEnum
     details?: JsonFilter<"WorkoutResult">
     notes?: StringNullableFilter<"WorkoutResult"> | string | null
     deletedAt?: DateTimeNullableFilter<"WorkoutResult"> | Date | string | null
@@ -15306,7 +15339,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"WorkoutResult"> | string
     athleteId?: IntWithAggregatesFilter<"WorkoutResult"> | number
     date?: DateTimeWithAggregatesFilter<"WorkoutResult"> | Date | string
-    type?: StringWithAggregatesFilter<"WorkoutResult"> | string
+    type?: EnumWorkoutTypeEnumWithAggregatesFilter<"WorkoutResult"> | $Enums.WorkoutTypeEnum
     details?: JsonWithAggregatesFilter<"WorkoutResult">
     notes?: StringNullableWithAggregatesFilter<"WorkoutResult"> | string | null
     deletedAt?: DateTimeNullableWithAggregatesFilter<"WorkoutResult"> | Date | string | null
@@ -16170,7 +16203,7 @@ export namespace Prisma {
 
   export type PlanWorkoutCreateInput = {
     id?: string
-    details?: string | null
+    details: string
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16180,7 +16213,7 @@ export namespace Prisma {
 
   export type PlanWorkoutUncheckedCreateInput = {
     id?: string
-    details?: string | null
+    details: string
     deletedAt?: Date | string | null
     weekId: string
     workoutTypeId: string
@@ -16190,7 +16223,7 @@ export namespace Prisma {
 
   export type PlanWorkoutUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    details?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16200,7 +16233,7 @@ export namespace Prisma {
 
   export type PlanWorkoutUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    details?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     weekId?: StringFieldUpdateOperationsInput | string
     workoutTypeId?: StringFieldUpdateOperationsInput | string
@@ -16210,7 +16243,7 @@ export namespace Prisma {
 
   export type PlanWorkoutCreateManyInput = {
     id?: string
-    details?: string | null
+    details: string
     deletedAt?: Date | string | null
     weekId: string
     workoutTypeId: string
@@ -16220,7 +16253,7 @@ export namespace Prisma {
 
   export type PlanWorkoutUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    details?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16228,7 +16261,7 @@ export namespace Prisma {
 
   export type PlanWorkoutUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    details?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     weekId?: StringFieldUpdateOperationsInput | string
     workoutTypeId?: StringFieldUpdateOperationsInput | string
@@ -16239,7 +16272,7 @@ export namespace Prisma {
   export type WorkoutResultCreateInput = {
     id?: string
     date: Date | string
-    type: string
+    type: $Enums.WorkoutTypeEnum
     details: JsonNullValueInput | InputJsonValue
     notes?: string | null
     deletedAt?: Date | string | null
@@ -16252,7 +16285,7 @@ export namespace Prisma {
     id?: string
     athleteId: number
     date: Date | string
-    type: string
+    type: $Enums.WorkoutTypeEnum
     details: JsonNullValueInput | InputJsonValue
     notes?: string | null
     deletedAt?: Date | string | null
@@ -16263,7 +16296,7 @@ export namespace Prisma {
   export type WorkoutResultUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumWorkoutTypeEnumFieldUpdateOperationsInput | $Enums.WorkoutTypeEnum
     details?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -16276,7 +16309,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     athleteId?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumWorkoutTypeEnumFieldUpdateOperationsInput | $Enums.WorkoutTypeEnum
     details?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -16288,7 +16321,7 @@ export namespace Prisma {
     id?: string
     athleteId: number
     date: Date | string
-    type: string
+    type: $Enums.WorkoutTypeEnum
     details: JsonNullValueInput | InputJsonValue
     notes?: string | null
     deletedAt?: Date | string | null
@@ -16299,7 +16332,7 @@ export namespace Prisma {
   export type WorkoutResultUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumWorkoutTypeEnumFieldUpdateOperationsInput | $Enums.WorkoutTypeEnum
     details?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -16311,7 +16344,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     athleteId?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumWorkoutTypeEnumFieldUpdateOperationsInput | $Enums.WorkoutTypeEnum
     details?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17136,6 +17169,13 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
+
+  export type EnumWorkoutTypeEnumFilter<$PrismaModel = never> = {
+    equals?: $Enums.WorkoutTypeEnum | EnumWorkoutTypeEnumFieldRefInput<$PrismaModel>
+    in?: $Enums.WorkoutTypeEnum[] | ListEnumWorkoutTypeEnumFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WorkoutTypeEnum[] | ListEnumWorkoutTypeEnumFieldRefInput<$PrismaModel>
+    not?: NestedEnumWorkoutTypeEnumFilter<$PrismaModel> | $Enums.WorkoutTypeEnum
+  }
   export type JsonFilter<$PrismaModel = never> = 
     | PatchUndefined<
         Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
@@ -17199,6 +17239,16 @@ export namespace Prisma {
 
   export type WorkoutResultSumOrderByAggregateInput = {
     athleteId?: SortOrder
+  }
+
+  export type EnumWorkoutTypeEnumWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WorkoutTypeEnum | EnumWorkoutTypeEnumFieldRefInput<$PrismaModel>
+    in?: $Enums.WorkoutTypeEnum[] | ListEnumWorkoutTypeEnumFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WorkoutTypeEnum[] | ListEnumWorkoutTypeEnumFieldRefInput<$PrismaModel>
+    not?: NestedEnumWorkoutTypeEnumWithAggregatesFilter<$PrismaModel> | $Enums.WorkoutTypeEnum
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWorkoutTypeEnumFilter<$PrismaModel>
+    _max?: NestedEnumWorkoutTypeEnumFilter<$PrismaModel>
   }
   export type JsonWithAggregatesFilter<$PrismaModel = never> = 
     | PatchUndefined<
@@ -17898,6 +17948,10 @@ export namespace Prisma {
     connect?: AthleteWhereUniqueInput
   }
 
+  export type EnumWorkoutTypeEnumFieldUpdateOperationsInput = {
+    set?: $Enums.WorkoutTypeEnum
+  }
+
   export type AthleteUpdateOneRequiredWithoutWorkoutResultsNestedInput = {
     create?: XOR<AthleteCreateWithoutWorkoutResultsInput, AthleteUncheckedCreateWithoutWorkoutResultsInput>
     connectOrCreate?: AthleteCreateOrConnectWithoutWorkoutResultsInput
@@ -18119,6 +18173,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedEnumWorkoutTypeEnumFilter<$PrismaModel = never> = {
+    equals?: $Enums.WorkoutTypeEnum | EnumWorkoutTypeEnumFieldRefInput<$PrismaModel>
+    in?: $Enums.WorkoutTypeEnum[] | ListEnumWorkoutTypeEnumFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WorkoutTypeEnum[] | ListEnumWorkoutTypeEnumFieldRefInput<$PrismaModel>
+    not?: NestedEnumWorkoutTypeEnumFilter<$PrismaModel> | $Enums.WorkoutTypeEnum
+  }
+
+  export type NestedEnumWorkoutTypeEnumWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WorkoutTypeEnum | EnumWorkoutTypeEnumFieldRefInput<$PrismaModel>
+    in?: $Enums.WorkoutTypeEnum[] | ListEnumWorkoutTypeEnumFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WorkoutTypeEnum[] | ListEnumWorkoutTypeEnumFieldRefInput<$PrismaModel>
+    not?: NestedEnumWorkoutTypeEnumWithAggregatesFilter<$PrismaModel> | $Enums.WorkoutTypeEnum
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWorkoutTypeEnumFilter<$PrismaModel>
+    _max?: NestedEnumWorkoutTypeEnumFilter<$PrismaModel>
   }
   export type NestedJsonFilter<$PrismaModel = never> = 
     | PatchUndefined<
@@ -18701,7 +18772,7 @@ export namespace Prisma {
   export type WorkoutResultCreateWithoutAthleteInput = {
     id?: string
     date: Date | string
-    type: string
+    type: $Enums.WorkoutTypeEnum
     details: JsonNullValueInput | InputJsonValue
     notes?: string | null
     deletedAt?: Date | string | null
@@ -18712,7 +18783,7 @@ export namespace Prisma {
   export type WorkoutResultUncheckedCreateWithoutAthleteInput = {
     id?: string
     date: Date | string
-    type: string
+    type: $Enums.WorkoutTypeEnum
     details: JsonNullValueInput | InputJsonValue
     notes?: string | null
     deletedAt?: Date | string | null
@@ -18820,7 +18891,7 @@ export namespace Prisma {
     id?: StringFilter<"WorkoutResult"> | string
     athleteId?: IntFilter<"WorkoutResult"> | number
     date?: DateTimeFilter<"WorkoutResult"> | Date | string
-    type?: StringFilter<"WorkoutResult"> | string
+    type?: EnumWorkoutTypeEnumFilter<"WorkoutResult"> | $Enums.WorkoutTypeEnum
     details?: JsonFilter<"WorkoutResult">
     notes?: StringNullableFilter<"WorkoutResult"> | string | null
     deletedAt?: DateTimeNullableFilter<"WorkoutResult"> | Date | string | null
@@ -19250,7 +19321,7 @@ export namespace Prisma {
 
   export type PlanWorkoutCreateWithoutWeekInput = {
     id?: string
-    details?: string | null
+    details: string
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19259,7 +19330,7 @@ export namespace Prisma {
 
   export type PlanWorkoutUncheckedCreateWithoutWeekInput = {
     id?: string
-    details?: string | null
+    details: string
     deletedAt?: Date | string | null
     workoutTypeId: string
     createdAt?: Date | string
@@ -19348,7 +19419,7 @@ export namespace Prisma {
     OR?: PlanWorkoutScalarWhereInput[]
     NOT?: PlanWorkoutScalarWhereInput | PlanWorkoutScalarWhereInput[]
     id?: StringFilter<"PlanWorkout"> | string
-    details?: StringNullableFilter<"PlanWorkout"> | string | null
+    details?: StringFilter<"PlanWorkout"> | string
     deletedAt?: DateTimeNullableFilter<"PlanWorkout"> | Date | string | null
     weekId?: StringFilter<"PlanWorkout"> | string
     workoutTypeId?: StringFilter<"PlanWorkout"> | string
@@ -19358,7 +19429,7 @@ export namespace Prisma {
 
   export type PlanWorkoutCreateWithoutWorkoutTypeInput = {
     id?: string
-    details?: string | null
+    details: string
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19367,7 +19438,7 @@ export namespace Prisma {
 
   export type PlanWorkoutUncheckedCreateWithoutWorkoutTypeInput = {
     id?: string
-    details?: string | null
+    details: string
     deletedAt?: Date | string | null
     weekId: string
     createdAt?: Date | string
@@ -19940,7 +20011,7 @@ export namespace Prisma {
   export type WorkoutResultCreateManyAthleteInput = {
     id?: string
     date: Date | string
-    type: string
+    type: $Enums.WorkoutTypeEnum
     details: JsonNullValueInput | InputJsonValue
     notes?: string | null
     deletedAt?: Date | string | null
@@ -19958,7 +20029,7 @@ export namespace Prisma {
   export type WorkoutResultUpdateWithoutAthleteInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumWorkoutTypeEnumFieldUpdateOperationsInput | $Enums.WorkoutTypeEnum
     details?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -19969,7 +20040,7 @@ export namespace Prisma {
   export type WorkoutResultUncheckedUpdateWithoutAthleteInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumWorkoutTypeEnumFieldUpdateOperationsInput | $Enums.WorkoutTypeEnum
     details?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -19980,7 +20051,7 @@ export namespace Prisma {
   export type WorkoutResultUncheckedUpdateManyWithoutAthleteInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    type?: StringFieldUpdateOperationsInput | string
+    type?: EnumWorkoutTypeEnumFieldUpdateOperationsInput | $Enums.WorkoutTypeEnum
     details?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -20081,7 +20152,7 @@ export namespace Prisma {
 
   export type PlanWorkoutCreateManyWeekInput = {
     id?: string
-    details?: string | null
+    details: string
     deletedAt?: Date | string | null
     workoutTypeId: string
     createdAt?: Date | string
@@ -20090,7 +20161,7 @@ export namespace Prisma {
 
   export type PlanWorkoutUpdateWithoutWeekInput = {
     id?: StringFieldUpdateOperationsInput | string
-    details?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20099,7 +20170,7 @@ export namespace Prisma {
 
   export type PlanWorkoutUncheckedUpdateWithoutWeekInput = {
     id?: StringFieldUpdateOperationsInput | string
-    details?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workoutTypeId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20108,7 +20179,7 @@ export namespace Prisma {
 
   export type PlanWorkoutUncheckedUpdateManyWithoutWeekInput = {
     id?: StringFieldUpdateOperationsInput | string
-    details?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workoutTypeId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20117,7 +20188,7 @@ export namespace Prisma {
 
   export type PlanWorkoutCreateManyWorkoutTypeInput = {
     id?: string
-    details?: string | null
+    details: string
     deletedAt?: Date | string | null
     weekId: string
     createdAt?: Date | string
@@ -20126,7 +20197,7 @@ export namespace Prisma {
 
   export type PlanWorkoutUpdateWithoutWorkoutTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    details?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20135,7 +20206,7 @@ export namespace Prisma {
 
   export type PlanWorkoutUncheckedUpdateWithoutWorkoutTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    details?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     weekId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20144,7 +20215,7 @@ export namespace Prisma {
 
   export type PlanWorkoutUncheckedUpdateManyWithoutWorkoutTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    details?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     weekId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

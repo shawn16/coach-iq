@@ -287,7 +287,12 @@ exports.Prisma.JsonNullValueFilter = {
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
 };
-
+exports.WorkoutTypeEnum = exports.$Enums.WorkoutTypeEnum = {
+  RUN: 'RUN',
+  WORKOUT: 'WORKOUT',
+  RACE: 'RACE',
+  OTHER: 'OTHER'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',

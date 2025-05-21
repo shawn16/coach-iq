@@ -190,7 +190,7 @@ model WorkoutType {
 // Workout for a specific week and type
 model PlanWorkout {
   id        String    @id @default(cuid())
-  details   String?   @db.Text
+  details   String    @db.Text
   deletedAt DateTime? @map("deleted_at") @db.Timestamptz
 
   // Relations
@@ -209,16 +209,23 @@ model PlanWorkout {
   @@map("plan_workouts")
 }
 
+enum WorkoutTypeEnum {
+  RUN
+  WORKOUT
+  RACE
+  OTHER
+}
+
 // Workout Result model (Simplified for now)
 model WorkoutResult {
-  id        String    @id @default(cuid())
-  athleteId Int       @map("athlete_id")
-  athlete   Athlete   @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+  id        String          @id @default(cuid())
+  athleteId Int             @map("athlete_id")
+  athlete   Athlete         @relation(fields: [athleteId], references: [id], onDelete: Cascade)
   date      DateTime
-  type      String
+  type      WorkoutTypeEnum
   details   Json
   notes     String?
-  deletedAt DateTime? @map("deleted_at") @db.Timestamptz
+  deletedAt DateTime?       @map("deleted_at") @db.Timestamptz
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
