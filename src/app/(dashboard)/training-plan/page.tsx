@@ -22,7 +22,7 @@ import {
 export default function TrainingPlanPage() {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
-  const [activeTab, setActiveTab] = useState<'active' | 'completed'>('active');
+  const [activeTab, setActiveTab] = useState<"active" | "completed">("active");
   const [activePlans, setActivePlans] = useState<TrainingPlan[]>([]);
   const [completedPlans, setCompletedPlans] = useState<TrainingPlan[]>([]);
   const [loading, setLoading] = useState(true);
@@ -39,26 +39,26 @@ export default function TrainingPlanPage() {
   const fetchTrainingPlans = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/training-plans', {
-        cache: 'no-store',
+      const response = await fetch("/api/training-plans", {
+        cache: "no-store",
         headers: {
-          'pragma': 'no-cache',
-          'cache-control': 'no-cache'
-        }
+          pragma: "no-cache",
+          "cache-control": "no-cache",
+        },
       });
-      
+
       if (!response.ok) {
-        throw new Error('Failed to fetch training plans');
+        throw new Error("Failed to fetch training plans");
       }
-      
+
       const data = await response.json();
       console.log("Fetched training plans:", data);
       setActivePlans(data.activePlans || []);
       setCompletedPlans(data.completedPlans || []);
       setError(null);
     } catch (err) {
-      console.error('Error fetching training plans:', err);
-      setError('Failed to load training plans');
+      console.error("Error fetching training plans:", err);
+      setError("Failed to load training plans");
     } finally {
       setLoading(false);
     }
@@ -67,18 +67,18 @@ export default function TrainingPlanPage() {
   // Fetch data on component mount and when the page becomes visible
   useEffect(() => {
     fetchTrainingPlans();
-    
+
     // Refetch data when the browser tab becomes visible again
     const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') {
+      if (document.visibilityState === "visible") {
         fetchTrainingPlans();
       }
     };
-    
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, []);
 
@@ -88,7 +88,7 @@ export default function TrainingPlanPage() {
   const handleViewDetails = (id: string) => {
     router.push(`/training-plan/${id}`);
   };
-  
+
   /**
    * Opens the edit dialog for a training plan
    */
@@ -101,7 +101,7 @@ export default function TrainingPlanPage() {
    * Handles tab changes between active and completed plans
    */
   const handleTabChange = (value: string) => {
-    setActiveTab(value as 'active' | 'completed');
+    setActiveTab(value as "active" | "completed");
     setCurrentPage(1);
   };
 
@@ -138,41 +138,44 @@ export default function TrainingPlanPage() {
   } = getPaginatedPlans(completedPlans);
 
   // Display proper pagination based on active tab
-  const currentTotalPages = activeTab === 'active' ? activeTotalPages : completedTotalPages;
+  const currentTotalPages =
+    activeTab === "active" ? activeTotalPages : completedTotalPages;
 
   return (
     <div className="container mx-auto p-6">
       {/* Edit Training Plan Dialog */}
-      {selectedPlan && (() => {
-        // Find the plan once based on which tab is active
-        const planToEdit = activeTab === 'active' 
-          ? activePlans.find(plan => plan.id === selectedPlan)
-          : completedPlans.find(plan => plan.id === selectedPlan);
-        
-        // Only show dialog if we found the plan
-        return planToEdit ? (
-          <EditTrainingPlanDialog
-            planId={selectedPlan}
-            initialData={{
-              title: planToEdit.title || "",
-              description: planToEdit.description || "",
-              startDate: planToEdit.startDate || "",
-              duration: planToEdit.duration || "",
-              planType: planToEdit.planType || "xc",
-            }}
-            open={showEditDialog}
-            onClose={() => {
-              setShowEditDialog(false);
-              setSelectedPlan(null); // Reset the selected plan when dialog closes
-            }}
-            onUpdateSuccess={() => {
-              setShowEditDialog(false);
-              setSelectedPlan(null); // Reset the selected plan after successful update
-              fetchTrainingPlans();
-            }}
-          />
-        ) : null;
-      })()}
+      {selectedPlan &&
+        (() => {
+          // Find the plan once based on which tab is active
+          const planToEdit =
+            activeTab === "active"
+              ? activePlans.find((plan) => plan.id === selectedPlan)
+              : completedPlans.find((plan) => plan.id === selectedPlan);
+
+          // Only show dialog if we found the plan
+          return planToEdit ? (
+            <EditTrainingPlanDialog
+              planId={selectedPlan}
+              initialData={{
+                title: planToEdit.title || "",
+                description: planToEdit.description || "",
+                startDate: planToEdit.startDate || "",
+                duration: planToEdit.duration || "",
+                planType: planToEdit.planType || "xc",
+              }}
+              open={showEditDialog}
+              onClose={() => {
+                setShowEditDialog(false);
+                setSelectedPlan(null); // Reset the selected plan when dialog closes
+              }}
+              onUpdateSuccess={() => {
+                setShowEditDialog(false);
+                setSelectedPlan(null); // Reset the selected plan after successful update
+                fetchTrainingPlans();
+              }}
+            />
+          ) : null;
+        })()}
 
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50">
@@ -191,7 +194,11 @@ export default function TrainingPlanPage() {
         </div>
       </div>
 
-      <Tabs defaultValue="active" className="w-full" onValueChange={handleTabChange}>
+      <Tabs
+        defaultValue="active"
+        className="w-full"
+        onValueChange={handleTabChange}
+      >
         <TabsList className="mb-4 bg-gray-100 dark:bg-gray-800 p-1">
           <TabsTrigger
             value="active"
@@ -216,8 +223,8 @@ export default function TrainingPlanPage() {
           <Card className="border-red-200 dark:border-red-900 p-6">
             <div className="text-center text-red-600 dark:text-red-400">
               <p className="mb-2">{error}</p>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={fetchTrainingPlans}
                 className="mt-2"
               >
@@ -233,7 +240,8 @@ export default function TrainingPlanPage() {
                 <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                   <Info className="h-5 w-5 text-indigo-500" />
                   <p>
-                    You have <span className="font-medium">{activeTotalPlans}</span>{" "}
+                    You have{" "}
+                    <span className="font-medium">{activeTotalPlans}</span>{" "}
                     active {activeTotalPlans === 1 ? "plan" : "plans"}
                   </p>
                 </div>
@@ -291,9 +299,7 @@ export default function TrainingPlanPage() {
               ) : (
                 <Card className="border-dashed border-2 p-6">
                   <div className="text-center text-gray-500 dark:text-gray-400">
-                    <p className="mb-2">
-                      No active plans found.
-                    </p>
+                    <p className="mb-2">No active plans found.</p>
                     <p>Create a new training plan to get started.</p>
                   </div>
                 </Card>
@@ -366,9 +372,7 @@ export default function TrainingPlanPage() {
               ) : (
                 <Card className="border-dashed border-2 p-6">
                   <div className="text-center text-gray-500 dark:text-gray-400">
-                    <p className="mb-2">
-                      No completed plans found.
-                    </p>
+                    <p className="mb-2">No completed plans found.</p>
                     <p>Plans will appear here when they are completed.</p>
                   </div>
                 </Card>

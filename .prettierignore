@@ -1,0 +1,8 @@
+.next
+node_modules
+dist
+*.md
+*.mdx
+*.json
+*.yaml
+*.yml
