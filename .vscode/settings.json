@@ -21,6 +21,12 @@
   "[typescript]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
   },
+  "css.lint.unknownAtRules": "ignore",
+  "css.validate": false,
+  "tailwindCSS.validate": true,
+  "editor.quickSuggestions": {
+    "strings": true
+  },
   "cSpell.words": [
     "autoincrement",
     "cooldown",
