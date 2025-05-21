@@ -4,12 +4,33 @@
 // It also includes logic to handle edge cases, such as missing or invalid data, ensuring robust and predictable behavior.
 // This hook is particularly useful for building user interfaces that require dynamic filtering and sorting of athlete data.
 
-import { useState } from "react"; // Importing React's useState hook to manage component state.
+import { useState, useEffect } from "react"; // Importing React's useState and useEffect hooks to manage component state and side effects.
 import { Athlete } from "./useAthletes"; // Importing the Athlete type definition for type safety and consistency.
+import { AthleteDisplay } from "@/types/athlete";
+import { msToTimeString } from "@/lib/time-utils";
 
 // Custom hook to manage filtering and sorting of athletes
 // Hooks are reusable functions that encapsulate logic and state management in React.
+// Function to convert Athlete to AthleteDisplay
+const toAthleteDisplay = (athlete: Athlete): AthleteDisplay => {
+  return {
+    ...athlete,
+    id: parseInt(athlete.id, 10), // Convert string ID to number for AthleteDisplay
+    time1600m: msToTimeString(athlete.time_1600m) // Use time_1600m from Athlete and convert to formatted string
+  };
+};
+
 export function useAthleteFilters(athletes: Athlete[]) {
+  // Convert athletes to AthleteDisplay format when they are loaded
+  const [athleteDisplays, setAthleteDisplays] = useState<AthleteDisplay[]>([]);
+
+  useEffect(() => {
+    if (athletes && athletes.length > 0) {
+      setAthleteDisplays(athletes.map(toAthleteDisplay));
+    } else {
+      setAthleteDisplays([]);
+    }
+  }, [athletes]);
   // State for search query, which allows users to filter athletes by name.
   const [searchQuery, setSearchQuery] = useState(""); // Starts as an empty string since no search is applied initially.
 
@@ -17,15 +38,15 @@ export function useAthleteFilters(athletes: Athlete[]) {
   const [selectedGrade, setSelectedGrade] = useState<string>("All Grades"); // Default is "All Grades" to show all athletes.
 
   // State for sorting field, which determines the attribute used for sorting athletes.
-  const [sortField, setSortField] = useState<"last_name" | "grade" | "time_1600m">("last_name"); // Default is "last_name" for alphabetical sorting.
+  const [sortField, setSortField] = useState<"last_name" | "grade" | "time1600m">("last_name"); // Default is "last_name" for alphabetical sorting.
 
   // State for sorting direction, which determines whether sorting is ascending or descending.
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc"); // Default is ascending order.
 
   // Filter athletes based on search query and selected grade
   // This ensures that only athletes matching the search and grade criteria are displayed.
-  const filteredAthletes = Array.isArray(athletes) // Check if athletes is an array to avoid runtime errors.
-    ? athletes.filter((athlete) => {
+  const filteredAthletes = Array.isArray(athleteDisplays) // Check if athletes is an array to avoid runtime errors.
+    ? athleteDisplays.filter((athlete) => {
         // Check if the athlete's name matches the search query (case-insensitive).
         const nameMatch =
           athlete.first_name && athlete.last_name // Ensure both first and last names exist to avoid errors.
@@ -48,30 +69,43 @@ export function useAthleteFilters(athletes: Athlete[]) {
   // Sort the filtered athletes
   // Sorting ensures that the displayed athletes are ordered based on the selected field and direction.
   const sortedAthletes = [...filteredAthletes].sort((a, b) => {
-    const valA = a[sortField]; // Get the value of the sorting field for athlete A.
-    const valB = b[sortField]; // Get the value of the sorting field for athlete B.
+    let valA = a[sortField];
+    let valB = b[sortField];
 
-    // Handle cases where the sorting field value is null or undefined.
-    if (valA === null || valA === undefined) return 1; // Place athlete A after athlete B.
-    if (valB === null || valB === undefined) return -1; // Place athlete B after athlete A.
-
-    // Handle sorting for string fields (e.g., last_name).
-    if (sortField === "last_name") {
-      return sortDirection === "asc"
-        ? String(valA).localeCompare(String(valB)) // Ascending order.
-        : String(valB).localeCompare(String(valA)); // Descending order.
-    } else if (sortField === "grade" || sortField === "time_1600m") {
-      // Handle sorting for numeric fields (e.g., grade, time_1600m).
-      const numA = Number(valA); // Convert value to a number for comparison.
-      const numB = Number(valB);
-      return sortDirection === "asc" ? numA - numB : numB - numA; // Ascending or descending order.
+    // Convert time1600m to number for proper comparison
+    if (sortField === 'time1600m') {
+      // For time strings like "4:30.00", we need to convert them to milliseconds for proper comparison
+      if (typeof valA === 'string') {
+        const [minutes, seconds] = valA.split(':').map(Number);
+        valA = minutes * 60 + seconds;
+      }
+      if (typeof valB === 'string') {
+        const [minutes, seconds] = valB.split(':').map(Number);
+        valB = minutes * 60 + seconds;
+      }
     }
-    return 0; // Default case (should not occur).
+
+    // Handle null/undefined values
+    if (valA == null) return sortDirection === "asc" ? -1 : 1;
+    if (valB == null) return sortDirection === "asc" ? 1 : -1;
+
+    // Compare values based on type
+    if (typeof valA === 'string' && typeof valB === 'string') {
+      return sortDirection === "asc" 
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    }
+
+    if (typeof valA === 'number' && typeof valB === 'number') {
+      return sortDirection === "asc" ? valA - valB : valB - valA;
+    }
+
+    return 0;
   });
 
   // Handle column sort
   // This function updates the sorting field and direction based on user interaction.
-  const handleSort = (field: "last_name" | "grade" | "time_1600m") => {
+  const handleSort = (field: "last_name" | "grade" | "time1600m") => {
     if (field === sortField) {
       // If the same field is clicked, toggle the sorting direction.
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");

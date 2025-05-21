@@ -100,22 +100,24 @@ export interface WorkoutType {
 /**
  * Type definition for a workout in the library
  */
-export interface WorkoutLibrary {
-  id: string;
-  name: string;
-  type: string;
-  category: string;
-  duration: string;
-  description: string;
-  icon: string;
-}
+import type { WorkoutLibrary as WL } from './training-plans';
+
+export interface WorkoutLibrary extends WL {}
 
 /**
  * Type definition for a workout
  */
 export interface Workout {
   id: string;
+  title?: string;
+  type?: string;
   details: string | null;
+  description?: string;
+  duration?: string;
+  intensityLevel?: string;
+  equipment?: string;
+  notes?: string;
+  exercises?: any[]; // TODO: Define proper type for exercises
   weekId: string;
   workoutTypeId: string;
   workoutType: WorkoutType;
@@ -210,7 +212,7 @@ export interface TrainingMetric {
 export interface ProgressionStep {
   label: string;
   color: string;
-  workout: WorkoutLibrary;
+  workout: WL;
 }
 
 /**

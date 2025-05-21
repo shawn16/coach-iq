@@ -48,7 +48,7 @@ export function AthleteTable({
   // Filter the list of athletes based on the selected grade.
   // If no grade is selected, all athletes are displayed.
   const filteredAthletes = filterGrade
-    ? athletes.filter((athlete) => athlete.grade === filterGrade)
+    ? athletes.filter((athlete) => athlete.grade.toString() === filterGrade)
     : athletes;
 
   // Helper function to render sortable table headers.
@@ -102,8 +102,8 @@ export function AthleteTable({
           onChange={(e) => setFilterGrade(e.target.value || null)}
         >
           <option value="">All Grades</option>
-          {[...new Set(athletes.map((athlete) => athlete.grade))].map((grade) => (
-            <option key={grade} value={grade}>
+          {Array.from(new Set(athletes.map((athlete) => athlete.grade))).map((grade) => (
+            <option key={grade} value={grade.toString()}>
               {grade}th
             </option>
           ))}

@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createWorkoutLibraryItem } from '@/lib/training/workoutLibrary';
 import { withAuthenticatedSession } from '@/lib/api-utils';
+import { WorkoutLibrary } from '@/types/training-plans';
 
 export async function POST(req: NextRequest) {
-  return withAuthenticatedSession(req, async (request, session) => {
+  return withAuthenticatedSession<WorkoutLibrary>(req, async (request, session) => {
     const userId = session.user.id;
 
     const body = await request.json();
@@ -25,7 +26,7 @@ export async function POST(req: NextRequest) {
       userId,
     });
 
-    return NextResponse.json(workoutLibraryItem);
+    return NextResponse.json(workoutLibraryItem, { status: 201 });
   }, {
     actionDescription: 'create workout library item'
   });

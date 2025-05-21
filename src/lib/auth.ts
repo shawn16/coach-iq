@@ -5,7 +5,8 @@ import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 // Import bcryptjs for password comparison
-import bcrypt from "bcryptjs";
+// Use require to avoid TypeScript module resolution issues
+const bcrypt = require('bcryptjs');
 
 // Basic check for required environment variables
 if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
@@ -58,10 +59,13 @@ export const authOptions: NextAuthOptions = {
         }
 
         // Compare provided password with the hashed password in the database
-        const isValidPassword = await bcrypt.compare(
-          credentials.password,
-          user.passwordHash
-        );
+        let isValidPassword = false;
+        try {
+isValidPassword = await bcrypt.compare(credentials.password, user.passwordHash);
+        } catch (error) {
+          console.error("Error in password comparison:", error);
+          return null;
+        }
 
         if (!isValidPassword) {
           console.log(`Auth Error: Invalid password for user ${credentials.email}`);

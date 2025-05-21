@@ -295,13 +295,23 @@ export function EditWorkoutSheet(
     workout?: WorkoutLibrary;
   }
 ) {
+  // Convert WorkoutLibrary to WorkoutFormData
+  const initialValues = props.workout ? {
+    name: props.workout.name,
+    type: props.workout.type,
+    category: props.workout.category,
+    duration: props.workout.duration,
+    description: props.workout.description || '',
+    id: props.workout.id
+  } : undefined;
+
   return (
     <WorkoutSheet
       {...props}
       isEditMode={true}
       title="Edit Workout"
       submitButtonText="Save Changes"
-      initialValues={props.workout}
+      initialValues={initialValues}
     />
   );
 }

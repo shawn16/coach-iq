@@ -8,9 +8,11 @@ import { DatePicker } from "@/components/ui/date-picker";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CalendarIcon, Clock, Plus } from "lucide-react";
 import { format } from "date-fns";
-import { PlanFormat, WeekData, WorkoutType } from "@/types/training";
+import { WorkoutType } from "@/types/training";
+import { PlanFormat, WeekData } from "@/types/training-plans";
 import { TrainingPlanTable } from "@/components/training-plan-table";
 import type { PhaseData } from "@/components/phase-editor-dialog";
+import { useMemo } from 'react';
 
 // Props interface for the PlanDetailsTab component
 interface PlanDetailsTabProps {
@@ -32,7 +34,7 @@ interface PlanDetailsTabProps {
   // Event handlers
   onCellClick: (weekId: number, workoutTypeId: string) => void;
   onKeyDown: (e: React.KeyboardEvent, weekId: number, workoutTypeId: string) => void;
-  onPhaseChange: (weekId: number, phaseData: PhaseData) => void;
+  onPhaseChange: (weekId: number, phaseData: string | PhaseData) => void;
 }
 
 // The Plan Details tab content component
@@ -54,6 +56,16 @@ export function PlanDetailsTab({
   onKeyDown,
   onPhaseChange,
 }: PlanDetailsTabProps) {
+  // Transform planData to match ExtendedWeekData type
+  const transformedPlanData = useMemo(() => {
+    return planData.map(week => ({
+      ...week,
+      workouts: week.workouts || {},
+      weekNumber: week.weekNumber || 0,
+      dateRange: week.dateRange || ''
+    }));
+  }, [planData]);
+
   return (
     <div className="space-y-6">
       {/* Plan Information Card */}
@@ -214,7 +226,7 @@ export function PlanDetailsTab({
         />
         <CardContent>
           <TrainingPlanTable
-            planData={planData}
+            planData={transformedPlanData}
             workoutTypes={workoutTypes}
             onCellClick={onCellClick}
             onKeyDown={onKeyDown}

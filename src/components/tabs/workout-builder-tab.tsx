@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { CardHeaderWithIcon } from "@/components/ui/card-header-with-icon";
 import { WorkoutCard } from "@/components/workout-card";
 import { Library, Plus } from "lucide-react";
-import type { WorkoutLibrary } from "@/types/training-plans";
+import type { WorkoutLibrary } from "@/types/training";
 
 // Props interface for the WorkoutBuilderTab component
 interface WorkoutBuilderTabProps {

@@ -107,9 +107,7 @@ export default function AthletesPage() {
   // Adapter for onSort
   const handleSortAdapter = (column: keyof AthleteDisplay) => {
     // Map from AthleteDisplay keys to useAthleteFilters sort field
-    if (column === "time1600m") {
-      handleSort("time_1600m");
-    } else if (column === "last_name" || column === "grade") {
+    if (column === "time1600m" || column === "last_name" || column === "grade") {
       handleSort(column);
     }
   };
@@ -216,7 +214,7 @@ export default function AthletesPage() {
             // Athlete table displayed when data is successfully fetched
             <AthleteTable
               athletes={sortedAthletes}
-              sortColumn={sortField === "time_1600m" ? "time1600m" as keyof AthleteDisplay : sortField as keyof AthleteDisplay}
+              sortColumn={sortField as keyof AthleteDisplay}
               sortDirection={sortDirection}
               onSort={handleSortAdapter}
               onDeleteClick={handleDeleteClick}

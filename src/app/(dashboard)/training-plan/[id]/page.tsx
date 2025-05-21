@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, use } from "react"; // Import React.use
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -33,9 +33,8 @@ export default function TrainingPlanDetails({
 }: {
   params: { id: string };
 }) {
-  // Unwrap the params properly with React.use
-  const unwrappedParams = use(params);
-  const planId = unwrappedParams.id;
+  // Get the plan ID from params
+  const planId = params.id;
 
   const router = useRouter();
   const [plan, setPlan] = useState<TrainingPlanDetail | null>(null);

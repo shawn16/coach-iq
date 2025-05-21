@@ -216,7 +216,7 @@ export function AddAthleteDialog({
         last_name: formData.lastName.trim(),
         birthday: formData.birthday,
         grade: Number.parseInt(formData.grade),
-        time_1600m: timeStringToMs(formData.time1600m.trim()), // Convert "4:45.30" to milliseconds
+        time1600m: timeStringToMs(formData.time1600m.trim()), // Convert "4:45.30" to milliseconds
       };
 
       // Pass data up to parent component

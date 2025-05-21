@@ -38,6 +38,7 @@ const workoutSchema = z.object({
   intensityLevel: z.string(),
   equipment: z.string().optional(),
   notes: z.string().optional(),
+  exercises: z.array(z.string()).optional(),
 });
 
 /**
@@ -86,7 +87,7 @@ export function WorkoutEditor({
 }: WorkoutEditorProps) {
   // Exercise input management
   const [exerciseInput, setExerciseInput] = useState("");
-  const [exercises, setExercises] = useState<string[]>([]);
+  const [exercises, setExercises] = useState<string[]>(initialData.exercises || []);
 
   // Form setup with validation schema
   const form = useForm<WorkoutFormValues>({
@@ -99,6 +100,7 @@ export function WorkoutEditor({
       intensityLevel: initialData.intensityLevel || "Moderate",
       equipment: initialData.equipment || "",
       notes: initialData.notes || "",
+      exercises: initialData.exercises || [],
     },
   });
 
@@ -127,16 +129,9 @@ export function WorkoutEditor({
   const onSubmit = (data: WorkoutFormValues) => {
     onSave({
       ...data,
-      // Add exercises to the form data
+      exercises,
     });
   };
-
-  // Initialize exercises if available in initial data
-  useEffect(() => {
-    if (initialData.exercises && Array.isArray(initialData.exercises)) {
-      setExercises(initialData.exercises);
-    }
-  }, [initialData.exercises]);
 
   return (
     <Form {...form}>

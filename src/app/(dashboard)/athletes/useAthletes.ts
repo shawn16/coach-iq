@@ -7,7 +7,7 @@ import { useState, useEffect } from "react"; // React hooks for managing state a
 
 // Define the structure of an Athlete object using TypeScript's interface feature.
 // This helps ensure that the data we work with has a consistent shape.
-interface Athlete {
+export interface Athlete {
   id: string; // Unique identifier for the athlete
   first_name: string; // Athlete's first name
   last_name: string; // Athlete's last name

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import bcrypt from 'bcryptjs';
+// Use require for better type compatibility with bcrypt
+const bcrypt = require('bcryptjs');
 import { Prisma } from '@/generated/prisma/client';
 
 // Basic validation function (can be expanded)
@@ -43,9 +44,17 @@ export async function POST(request: Request) {
       );
     }
 
-    // Hash the password
+    // Hash the password with proper Promise-based hashing
     const saltRounds = 10; // Standard salt rounds for bcrypt
-    const passwordHash = await bcrypt.hash(password, saltRounds);
+    const passwordHash = await new Promise<string>((resolve, reject) => {
+      bcrypt.genSalt(saltRounds, (err: Error | null, salt: string) => {
+        if (err) return reject(err);
+        bcrypt.hash(password, salt, (err: Error | null, hash: string) => {
+          if (err) return reject(err);
+          resolve(hash);
+        });
+      });
+    });
 
     // Create the user
     const newUser = await prisma.user.create({

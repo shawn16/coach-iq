@@ -219,7 +219,7 @@ export function EditAthleteDialog({
         last_name: formData.lastName.trim(),
         birthday: formData.birthday,
         grade: Number.parseInt(formData.grade),
-        time_1600m: timeStringToMs(formData.time1600m.trim()),
+        time1600m: timeStringToMs(formData.time1600m.trim()),
       };
 
       // Pass data up to parent component

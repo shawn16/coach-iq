@@ -49,7 +49,7 @@ interface WorkoutCardProps {
 }
 
 export function WorkoutCard({ workout }: WorkoutCardProps) {
-  const IconComponent = iconMap[workout.icon] || Clock; // Default to Clock if name not found
+  const IconComponent = workout.icon ? (iconMap[workout.icon] || Clock) : Clock; // Default to Clock if icon is null or not found
   // State for edit dialog
   const [editOpen, setEditOpen] = useState(false);
   const [workoutData, setWorkoutData] = useState(workout);
