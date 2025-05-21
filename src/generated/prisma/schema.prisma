@@ -126,7 +126,9 @@ model TrainingPlan {
   createdAt     DateTime              @default(now()) @map("created_at")
   updatedAt     DateTime              @updatedAt @map("updated_at")
 
-  @@index([userId])
+  @@index([userId], name: "idx_training_plan_user_id")
+  @@index([startDate], name: "idx_training_plan_start_date")
+  @@index([endDate], name: "idx_training_plan_end_date")
   @@index([deletedAt], name: "idx_training_plan_deleted_at")
   @@map("training_plans")
 }
