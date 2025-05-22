@@ -23,7 +23,17 @@ export async function GET() {
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return new NextResponse(
+      JSON.stringify({ error: "Unauthorized - Please sign in to access this resource" }), 
+      { 
+        status: 401,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Credentials': 'true',
+          'Access-Control-Allow-Origin': process.env.NEXTAUTH_URL || 'http://localhost:3000'
+        }
+      }
+    );
   }
   const coachId = session.user.id;
 

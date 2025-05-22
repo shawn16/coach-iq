@@ -43,8 +43,10 @@ export function useAthletes() {
     try {
       setIsLoading(true); // Indicate that loading is in progress.
 
-      // Make a GET request to the API endpoint for athletes.
-      const response = await fetch("/api/athletes");
+      // Make a GET request to the API endpoint for athletes with credentials
+      const response = await fetch("/api/athletes", {
+        credentials: 'include'  // This ensures cookies are sent with the request
+      });
 
       // Check if the response status is not OK (e.g., 404 or 500).
       if (!response.ok) {

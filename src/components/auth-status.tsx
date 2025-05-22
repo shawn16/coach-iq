@@ -75,9 +75,11 @@ export function AuthStatus() {
 
   // Unauthenticated state
   return (
-    <Button variant="outline" onClick={() => signIn()}>
-      <LogIn className="mr-2 h-4 w-4" />
-      Sign In
+    <Button variant="outline" asChild>
+      <a href="/login">
+        <LogIn className="mr-2 h-4 w-4" />
+        Sign In
+      </a>
     </Button>
   );
 }

@@ -22,6 +22,8 @@ model User {
   emailVerified       DateTime? // When email was verified
   image               String? // Profile image URL
   passwordHash        String? // For Credentials provider
+  resetToken         String?   @unique
+  resetTokenExpiry   DateTime?
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
   deletedAt           DateTime?            @map("deleted_at") @db.Timestamptz
