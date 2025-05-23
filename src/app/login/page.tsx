@@ -75,7 +75,7 @@ export default function LoginPage() {
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
             Or{" "}
             <Link
-              href="/signup"
+              href="/auth/signup"
               className="font-medium text-primary hover:text-primary/90"
             >
               create a new account

@@ -130,7 +130,7 @@ export default function AthletesPage() {
 
   return (
     <div className="space-y-4 p-4 md:p-6">
-      {/* Header section with title and description */}
+      {/* Header section */}
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Athletes</h1>
         <p className="text-muted-foreground">
@@ -139,7 +139,11 @@ export default function AthletesPage() {
       </div>
 
       {/* Card section containing search, filters, and actions */}
-      <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+      <div className="rounded-lg border bg-white shadow-sm">
+        <div className="flex items-center justify-between p-4 border-b">
+          <h2 className="text-lg font-medium">Athlete List</h2>
+          <AddAthleteDialog onAthleteAdded={fetchAthletes} />
+        </div>
         <div className="flex flex-col items-start justify-between gap-4 p-4 sm:flex-row sm:items-center">
           {/* Search input for filtering athletes by name */}
           <div className="relative w-full max-w-sm">
@@ -188,9 +192,6 @@ export default function AthletesPage() {
               <Download className="h-4 w-4" />
               Export
             </Button>
-
-            {/* Dialog for adding a new athlete */}
-            <AddAthleteDialog onAthleteAdded={fetchAthletes} />
           </div>
         </div>
 
